@@ -45,4 +45,6 @@ next-env.d.ts
 # documentation
 README.md
 
+# generated files
 /app/generated/prisma
+/src/generated
