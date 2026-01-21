@@ -8,6 +8,17 @@ import { inngest } from "@/lib/inngest/client";
  */
 export async function POST(request: NextRequest) {
   try {
+    // Check if DATABASE_URL is set
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json(
+        {
+          error: "DATABASE_URL is not set in environment variables",
+          hint: "Please add DATABASE_URL to your Vercel environment variables",
+        },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const {
       platform = "instagram",
@@ -87,6 +98,35 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: any) {
     console.error("Error creating test content:", error);
+    
+    // Provide helpful error messages
+    if (error.code === "P1001") {
+      return NextResponse.json(
+        {
+          error: "Cannot reach database server",
+          details: error.message,
+          troubleshooting: [
+            "1. Check if Supabase project is paused (go to Supabase dashboard and resume if needed)",
+            "2. Verify DATABASE_URL is set correctly in Vercel environment variables",
+            "3. Make sure DATABASE_URL is enabled for all environments (Production, Preview, Development)",
+            "4. Check that the connection string uses direct connection (port 5432, not 6543)",
+          ],
+        },
+        { status: 500 }
+      );
+    }
+
+    if (error.message?.includes("DATABASE_URL")) {
+      return NextResponse.json(
+        {
+          error: "Database configuration error",
+          details: error.message,
+          hint: "DATABASE_URL environment variable is missing or incorrect",
+        },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
       { error: error.message || "Internal server error" },
       { status: 500 }
