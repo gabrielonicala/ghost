@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { supabase } from "@/lib/supabase";
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,6 +12,40 @@ export async function GET(request: NextRequest) {
     const minScore = searchParams.get("minScore")
       ? parseInt(searchParams.get("minScore")!)
       : undefined;
+
+    if (!prisma) {
+      // Use Supabase if Prisma not available
+      if (!supabase) {
+        return NextResponse.json(
+          { error: "Database client not available. Please check environment variables." },
+          { status: 500 }
+        );
+      }
+      
+      let query = supabase
+        .from("ContentItem")
+        .select("*, creator:Creator(*), conversionScores:ConversionConfidenceScore(*), metricsSnapshots:ContentMetricsSnapshot(*)")
+        .range((page - 1) * limit, page * limit - 1)
+        .limit(limit);
+      
+      if (minScore !== undefined) {
+        // Filter by score using a join
+        query = query.eq("conversionScores.score", minScore);
+      }
+      
+      const { data: contentItems, error, count } = await query.order(sortBy, { ascending: order === "asc" });
+      if (error) throw error;
+      
+      return NextResponse.json({
+        contentItems: contentItems || [],
+        pagination: {
+          page,
+          limit,
+          total: count || 0,
+          totalPages: Math.ceil((count || 0) / limit),
+        },
+      });
+    }
 
     const where: any = {};
     if (minScore !== undefined) {

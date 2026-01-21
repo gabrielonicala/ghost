@@ -21,6 +21,13 @@ export async function detectBrandContent(
   }
 ): Promise<DetectionResult[]> {
   // Get brand dictionaries for this organization
+  if (!prisma) {
+    // Prisma not available (e.g., on Vercel) - skip brand detection for now
+    // TODO: Implement using Supabase client
+    console.warn("Prisma not available, skipping brand detection");
+    return [];
+  }
+  
   const brandDictionaries = await prisma.brandDictionary.findMany({
     where: { organizationId },
   });
@@ -166,6 +173,11 @@ async function saveDetection(
   method: string,
   result: Omit<DetectionResult, "method">
 ): Promise<void> {
+  if (!prisma) {
+    // Prisma not available - skip saving (already checked in detectBrandContent)
+    return;
+  }
+  
   await prisma.brandDetection.create({
     data: {
       contentItemId,
