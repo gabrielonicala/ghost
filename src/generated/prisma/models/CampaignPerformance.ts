@@ -237,8 +237,8 @@ export type CampaignPerformanceWhereInput = {
   metadata?: Prisma.JsonNullableFilter<"CampaignPerformance">
   recordedAt?: Prisma.DateTimeFilter<"CampaignPerformance"> | Date | string
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
-  integration?: Prisma.XOR<Prisma.IntegrationNullableScalarRelationFilter, Prisma.IntegrationWhereInput> | null
   contentItem?: Prisma.XOR<Prisma.ContentItemNullableScalarRelationFilter, Prisma.ContentItemWhereInput> | null
+  integration?: Prisma.XOR<Prisma.IntegrationNullableScalarRelationFilter, Prisma.IntegrationWhereInput> | null
 }
 
 export type CampaignPerformanceOrderByWithRelationInput = {
@@ -251,8 +251,8 @@ export type CampaignPerformanceOrderByWithRelationInput = {
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   recordedAt?: Prisma.SortOrder
   campaign?: Prisma.CampaignOrderByWithRelationInput
-  integration?: Prisma.IntegrationOrderByWithRelationInput
   contentItem?: Prisma.ContentItemOrderByWithRelationInput
+  integration?: Prisma.IntegrationOrderByWithRelationInput
 }
 
 export type CampaignPerformanceWhereUniqueInput = Prisma.AtLeast<{
@@ -268,8 +268,8 @@ export type CampaignPerformanceWhereUniqueInput = Prisma.AtLeast<{
   metadata?: Prisma.JsonNullableFilter<"CampaignPerformance">
   recordedAt?: Prisma.DateTimeFilter<"CampaignPerformance"> | Date | string
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
-  integration?: Prisma.XOR<Prisma.IntegrationNullableScalarRelationFilter, Prisma.IntegrationWhereInput> | null
   contentItem?: Prisma.XOR<Prisma.ContentItemNullableScalarRelationFilter, Prisma.ContentItemWhereInput> | null
+  integration?: Prisma.XOR<Prisma.IntegrationNullableScalarRelationFilter, Prisma.IntegrationWhereInput> | null
 }, "id">
 
 export type CampaignPerformanceOrderByWithAggregationInput = {
@@ -309,8 +309,8 @@ export type CampaignPerformanceCreateInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   recordedAt?: Date | string
   campaign: Prisma.CampaignCreateNestedOneWithoutPerformanceDataInput
-  integration?: Prisma.IntegrationCreateNestedOneWithoutPerformanceDataInput
   contentItem?: Prisma.ContentItemCreateNestedOneWithoutPerformanceDataInput
+  integration?: Prisma.IntegrationCreateNestedOneWithoutPerformanceDataInput
 }
 
 export type CampaignPerformanceUncheckedCreateInput = {
@@ -331,8 +331,8 @@ export type CampaignPerformanceUpdateInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   recordedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutPerformanceDataNestedInput
-  integration?: Prisma.IntegrationUpdateOneWithoutPerformanceDataNestedInput
   contentItem?: Prisma.ContentItemUpdateOneWithoutPerformanceDataNestedInput
+  integration?: Prisma.IntegrationUpdateOneWithoutPerformanceDataNestedInput
 }
 
 export type CampaignPerformanceUncheckedUpdateInput = {
@@ -557,8 +557,8 @@ export type CampaignPerformanceCreateWithoutCampaignInput = {
   value: number
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   recordedAt?: Date | string
-  integration?: Prisma.IntegrationCreateNestedOneWithoutPerformanceDataInput
   contentItem?: Prisma.ContentItemCreateNestedOneWithoutPerformanceDataInput
+  integration?: Prisma.IntegrationCreateNestedOneWithoutPerformanceDataInput
 }
 
 export type CampaignPerformanceUncheckedCreateWithoutCampaignInput = {
@@ -719,8 +719,8 @@ export type CampaignPerformanceUpdateWithoutCampaignInput = {
   value?: Prisma.FloatFieldUpdateOperationsInput | number
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   recordedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  integration?: Prisma.IntegrationUpdateOneWithoutPerformanceDataNestedInput
   contentItem?: Prisma.ContentItemUpdateOneWithoutPerformanceDataNestedInput
+  integration?: Prisma.IntegrationUpdateOneWithoutPerformanceDataNestedInput
 }
 
 export type CampaignPerformanceUncheckedUpdateWithoutCampaignInput = {
@@ -835,8 +835,8 @@ export type CampaignPerformanceSelect<ExtArgs extends runtime.Types.Extensions.I
   metadata?: boolean
   recordedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
-  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
   contentItem?: boolean | Prisma.CampaignPerformance$contentItemArgs<ExtArgs>
+  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
 }, ExtArgs["result"]["campaignPerformance"]>
 
 export type CampaignPerformanceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -849,8 +849,8 @@ export type CampaignPerformanceSelectCreateManyAndReturn<ExtArgs extends runtime
   metadata?: boolean
   recordedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
-  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
   contentItem?: boolean | Prisma.CampaignPerformance$contentItemArgs<ExtArgs>
+  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
 }, ExtArgs["result"]["campaignPerformance"]>
 
 export type CampaignPerformanceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -863,8 +863,8 @@ export type CampaignPerformanceSelectUpdateManyAndReturn<ExtArgs extends runtime
   metadata?: boolean
   recordedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
-  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
   contentItem?: boolean | Prisma.CampaignPerformance$contentItemArgs<ExtArgs>
+  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
 }, ExtArgs["result"]["campaignPerformance"]>
 
 export type CampaignPerformanceSelectScalar = {
@@ -881,26 +881,26 @@ export type CampaignPerformanceSelectScalar = {
 export type CampaignPerformanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "integrationId" | "contentItemId" | "metricType" | "value" | "metadata" | "recordedAt", ExtArgs["result"]["campaignPerformance"]>
 export type CampaignPerformanceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
-  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
   contentItem?: boolean | Prisma.CampaignPerformance$contentItemArgs<ExtArgs>
+  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
 }
 export type CampaignPerformanceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
-  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
   contentItem?: boolean | Prisma.CampaignPerformance$contentItemArgs<ExtArgs>
+  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
 }
 export type CampaignPerformanceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
-  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
   contentItem?: boolean | Prisma.CampaignPerformance$contentItemArgs<ExtArgs>
+  integration?: boolean | Prisma.CampaignPerformance$integrationArgs<ExtArgs>
 }
 
 export type $CampaignPerformancePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CampaignPerformance"
   objects: {
     campaign: Prisma.$CampaignPayload<ExtArgs>
-    integration: Prisma.$IntegrationPayload<ExtArgs> | null
     contentItem: Prisma.$ContentItemPayload<ExtArgs> | null
+    integration: Prisma.$IntegrationPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1306,8 +1306,8 @@ readonly fields: CampaignPerformanceFieldRefs;
 export interface Prisma__CampaignPerformanceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   campaign<T extends Prisma.CampaignDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignDefaultArgs<ExtArgs>>): Prisma.Prisma__CampaignClient<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  integration<T extends Prisma.CampaignPerformance$integrationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignPerformance$integrationArgs<ExtArgs>>): Prisma.Prisma__IntegrationClient<runtime.Types.Result.GetResult<Prisma.$IntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   contentItem<T extends Prisma.CampaignPerformance$contentItemArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignPerformance$contentItemArgs<ExtArgs>>): Prisma.Prisma__ContentItemClient<runtime.Types.Result.GetResult<Prisma.$ContentItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  integration<T extends Prisma.CampaignPerformance$integrationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignPerformance$integrationArgs<ExtArgs>>): Prisma.Prisma__IntegrationClient<runtime.Types.Result.GetResult<Prisma.$IntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1741,25 +1741,6 @@ export type CampaignPerformanceDeleteManyArgs<ExtArgs extends runtime.Types.Exte
 }
 
 /**
- * CampaignPerformance.integration
- */
-export type CampaignPerformance$integrationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Integration
-   */
-  select?: Prisma.IntegrationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Integration
-   */
-  omit?: Prisma.IntegrationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.IntegrationInclude<ExtArgs> | null
-  where?: Prisma.IntegrationWhereInput
-}
-
-/**
  * CampaignPerformance.contentItem
  */
 export type CampaignPerformance$contentItemArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1776,6 +1757,25 @@ export type CampaignPerformance$contentItemArgs<ExtArgs extends runtime.Types.Ex
    */
   include?: Prisma.ContentItemInclude<ExtArgs> | null
   where?: Prisma.ContentItemWhereInput
+}
+
+/**
+ * CampaignPerformance.integration
+ */
+export type CampaignPerformance$integrationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Integration
+   */
+  select?: Prisma.IntegrationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Integration
+   */
+  omit?: Prisma.IntegrationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IntegrationInclude<ExtArgs> | null
+  where?: Prisma.IntegrationWhereInput
 }
 
 /**

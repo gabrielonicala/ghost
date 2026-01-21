@@ -475,14 +475,9 @@ export type ConversionConfidenceScoreUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ConversionConfidenceScoreListRelationFilter = {
-  every?: Prisma.ConversionConfidenceScoreWhereInput
-  some?: Prisma.ConversionConfidenceScoreWhereInput
-  none?: Prisma.ConversionConfidenceScoreWhereInput
-}
-
-export type ConversionConfidenceScoreOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type ConversionConfidenceScoreNullableScalarRelationFilter = {
+  is?: Prisma.ConversionConfidenceScoreWhereInput | null
+  isNot?: Prisma.ConversionConfidenceScoreWhereInput | null
 }
 
 export type ConversionConfidenceScoreCountOrderByAggregateInput = {
@@ -543,46 +538,36 @@ export type ConversionConfidenceScoreSumOrderByAggregateInput = {
   fatigueRiskScore?: Prisma.SortOrder
 }
 
-export type ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput = {
-  create?: Prisma.XOR<Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput> | Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput[] | Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput[]
-  connectOrCreate?: Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput | Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput[]
-  createMany?: Prisma.ConversionConfidenceScoreCreateManyContentItemInputEnvelope
-  connect?: Prisma.ConversionConfidenceScoreWhereUniqueInput | Prisma.ConversionConfidenceScoreWhereUniqueInput[]
+export type ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput = {
+  create?: Prisma.XOR<Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput>
+  connectOrCreate?: Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput
+  connect?: Prisma.ConversionConfidenceScoreWhereUniqueInput
 }
 
-export type ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput = {
-  create?: Prisma.XOR<Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput> | Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput[] | Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput[]
-  connectOrCreate?: Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput | Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput[]
-  createMany?: Prisma.ConversionConfidenceScoreCreateManyContentItemInputEnvelope
-  connect?: Prisma.ConversionConfidenceScoreWhereUniqueInput | Prisma.ConversionConfidenceScoreWhereUniqueInput[]
+export type ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput = {
+  create?: Prisma.XOR<Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput>
+  connectOrCreate?: Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput
+  connect?: Prisma.ConversionConfidenceScoreWhereUniqueInput
 }
 
-export type ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput = {
-  create?: Prisma.XOR<Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput> | Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput[] | Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput[]
-  connectOrCreate?: Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput | Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput[]
-  upsert?: Prisma.ConversionConfidenceScoreUpsertWithWhereUniqueWithoutContentItemInput | Prisma.ConversionConfidenceScoreUpsertWithWhereUniqueWithoutContentItemInput[]
-  createMany?: Prisma.ConversionConfidenceScoreCreateManyContentItemInputEnvelope
-  set?: Prisma.ConversionConfidenceScoreWhereUniqueInput | Prisma.ConversionConfidenceScoreWhereUniqueInput[]
-  disconnect?: Prisma.ConversionConfidenceScoreWhereUniqueInput | Prisma.ConversionConfidenceScoreWhereUniqueInput[]
-  delete?: Prisma.ConversionConfidenceScoreWhereUniqueInput | Prisma.ConversionConfidenceScoreWhereUniqueInput[]
-  connect?: Prisma.ConversionConfidenceScoreWhereUniqueInput | Prisma.ConversionConfidenceScoreWhereUniqueInput[]
-  update?: Prisma.ConversionConfidenceScoreUpdateWithWhereUniqueWithoutContentItemInput | Prisma.ConversionConfidenceScoreUpdateWithWhereUniqueWithoutContentItemInput[]
-  updateMany?: Prisma.ConversionConfidenceScoreUpdateManyWithWhereWithoutContentItemInput | Prisma.ConversionConfidenceScoreUpdateManyWithWhereWithoutContentItemInput[]
-  deleteMany?: Prisma.ConversionConfidenceScoreScalarWhereInput | Prisma.ConversionConfidenceScoreScalarWhereInput[]
+export type ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput>
+  connectOrCreate?: Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput
+  upsert?: Prisma.ConversionConfidenceScoreUpsertWithoutContentItemInput
+  disconnect?: Prisma.ConversionConfidenceScoreWhereInput | boolean
+  delete?: Prisma.ConversionConfidenceScoreWhereInput | boolean
+  connect?: Prisma.ConversionConfidenceScoreWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConversionConfidenceScoreUpdateToOneWithWhereWithoutContentItemInput, Prisma.ConversionConfidenceScoreUpdateWithoutContentItemInput>, Prisma.ConversionConfidenceScoreUncheckedUpdateWithoutContentItemInput>
 }
 
-export type ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput = {
-  create?: Prisma.XOR<Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput> | Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput[] | Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput[]
-  connectOrCreate?: Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput | Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput[]
-  upsert?: Prisma.ConversionConfidenceScoreUpsertWithWhereUniqueWithoutContentItemInput | Prisma.ConversionConfidenceScoreUpsertWithWhereUniqueWithoutContentItemInput[]
-  createMany?: Prisma.ConversionConfidenceScoreCreateManyContentItemInputEnvelope
-  set?: Prisma.ConversionConfidenceScoreWhereUniqueInput | Prisma.ConversionConfidenceScoreWhereUniqueInput[]
-  disconnect?: Prisma.ConversionConfidenceScoreWhereUniqueInput | Prisma.ConversionConfidenceScoreWhereUniqueInput[]
-  delete?: Prisma.ConversionConfidenceScoreWhereUniqueInput | Prisma.ConversionConfidenceScoreWhereUniqueInput[]
-  connect?: Prisma.ConversionConfidenceScoreWhereUniqueInput | Prisma.ConversionConfidenceScoreWhereUniqueInput[]
-  update?: Prisma.ConversionConfidenceScoreUpdateWithWhereUniqueWithoutContentItemInput | Prisma.ConversionConfidenceScoreUpdateWithWhereUniqueWithoutContentItemInput[]
-  updateMany?: Prisma.ConversionConfidenceScoreUpdateManyWithWhereWithoutContentItemInput | Prisma.ConversionConfidenceScoreUpdateManyWithWhereWithoutContentItemInput[]
-  deleteMany?: Prisma.ConversionConfidenceScoreScalarWhereInput | Prisma.ConversionConfidenceScoreScalarWhereInput[]
+export type ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput>
+  connectOrCreate?: Prisma.ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput
+  upsert?: Prisma.ConversionConfidenceScoreUpsertWithoutContentItemInput
+  disconnect?: Prisma.ConversionConfidenceScoreWhereInput | boolean
+  delete?: Prisma.ConversionConfidenceScoreWhereInput | boolean
+  connect?: Prisma.ConversionConfidenceScoreWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConversionConfidenceScoreUpdateToOneWithWhereWithoutContentItemInput, Prisma.ConversionConfidenceScoreUpdateWithoutContentItemInput>, Prisma.ConversionConfidenceScoreUncheckedUpdateWithoutContentItemInput>
 }
 
 export type ConversionConfidenceScoreCreaterecommendedUseInput = {
@@ -629,59 +614,15 @@ export type ConversionConfidenceScoreCreateOrConnectWithoutContentItemInput = {
   create: Prisma.XOR<Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput>
 }
 
-export type ConversionConfidenceScoreCreateManyContentItemInputEnvelope = {
-  data: Prisma.ConversionConfidenceScoreCreateManyContentItemInput | Prisma.ConversionConfidenceScoreCreateManyContentItemInput[]
-  skipDuplicates?: boolean
-}
-
-export type ConversionConfidenceScoreUpsertWithWhereUniqueWithoutContentItemInput = {
-  where: Prisma.ConversionConfidenceScoreWhereUniqueInput
+export type ConversionConfidenceScoreUpsertWithoutContentItemInput = {
   update: Prisma.XOR<Prisma.ConversionConfidenceScoreUpdateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedUpdateWithoutContentItemInput>
   create: Prisma.XOR<Prisma.ConversionConfidenceScoreCreateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedCreateWithoutContentItemInput>
+  where?: Prisma.ConversionConfidenceScoreWhereInput
 }
 
-export type ConversionConfidenceScoreUpdateWithWhereUniqueWithoutContentItemInput = {
-  where: Prisma.ConversionConfidenceScoreWhereUniqueInput
+export type ConversionConfidenceScoreUpdateToOneWithWhereWithoutContentItemInput = {
+  where?: Prisma.ConversionConfidenceScoreWhereInput
   data: Prisma.XOR<Prisma.ConversionConfidenceScoreUpdateWithoutContentItemInput, Prisma.ConversionConfidenceScoreUncheckedUpdateWithoutContentItemInput>
-}
-
-export type ConversionConfidenceScoreUpdateManyWithWhereWithoutContentItemInput = {
-  where: Prisma.ConversionConfidenceScoreScalarWhereInput
-  data: Prisma.XOR<Prisma.ConversionConfidenceScoreUpdateManyMutationInput, Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemInput>
-}
-
-export type ConversionConfidenceScoreScalarWhereInput = {
-  AND?: Prisma.ConversionConfidenceScoreScalarWhereInput | Prisma.ConversionConfidenceScoreScalarWhereInput[]
-  OR?: Prisma.ConversionConfidenceScoreScalarWhereInput[]
-  NOT?: Prisma.ConversionConfidenceScoreScalarWhereInput | Prisma.ConversionConfidenceScoreScalarWhereInput[]
-  id?: Prisma.StringFilter<"ConversionConfidenceScore"> | string
-  contentItemId?: Prisma.StringFilter<"ConversionConfidenceScore"> | string
-  score?: Prisma.FloatFilter<"ConversionConfidenceScore"> | number
-  authenticityScore?: Prisma.FloatFilter<"ConversionConfidenceScore"> | number
-  audienceTrustScore?: Prisma.FloatFilter<"ConversionConfidenceScore"> | number
-  promotionSaturationScore?: Prisma.FloatFilter<"ConversionConfidenceScore"> | number
-  fatigueRiskScore?: Prisma.FloatFilter<"ConversionConfidenceScore"> | number
-  predictedPerformanceTier?: Prisma.StringNullableFilter<"ConversionConfidenceScore"> | string | null
-  recommendedUse?: Prisma.StringNullableListFilter<"ConversionConfidenceScore">
-  confidenceInterval?: Prisma.JsonNullableFilter<"ConversionConfidenceScore">
-  reasonAttribution?: Prisma.JsonNullableFilter<"ConversionConfidenceScore">
-  computedAt?: Prisma.DateTimeFilter<"ConversionConfidenceScore"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"ConversionConfidenceScore"> | Date | string
-}
-
-export type ConversionConfidenceScoreCreateManyContentItemInput = {
-  id?: string
-  score: number
-  authenticityScore: number
-  audienceTrustScore: number
-  promotionSaturationScore: number
-  fatigueRiskScore: number
-  predictedPerformanceTier?: string | null
-  recommendedUse?: Prisma.ConversionConfidenceScoreCreaterecommendedUseInput | string[]
-  confidenceInterval?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  reasonAttribution?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  computedAt?: Date | string
-  updatedAt?: Date | string
 }
 
 export type ConversionConfidenceScoreUpdateWithoutContentItemInput = {
@@ -700,21 +641,6 @@ export type ConversionConfidenceScoreUpdateWithoutContentItemInput = {
 }
 
 export type ConversionConfidenceScoreUncheckedUpdateWithoutContentItemInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
-  authenticityScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  audienceTrustScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  promotionSaturationScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  fatigueRiskScore?: Prisma.FloatFieldUpdateOperationsInput | number
-  predictedPerformanceTier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recommendedUse?: Prisma.ConversionConfidenceScoreUpdaterecommendedUseInput | string[]
-  confidenceInterval?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  reasonAttribution?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  computedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   authenticityScore?: Prisma.FloatFieldUpdateOperationsInput | number

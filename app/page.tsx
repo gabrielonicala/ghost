@@ -1,4 +1,5 @@
 import { ContentLibrary } from "@/components/content-library";
+import { AddTestContent } from "@/components/add-test-content";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
             spend money.
           </p>
         </div>
+        <AddTestContent />
         <ContentLibrary />
       </div>
     </main>

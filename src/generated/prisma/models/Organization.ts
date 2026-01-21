@@ -174,10 +174,10 @@ export type OrganizationWhereInput = {
   name?: Prisma.StringFilter<"Organization"> | string
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
-  users?: Prisma.UserListRelationFilter
-  campaigns?: Prisma.CampaignListRelationFilter
   brandDictionaries?: Prisma.BrandDictionaryListRelationFilter
+  campaigns?: Prisma.CampaignListRelationFilter
   integrations?: Prisma.IntegrationListRelationFilter
+  users?: Prisma.UserListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -185,10 +185,10 @@ export type OrganizationOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  users?: Prisma.UserOrderByRelationAggregateInput
-  campaigns?: Prisma.CampaignOrderByRelationAggregateInput
   brandDictionaries?: Prisma.BrandDictionaryOrderByRelationAggregateInput
+  campaigns?: Prisma.CampaignOrderByRelationAggregateInput
   integrations?: Prisma.IntegrationOrderByRelationAggregateInput
+  users?: Prisma.UserOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -199,10 +199,10 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Organization"> | string
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
-  users?: Prisma.UserListRelationFilter
-  campaigns?: Prisma.CampaignListRelationFilter
   brandDictionaries?: Prisma.BrandDictionaryListRelationFilter
+  campaigns?: Prisma.CampaignListRelationFilter
   integrations?: Prisma.IntegrationListRelationFilter
+  users?: Prisma.UserListRelationFilter
 }, "id">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -230,10 +230,10 @@ export type OrganizationCreateInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
-  campaigns?: Prisma.CampaignCreateNestedManyWithoutOrganizationInput
   brandDictionaries?: Prisma.BrandDictionaryCreateNestedManyWithoutOrganizationInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutOrganizationInput
   integrations?: Prisma.IntegrationCreateNestedManyWithoutOrganizationInput
+  users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -241,10 +241,10 @@ export type OrganizationUncheckedCreateInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
-  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutOrganizationInput
   brandDictionaries?: Prisma.BrandDictionaryUncheckedCreateNestedManyWithoutOrganizationInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutOrganizationInput
   integrations?: Prisma.IntegrationUncheckedCreateNestedManyWithoutOrganizationInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -252,10 +252,10 @@ export type OrganizationUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
-  campaigns?: Prisma.CampaignUpdateManyWithoutOrganizationNestedInput
   brandDictionaries?: Prisma.BrandDictionaryUpdateManyWithoutOrganizationNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutOrganizationNestedInput
   integrations?: Prisma.IntegrationUpdateManyWithoutOrganizationNestedInput
+  users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -263,10 +263,10 @@ export type OrganizationUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
-  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
   brandDictionaries?: Prisma.BrandDictionaryUncheckedUpdateManyWithoutOrganizationNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
   integrations?: Prisma.IntegrationUncheckedUpdateManyWithoutOrganizationNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -385,8 +385,8 @@ export type OrganizationCreateWithoutUsersInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  campaigns?: Prisma.CampaignCreateNestedManyWithoutOrganizationInput
   brandDictionaries?: Prisma.BrandDictionaryCreateNestedManyWithoutOrganizationInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutOrganizationInput
   integrations?: Prisma.IntegrationCreateNestedManyWithoutOrganizationInput
 }
 
@@ -395,8 +395,8 @@ export type OrganizationUncheckedCreateWithoutUsersInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutOrganizationInput
   brandDictionaries?: Prisma.BrandDictionaryUncheckedCreateNestedManyWithoutOrganizationInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutOrganizationInput
   integrations?: Prisma.IntegrationUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
@@ -421,8 +421,8 @@ export type OrganizationUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campaigns?: Prisma.CampaignUpdateManyWithoutOrganizationNestedInput
   brandDictionaries?: Prisma.BrandDictionaryUpdateManyWithoutOrganizationNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutOrganizationNestedInput
   integrations?: Prisma.IntegrationUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -431,8 +431,8 @@ export type OrganizationUncheckedUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
   brandDictionaries?: Prisma.BrandDictionaryUncheckedUpdateManyWithoutOrganizationNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
   integrations?: Prisma.IntegrationUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -441,9 +441,9 @@ export type OrganizationCreateWithoutCampaignsInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
   brandDictionaries?: Prisma.BrandDictionaryCreateNestedManyWithoutOrganizationInput
   integrations?: Prisma.IntegrationCreateNestedManyWithoutOrganizationInput
+  users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutCampaignsInput = {
@@ -451,9 +451,9 @@ export type OrganizationUncheckedCreateWithoutCampaignsInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
   brandDictionaries?: Prisma.BrandDictionaryUncheckedCreateNestedManyWithoutOrganizationInput
   integrations?: Prisma.IntegrationUncheckedCreateNestedManyWithoutOrganizationInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutCampaignsInput = {
@@ -477,9 +477,9 @@ export type OrganizationUpdateWithoutCampaignsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
   brandDictionaries?: Prisma.BrandDictionaryUpdateManyWithoutOrganizationNestedInput
   integrations?: Prisma.IntegrationUpdateManyWithoutOrganizationNestedInput
+  users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutCampaignsInput = {
@@ -487,9 +487,9 @@ export type OrganizationUncheckedUpdateWithoutCampaignsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
   brandDictionaries?: Prisma.BrandDictionaryUncheckedUpdateManyWithoutOrganizationNestedInput
   integrations?: Prisma.IntegrationUncheckedUpdateManyWithoutOrganizationNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutBrandDictionariesInput = {
@@ -497,9 +497,9 @@ export type OrganizationCreateWithoutBrandDictionariesInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
   campaigns?: Prisma.CampaignCreateNestedManyWithoutOrganizationInput
   integrations?: Prisma.IntegrationCreateNestedManyWithoutOrganizationInput
+  users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutBrandDictionariesInput = {
@@ -507,9 +507,9 @@ export type OrganizationUncheckedCreateWithoutBrandDictionariesInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutOrganizationInput
   integrations?: Prisma.IntegrationUncheckedCreateNestedManyWithoutOrganizationInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutBrandDictionariesInput = {
@@ -533,9 +533,9 @@ export type OrganizationUpdateWithoutBrandDictionariesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
   campaigns?: Prisma.CampaignUpdateManyWithoutOrganizationNestedInput
   integrations?: Prisma.IntegrationUpdateManyWithoutOrganizationNestedInput
+  users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutBrandDictionariesInput = {
@@ -543,9 +543,9 @@ export type OrganizationUncheckedUpdateWithoutBrandDictionariesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
   integrations?: Prisma.IntegrationUncheckedUpdateManyWithoutOrganizationNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutIntegrationsInput = {
@@ -553,9 +553,9 @@ export type OrganizationCreateWithoutIntegrationsInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
-  campaigns?: Prisma.CampaignCreateNestedManyWithoutOrganizationInput
   brandDictionaries?: Prisma.BrandDictionaryCreateNestedManyWithoutOrganizationInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutOrganizationInput
+  users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutIntegrationsInput = {
@@ -563,9 +563,9 @@ export type OrganizationUncheckedCreateWithoutIntegrationsInput = {
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
-  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutOrganizationInput
   brandDictionaries?: Prisma.BrandDictionaryUncheckedCreateNestedManyWithoutOrganizationInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutOrganizationInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutIntegrationsInput = {
@@ -589,9 +589,9 @@ export type OrganizationUpdateWithoutIntegrationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
-  campaigns?: Prisma.CampaignUpdateManyWithoutOrganizationNestedInput
   brandDictionaries?: Prisma.BrandDictionaryUpdateManyWithoutOrganizationNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutOrganizationNestedInput
+  users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutIntegrationsInput = {
@@ -599,9 +599,9 @@ export type OrganizationUncheckedUpdateWithoutIntegrationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
-  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
   brandDictionaries?: Prisma.BrandDictionaryUncheckedUpdateManyWithoutOrganizationNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutOrganizationNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -610,17 +610,17 @@ export type OrganizationUncheckedUpdateWithoutIntegrationsInput = {
  */
 
 export type OrganizationCountOutputType = {
-  users: number
-  campaigns: number
   brandDictionaries: number
+  campaigns: number
   integrations: number
+  users: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | OrganizationCountOutputTypeCountUsersArgs
-  campaigns?: boolean | OrganizationCountOutputTypeCountCampaignsArgs
   brandDictionaries?: boolean | OrganizationCountOutputTypeCountBrandDictionariesArgs
+  campaigns?: boolean | OrganizationCountOutputTypeCountCampaignsArgs
   integrations?: boolean | OrganizationCountOutputTypeCountIntegrationsArgs
+  users?: boolean | OrganizationCountOutputTypeCountUsersArgs
 }
 
 /**
@@ -636,8 +636,8 @@ export type OrganizationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types
 /**
  * OrganizationCountOutputType without action
  */
-export type OrganizationCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserWhereInput
+export type OrganizationCountOutputTypeCountBrandDictionariesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BrandDictionaryWhereInput
 }
 
 /**
@@ -650,15 +650,15 @@ export type OrganizationCountOutputTypeCountCampaignsArgs<ExtArgs extends runtim
 /**
  * OrganizationCountOutputType without action
  */
-export type OrganizationCountOutputTypeCountBrandDictionariesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.BrandDictionaryWhereInput
+export type OrganizationCountOutputTypeCountIntegrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IntegrationWhereInput
 }
 
 /**
  * OrganizationCountOutputType without action
  */
-export type OrganizationCountOutputTypeCountIntegrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.IntegrationWhereInput
+export type OrganizationCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
 }
 
 
@@ -667,10 +667,10 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   name?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  users?: boolean | Prisma.Organization$usersArgs<ExtArgs>
-  campaigns?: boolean | Prisma.Organization$campaignsArgs<ExtArgs>
   brandDictionaries?: boolean | Prisma.Organization$brandDictionariesArgs<ExtArgs>
+  campaigns?: boolean | Prisma.Organization$campaignsArgs<ExtArgs>
   integrations?: boolean | Prisma.Organization$integrationsArgs<ExtArgs>
+  users?: boolean | Prisma.Organization$usersArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -697,10 +697,10 @@ export type OrganizationSelectScalar = {
 
 export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Prisma.Organization$usersArgs<ExtArgs>
-  campaigns?: boolean | Prisma.Organization$campaignsArgs<ExtArgs>
   brandDictionaries?: boolean | Prisma.Organization$brandDictionariesArgs<ExtArgs>
+  campaigns?: boolean | Prisma.Organization$campaignsArgs<ExtArgs>
   integrations?: boolean | Prisma.Organization$integrationsArgs<ExtArgs>
+  users?: boolean | Prisma.Organization$usersArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -709,10 +709,10 @@ export type OrganizationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Organization"
   objects: {
-    users: Prisma.$UserPayload<ExtArgs>[]
-    campaigns: Prisma.$CampaignPayload<ExtArgs>[]
     brandDictionaries: Prisma.$BrandDictionaryPayload<ExtArgs>[]
+    campaigns: Prisma.$CampaignPayload<ExtArgs>[]
     integrations: Prisma.$IntegrationPayload<ExtArgs>[]
+    users: Prisma.$UserPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1113,10 +1113,10 @@ readonly fields: OrganizationFieldRefs;
  */
 export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  users<T extends Prisma.Organization$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  campaigns<T extends Prisma.Organization$campaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   brandDictionaries<T extends Prisma.Organization$brandDictionariesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$brandDictionariesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BrandDictionaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campaigns<T extends Prisma.Organization$campaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   integrations<T extends Prisma.Organization$integrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$integrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  users<T extends Prisma.Organization$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1538,27 +1538,27 @@ export type OrganizationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
- * Organization.users
+ * Organization.brandDictionaries
  */
-export type Organization$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Organization$brandDictionariesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the User
+   * Select specific fields to fetch from the BrandDictionary
    */
-  select?: Prisma.UserSelect<ExtArgs> | null
+  select?: Prisma.BrandDictionarySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the User
+   * Omit specific fields from the BrandDictionary
    */
-  omit?: Prisma.UserOmit<ExtArgs> | null
+  omit?: Prisma.BrandDictionaryOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
-  cursor?: Prisma.UserWhereUniqueInput
+  include?: Prisma.BrandDictionaryInclude<ExtArgs> | null
+  where?: Prisma.BrandDictionaryWhereInput
+  orderBy?: Prisma.BrandDictionaryOrderByWithRelationInput | Prisma.BrandDictionaryOrderByWithRelationInput[]
+  cursor?: Prisma.BrandDictionaryWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+  distinct?: Prisma.BrandDictionaryScalarFieldEnum | Prisma.BrandDictionaryScalarFieldEnum[]
 }
 
 /**
@@ -1586,30 +1586,6 @@ export type Organization$campaignsArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
- * Organization.brandDictionaries
- */
-export type Organization$brandDictionariesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the BrandDictionary
-   */
-  select?: Prisma.BrandDictionarySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the BrandDictionary
-   */
-  omit?: Prisma.BrandDictionaryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BrandDictionaryInclude<ExtArgs> | null
-  where?: Prisma.BrandDictionaryWhereInput
-  orderBy?: Prisma.BrandDictionaryOrderByWithRelationInput | Prisma.BrandDictionaryOrderByWithRelationInput[]
-  cursor?: Prisma.BrandDictionaryWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.BrandDictionaryScalarFieldEnum | Prisma.BrandDictionaryScalarFieldEnum[]
-}
-
-/**
  * Organization.integrations
  */
 export type Organization$integrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1631,6 +1607,30 @@ export type Organization$integrationsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.IntegrationScalarFieldEnum | Prisma.IntegrationScalarFieldEnum[]
+}
+
+/**
+ * Organization.users
+ */
+export type Organization$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
 }
 
 /**

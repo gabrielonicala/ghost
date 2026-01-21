@@ -256,11 +256,11 @@ export type CreatorWhereInput = {
   verified?: Prisma.BoolFilter<"Creator"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Creator"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Creator"> | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityListRelationFilter
-  contentItems?: Prisma.ContentItemListRelationFilter
-  campaigns?: Prisma.CampaignCreatorListRelationFilter
-  promotionMetrics?: Prisma.PromotionDensityMetricListRelationFilter
   authenticitySignals?: Prisma.AuthenticitySignalListRelationFilter
+  campaigns?: Prisma.CampaignCreatorListRelationFilter
+  contentItems?: Prisma.ContentItemListRelationFilter
+  creatorIdentities?: Prisma.CreatorIdentityListRelationFilter
+  promotionMetrics?: Prisma.PromotionDensityMetricListRelationFilter
 }
 
 export type CreatorOrderByWithRelationInput = {
@@ -274,11 +274,11 @@ export type CreatorOrderByWithRelationInput = {
   verified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  creatorIdentities?: Prisma.CreatorIdentityOrderByRelationAggregateInput
-  contentItems?: Prisma.ContentItemOrderByRelationAggregateInput
-  campaigns?: Prisma.CampaignCreatorOrderByRelationAggregateInput
-  promotionMetrics?: Prisma.PromotionDensityMetricOrderByRelationAggregateInput
   authenticitySignals?: Prisma.AuthenticitySignalOrderByRelationAggregateInput
+  campaigns?: Prisma.CampaignCreatorOrderByRelationAggregateInput
+  contentItems?: Prisma.ContentItemOrderByRelationAggregateInput
+  creatorIdentities?: Prisma.CreatorIdentityOrderByRelationAggregateInput
+  promotionMetrics?: Prisma.PromotionDensityMetricOrderByRelationAggregateInput
 }
 
 export type CreatorWhereUniqueInput = Prisma.AtLeast<{
@@ -296,11 +296,11 @@ export type CreatorWhereUniqueInput = Prisma.AtLeast<{
   verified?: Prisma.BoolFilter<"Creator"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Creator"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Creator"> | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityListRelationFilter
-  contentItems?: Prisma.ContentItemListRelationFilter
-  campaigns?: Prisma.CampaignCreatorListRelationFilter
-  promotionMetrics?: Prisma.PromotionDensityMetricListRelationFilter
   authenticitySignals?: Prisma.AuthenticitySignalListRelationFilter
+  campaigns?: Prisma.CampaignCreatorListRelationFilter
+  contentItems?: Prisma.ContentItemListRelationFilter
+  creatorIdentities?: Prisma.CreatorIdentityListRelationFilter
+  promotionMetrics?: Prisma.PromotionDensityMetricListRelationFilter
 }, "id" | "platform_platformId">
 
 export type CreatorOrderByWithAggregationInput = {
@@ -348,11 +348,11 @@ export type CreatorCreateInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creatorIdentities?: Prisma.CreatorIdentityCreateNestedManyWithoutCreatorInput
-  contentItems?: Prisma.ContentItemCreateNestedManyWithoutCreatorInput
-  campaigns?: Prisma.CampaignCreatorCreateNestedManyWithoutCreatorInput
-  promotionMetrics?: Prisma.PromotionDensityMetricCreateNestedManyWithoutCreatorInput
   authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutCreatorInput
+  campaigns?: Prisma.CampaignCreatorCreateNestedManyWithoutCreatorInput
+  contentItems?: Prisma.ContentItemCreateNestedManyWithoutCreatorInput
+  creatorIdentities?: Prisma.CreatorIdentityCreateNestedManyWithoutCreatorInput
+  promotionMetrics?: Prisma.PromotionDensityMetricCreateNestedManyWithoutCreatorInput
 }
 
 export type CreatorUncheckedCreateInput = {
@@ -366,11 +366,11 @@ export type CreatorUncheckedCreateInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUncheckedCreateNestedManyWithoutCreatorInput
-  contentItems?: Prisma.ContentItemUncheckedCreateNestedManyWithoutCreatorInput
-  campaigns?: Prisma.CampaignCreatorUncheckedCreateNestedManyWithoutCreatorInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedCreateNestedManyWithoutCreatorInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutCreatorInput
+  campaigns?: Prisma.CampaignCreatorUncheckedCreateNestedManyWithoutCreatorInput
+  contentItems?: Prisma.ContentItemUncheckedCreateNestedManyWithoutCreatorInput
+  creatorIdentities?: Prisma.CreatorIdentityUncheckedCreateNestedManyWithoutCreatorInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type CreatorUpdateInput = {
@@ -384,11 +384,11 @@ export type CreatorUpdateInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUpdateManyWithoutCreatorNestedInput
-  contentItems?: Prisma.ContentItemUpdateManyWithoutCreatorNestedInput
-  campaigns?: Prisma.CampaignCreatorUpdateManyWithoutCreatorNestedInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUpdateManyWithoutCreatorNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutCreatorNestedInput
+  campaigns?: Prisma.CampaignCreatorUpdateManyWithoutCreatorNestedInput
+  contentItems?: Prisma.ContentItemUpdateManyWithoutCreatorNestedInput
+  creatorIdentities?: Prisma.CreatorIdentityUpdateManyWithoutCreatorNestedInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUpdateManyWithoutCreatorNestedInput
 }
 
 export type CreatorUncheckedUpdateInput = {
@@ -402,11 +402,11 @@ export type CreatorUncheckedUpdateInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUncheckedUpdateManyWithoutCreatorNestedInput
-  contentItems?: Prisma.ContentItemUncheckedUpdateManyWithoutCreatorNestedInput
-  campaigns?: Prisma.CampaignCreatorUncheckedUpdateManyWithoutCreatorNestedInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedUpdateManyWithoutCreatorNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutCreatorNestedInput
+  campaigns?: Prisma.CampaignCreatorUncheckedUpdateManyWithoutCreatorNestedInput
+  contentItems?: Prisma.ContentItemUncheckedUpdateManyWithoutCreatorNestedInput
+  creatorIdentities?: Prisma.CreatorIdentityUncheckedUpdateManyWithoutCreatorNestedInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type CreatorCreateManyInput = {
@@ -605,10 +605,10 @@ export type CreatorCreateWithoutCreatorIdentitiesInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  contentItems?: Prisma.ContentItemCreateNestedManyWithoutCreatorInput
-  campaigns?: Prisma.CampaignCreatorCreateNestedManyWithoutCreatorInput
-  promotionMetrics?: Prisma.PromotionDensityMetricCreateNestedManyWithoutCreatorInput
   authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutCreatorInput
+  campaigns?: Prisma.CampaignCreatorCreateNestedManyWithoutCreatorInput
+  contentItems?: Prisma.ContentItemCreateNestedManyWithoutCreatorInput
+  promotionMetrics?: Prisma.PromotionDensityMetricCreateNestedManyWithoutCreatorInput
 }
 
 export type CreatorUncheckedCreateWithoutCreatorIdentitiesInput = {
@@ -622,10 +622,10 @@ export type CreatorUncheckedCreateWithoutCreatorIdentitiesInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  contentItems?: Prisma.ContentItemUncheckedCreateNestedManyWithoutCreatorInput
-  campaigns?: Prisma.CampaignCreatorUncheckedCreateNestedManyWithoutCreatorInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedCreateNestedManyWithoutCreatorInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutCreatorInput
+  campaigns?: Prisma.CampaignCreatorUncheckedCreateNestedManyWithoutCreatorInput
+  contentItems?: Prisma.ContentItemUncheckedCreateNestedManyWithoutCreatorInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type CreatorCreateOrConnectWithoutCreatorIdentitiesInput = {
@@ -655,10 +655,10 @@ export type CreatorUpdateWithoutCreatorIdentitiesInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  contentItems?: Prisma.ContentItemUpdateManyWithoutCreatorNestedInput
-  campaigns?: Prisma.CampaignCreatorUpdateManyWithoutCreatorNestedInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUpdateManyWithoutCreatorNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutCreatorNestedInput
+  campaigns?: Prisma.CampaignCreatorUpdateManyWithoutCreatorNestedInput
+  contentItems?: Prisma.ContentItemUpdateManyWithoutCreatorNestedInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUpdateManyWithoutCreatorNestedInput
 }
 
 export type CreatorUncheckedUpdateWithoutCreatorIdentitiesInput = {
@@ -672,10 +672,10 @@ export type CreatorUncheckedUpdateWithoutCreatorIdentitiesInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  contentItems?: Prisma.ContentItemUncheckedUpdateManyWithoutCreatorNestedInput
-  campaigns?: Prisma.CampaignCreatorUncheckedUpdateManyWithoutCreatorNestedInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedUpdateManyWithoutCreatorNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutCreatorNestedInput
+  campaigns?: Prisma.CampaignCreatorUncheckedUpdateManyWithoutCreatorNestedInput
+  contentItems?: Prisma.ContentItemUncheckedUpdateManyWithoutCreatorNestedInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type CreatorCreateWithoutCampaignsInput = {
@@ -689,10 +689,10 @@ export type CreatorCreateWithoutCampaignsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creatorIdentities?: Prisma.CreatorIdentityCreateNestedManyWithoutCreatorInput
-  contentItems?: Prisma.ContentItemCreateNestedManyWithoutCreatorInput
-  promotionMetrics?: Prisma.PromotionDensityMetricCreateNestedManyWithoutCreatorInput
   authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutCreatorInput
+  contentItems?: Prisma.ContentItemCreateNestedManyWithoutCreatorInput
+  creatorIdentities?: Prisma.CreatorIdentityCreateNestedManyWithoutCreatorInput
+  promotionMetrics?: Prisma.PromotionDensityMetricCreateNestedManyWithoutCreatorInput
 }
 
 export type CreatorUncheckedCreateWithoutCampaignsInput = {
@@ -706,10 +706,10 @@ export type CreatorUncheckedCreateWithoutCampaignsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUncheckedCreateNestedManyWithoutCreatorInput
-  contentItems?: Prisma.ContentItemUncheckedCreateNestedManyWithoutCreatorInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedCreateNestedManyWithoutCreatorInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutCreatorInput
+  contentItems?: Prisma.ContentItemUncheckedCreateNestedManyWithoutCreatorInput
+  creatorIdentities?: Prisma.CreatorIdentityUncheckedCreateNestedManyWithoutCreatorInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type CreatorCreateOrConnectWithoutCampaignsInput = {
@@ -739,10 +739,10 @@ export type CreatorUpdateWithoutCampaignsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUpdateManyWithoutCreatorNestedInput
-  contentItems?: Prisma.ContentItemUpdateManyWithoutCreatorNestedInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUpdateManyWithoutCreatorNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutCreatorNestedInput
+  contentItems?: Prisma.ContentItemUpdateManyWithoutCreatorNestedInput
+  creatorIdentities?: Prisma.CreatorIdentityUpdateManyWithoutCreatorNestedInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUpdateManyWithoutCreatorNestedInput
 }
 
 export type CreatorUncheckedUpdateWithoutCampaignsInput = {
@@ -756,10 +756,10 @@ export type CreatorUncheckedUpdateWithoutCampaignsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUncheckedUpdateManyWithoutCreatorNestedInput
-  contentItems?: Prisma.ContentItemUncheckedUpdateManyWithoutCreatorNestedInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedUpdateManyWithoutCreatorNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutCreatorNestedInput
+  contentItems?: Prisma.ContentItemUncheckedUpdateManyWithoutCreatorNestedInput
+  creatorIdentities?: Prisma.CreatorIdentityUncheckedUpdateManyWithoutCreatorNestedInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type CreatorCreateWithoutContentItemsInput = {
@@ -773,10 +773,10 @@ export type CreatorCreateWithoutContentItemsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creatorIdentities?: Prisma.CreatorIdentityCreateNestedManyWithoutCreatorInput
-  campaigns?: Prisma.CampaignCreatorCreateNestedManyWithoutCreatorInput
-  promotionMetrics?: Prisma.PromotionDensityMetricCreateNestedManyWithoutCreatorInput
   authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutCreatorInput
+  campaigns?: Prisma.CampaignCreatorCreateNestedManyWithoutCreatorInput
+  creatorIdentities?: Prisma.CreatorIdentityCreateNestedManyWithoutCreatorInput
+  promotionMetrics?: Prisma.PromotionDensityMetricCreateNestedManyWithoutCreatorInput
 }
 
 export type CreatorUncheckedCreateWithoutContentItemsInput = {
@@ -790,10 +790,10 @@ export type CreatorUncheckedCreateWithoutContentItemsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUncheckedCreateNestedManyWithoutCreatorInput
-  campaigns?: Prisma.CampaignCreatorUncheckedCreateNestedManyWithoutCreatorInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedCreateNestedManyWithoutCreatorInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutCreatorInput
+  campaigns?: Prisma.CampaignCreatorUncheckedCreateNestedManyWithoutCreatorInput
+  creatorIdentities?: Prisma.CreatorIdentityUncheckedCreateNestedManyWithoutCreatorInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type CreatorCreateOrConnectWithoutContentItemsInput = {
@@ -823,10 +823,10 @@ export type CreatorUpdateWithoutContentItemsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUpdateManyWithoutCreatorNestedInput
-  campaigns?: Prisma.CampaignCreatorUpdateManyWithoutCreatorNestedInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUpdateManyWithoutCreatorNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutCreatorNestedInput
+  campaigns?: Prisma.CampaignCreatorUpdateManyWithoutCreatorNestedInput
+  creatorIdentities?: Prisma.CreatorIdentityUpdateManyWithoutCreatorNestedInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUpdateManyWithoutCreatorNestedInput
 }
 
 export type CreatorUncheckedUpdateWithoutContentItemsInput = {
@@ -840,10 +840,10 @@ export type CreatorUncheckedUpdateWithoutContentItemsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUncheckedUpdateManyWithoutCreatorNestedInput
-  campaigns?: Prisma.CampaignCreatorUncheckedUpdateManyWithoutCreatorNestedInput
-  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedUpdateManyWithoutCreatorNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutCreatorNestedInput
+  campaigns?: Prisma.CampaignCreatorUncheckedUpdateManyWithoutCreatorNestedInput
+  creatorIdentities?: Prisma.CreatorIdentityUncheckedUpdateManyWithoutCreatorNestedInput
+  promotionMetrics?: Prisma.PromotionDensityMetricUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type CreatorCreateWithoutAuthenticitySignalsInput = {
@@ -857,9 +857,9 @@ export type CreatorCreateWithoutAuthenticitySignalsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creatorIdentities?: Prisma.CreatorIdentityCreateNestedManyWithoutCreatorInput
-  contentItems?: Prisma.ContentItemCreateNestedManyWithoutCreatorInput
   campaigns?: Prisma.CampaignCreatorCreateNestedManyWithoutCreatorInput
+  contentItems?: Prisma.ContentItemCreateNestedManyWithoutCreatorInput
+  creatorIdentities?: Prisma.CreatorIdentityCreateNestedManyWithoutCreatorInput
   promotionMetrics?: Prisma.PromotionDensityMetricCreateNestedManyWithoutCreatorInput
 }
 
@@ -874,9 +874,9 @@ export type CreatorUncheckedCreateWithoutAuthenticitySignalsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUncheckedCreateNestedManyWithoutCreatorInput
-  contentItems?: Prisma.ContentItemUncheckedCreateNestedManyWithoutCreatorInput
   campaigns?: Prisma.CampaignCreatorUncheckedCreateNestedManyWithoutCreatorInput
+  contentItems?: Prisma.ContentItemUncheckedCreateNestedManyWithoutCreatorInput
+  creatorIdentities?: Prisma.CreatorIdentityUncheckedCreateNestedManyWithoutCreatorInput
   promotionMetrics?: Prisma.PromotionDensityMetricUncheckedCreateNestedManyWithoutCreatorInput
 }
 
@@ -907,9 +907,9 @@ export type CreatorUpdateWithoutAuthenticitySignalsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUpdateManyWithoutCreatorNestedInput
-  contentItems?: Prisma.ContentItemUpdateManyWithoutCreatorNestedInput
   campaigns?: Prisma.CampaignCreatorUpdateManyWithoutCreatorNestedInput
+  contentItems?: Prisma.ContentItemUpdateManyWithoutCreatorNestedInput
+  creatorIdentities?: Prisma.CreatorIdentityUpdateManyWithoutCreatorNestedInput
   promotionMetrics?: Prisma.PromotionDensityMetricUpdateManyWithoutCreatorNestedInput
 }
 
@@ -924,9 +924,9 @@ export type CreatorUncheckedUpdateWithoutAuthenticitySignalsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUncheckedUpdateManyWithoutCreatorNestedInput
-  contentItems?: Prisma.ContentItemUncheckedUpdateManyWithoutCreatorNestedInput
   campaigns?: Prisma.CampaignCreatorUncheckedUpdateManyWithoutCreatorNestedInput
+  contentItems?: Prisma.ContentItemUncheckedUpdateManyWithoutCreatorNestedInput
+  creatorIdentities?: Prisma.CreatorIdentityUncheckedUpdateManyWithoutCreatorNestedInput
   promotionMetrics?: Prisma.PromotionDensityMetricUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
@@ -941,10 +941,10 @@ export type CreatorCreateWithoutPromotionMetricsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creatorIdentities?: Prisma.CreatorIdentityCreateNestedManyWithoutCreatorInput
-  contentItems?: Prisma.ContentItemCreateNestedManyWithoutCreatorInput
-  campaigns?: Prisma.CampaignCreatorCreateNestedManyWithoutCreatorInput
   authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutCreatorInput
+  campaigns?: Prisma.CampaignCreatorCreateNestedManyWithoutCreatorInput
+  contentItems?: Prisma.ContentItemCreateNestedManyWithoutCreatorInput
+  creatorIdentities?: Prisma.CreatorIdentityCreateNestedManyWithoutCreatorInput
 }
 
 export type CreatorUncheckedCreateWithoutPromotionMetricsInput = {
@@ -958,10 +958,10 @@ export type CreatorUncheckedCreateWithoutPromotionMetricsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUncheckedCreateNestedManyWithoutCreatorInput
-  contentItems?: Prisma.ContentItemUncheckedCreateNestedManyWithoutCreatorInput
-  campaigns?: Prisma.CampaignCreatorUncheckedCreateNestedManyWithoutCreatorInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutCreatorInput
+  campaigns?: Prisma.CampaignCreatorUncheckedCreateNestedManyWithoutCreatorInput
+  contentItems?: Prisma.ContentItemUncheckedCreateNestedManyWithoutCreatorInput
+  creatorIdentities?: Prisma.CreatorIdentityUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type CreatorCreateOrConnectWithoutPromotionMetricsInput = {
@@ -991,10 +991,10 @@ export type CreatorUpdateWithoutPromotionMetricsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUpdateManyWithoutCreatorNestedInput
-  contentItems?: Prisma.ContentItemUpdateManyWithoutCreatorNestedInput
-  campaigns?: Prisma.CampaignCreatorUpdateManyWithoutCreatorNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutCreatorNestedInput
+  campaigns?: Prisma.CampaignCreatorUpdateManyWithoutCreatorNestedInput
+  contentItems?: Prisma.ContentItemUpdateManyWithoutCreatorNestedInput
+  creatorIdentities?: Prisma.CreatorIdentityUpdateManyWithoutCreatorNestedInput
 }
 
 export type CreatorUncheckedUpdateWithoutPromotionMetricsInput = {
@@ -1008,10 +1008,10 @@ export type CreatorUncheckedUpdateWithoutPromotionMetricsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creatorIdentities?: Prisma.CreatorIdentityUncheckedUpdateManyWithoutCreatorNestedInput
-  contentItems?: Prisma.ContentItemUncheckedUpdateManyWithoutCreatorNestedInput
-  campaigns?: Prisma.CampaignCreatorUncheckedUpdateManyWithoutCreatorNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutCreatorNestedInput
+  campaigns?: Prisma.CampaignCreatorUncheckedUpdateManyWithoutCreatorNestedInput
+  contentItems?: Prisma.ContentItemUncheckedUpdateManyWithoutCreatorNestedInput
+  creatorIdentities?: Prisma.CreatorIdentityUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 
@@ -1020,19 +1020,19 @@ export type CreatorUncheckedUpdateWithoutPromotionMetricsInput = {
  */
 
 export type CreatorCountOutputType = {
-  creatorIdentities: number
-  contentItems: number
-  campaigns: number
-  promotionMetrics: number
   authenticitySignals: number
+  campaigns: number
+  contentItems: number
+  creatorIdentities: number
+  promotionMetrics: number
 }
 
 export type CreatorCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creatorIdentities?: boolean | CreatorCountOutputTypeCountCreatorIdentitiesArgs
-  contentItems?: boolean | CreatorCountOutputTypeCountContentItemsArgs
-  campaigns?: boolean | CreatorCountOutputTypeCountCampaignsArgs
-  promotionMetrics?: boolean | CreatorCountOutputTypeCountPromotionMetricsArgs
   authenticitySignals?: boolean | CreatorCountOutputTypeCountAuthenticitySignalsArgs
+  campaigns?: boolean | CreatorCountOutputTypeCountCampaignsArgs
+  contentItems?: boolean | CreatorCountOutputTypeCountContentItemsArgs
+  creatorIdentities?: boolean | CreatorCountOutputTypeCountCreatorIdentitiesArgs
+  promotionMetrics?: boolean | CreatorCountOutputTypeCountPromotionMetricsArgs
 }
 
 /**
@@ -1048,15 +1048,8 @@ export type CreatorCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * CreatorCountOutputType without action
  */
-export type CreatorCountOutputTypeCountCreatorIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CreatorIdentityWhereInput
-}
-
-/**
- * CreatorCountOutputType without action
- */
-export type CreatorCountOutputTypeCountContentItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ContentItemWhereInput
+export type CreatorCountOutputTypeCountAuthenticitySignalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuthenticitySignalWhereInput
 }
 
 /**
@@ -1069,15 +1062,22 @@ export type CreatorCountOutputTypeCountCampaignsArgs<ExtArgs extends runtime.Typ
 /**
  * CreatorCountOutputType without action
  */
-export type CreatorCountOutputTypeCountPromotionMetricsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PromotionDensityMetricWhereInput
+export type CreatorCountOutputTypeCountContentItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContentItemWhereInput
 }
 
 /**
  * CreatorCountOutputType without action
  */
-export type CreatorCountOutputTypeCountAuthenticitySignalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AuthenticitySignalWhereInput
+export type CreatorCountOutputTypeCountCreatorIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreatorIdentityWhereInput
+}
+
+/**
+ * CreatorCountOutputType without action
+ */
+export type CreatorCountOutputTypeCountPromotionMetricsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PromotionDensityMetricWhereInput
 }
 
 
@@ -1092,11 +1092,11 @@ export type CreatorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   verified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  creatorIdentities?: boolean | Prisma.Creator$creatorIdentitiesArgs<ExtArgs>
-  contentItems?: boolean | Prisma.Creator$contentItemsArgs<ExtArgs>
-  campaigns?: boolean | Prisma.Creator$campaignsArgs<ExtArgs>
-  promotionMetrics?: boolean | Prisma.Creator$promotionMetricsArgs<ExtArgs>
   authenticitySignals?: boolean | Prisma.Creator$authenticitySignalsArgs<ExtArgs>
+  campaigns?: boolean | Prisma.Creator$campaignsArgs<ExtArgs>
+  contentItems?: boolean | Prisma.Creator$contentItemsArgs<ExtArgs>
+  creatorIdentities?: boolean | Prisma.Creator$creatorIdentitiesArgs<ExtArgs>
+  promotionMetrics?: boolean | Prisma.Creator$promotionMetricsArgs<ExtArgs>
   _count?: boolean | Prisma.CreatorCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["creator"]>
 
@@ -1141,11 +1141,11 @@ export type CreatorSelectScalar = {
 
 export type CreatorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "platform" | "platformId" | "username" | "displayName" | "profileImageUrl" | "followerCount" | "verified" | "createdAt" | "updatedAt", ExtArgs["result"]["creator"]>
 export type CreatorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creatorIdentities?: boolean | Prisma.Creator$creatorIdentitiesArgs<ExtArgs>
-  contentItems?: boolean | Prisma.Creator$contentItemsArgs<ExtArgs>
-  campaigns?: boolean | Prisma.Creator$campaignsArgs<ExtArgs>
-  promotionMetrics?: boolean | Prisma.Creator$promotionMetricsArgs<ExtArgs>
   authenticitySignals?: boolean | Prisma.Creator$authenticitySignalsArgs<ExtArgs>
+  campaigns?: boolean | Prisma.Creator$campaignsArgs<ExtArgs>
+  contentItems?: boolean | Prisma.Creator$contentItemsArgs<ExtArgs>
+  creatorIdentities?: boolean | Prisma.Creator$creatorIdentitiesArgs<ExtArgs>
+  promotionMetrics?: boolean | Prisma.Creator$promotionMetricsArgs<ExtArgs>
   _count?: boolean | Prisma.CreatorCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CreatorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1154,11 +1154,11 @@ export type CreatorIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $CreatorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Creator"
   objects: {
-    creatorIdentities: Prisma.$CreatorIdentityPayload<ExtArgs>[]
-    contentItems: Prisma.$ContentItemPayload<ExtArgs>[]
-    campaigns: Prisma.$CampaignCreatorPayload<ExtArgs>[]
-    promotionMetrics: Prisma.$PromotionDensityMetricPayload<ExtArgs>[]
     authenticitySignals: Prisma.$AuthenticitySignalPayload<ExtArgs>[]
+    campaigns: Prisma.$CampaignCreatorPayload<ExtArgs>[]
+    contentItems: Prisma.$ContentItemPayload<ExtArgs>[]
+    creatorIdentities: Prisma.$CreatorIdentityPayload<ExtArgs>[]
+    promotionMetrics: Prisma.$PromotionDensityMetricPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1565,11 +1565,11 @@ readonly fields: CreatorFieldRefs;
  */
 export interface Prisma__CreatorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  creatorIdentities<T extends Prisma.Creator$creatorIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Creator$creatorIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatorIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  contentItems<T extends Prisma.Creator$contentItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Creator$contentItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  campaigns<T extends Prisma.Creator$campaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Creator$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignCreatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  promotionMetrics<T extends Prisma.Creator$promotionMetricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Creator$promotionMetricsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromotionDensityMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   authenticitySignals<T extends Prisma.Creator$authenticitySignalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Creator$authenticitySignalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthenticitySignalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campaigns<T extends Prisma.Creator$campaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Creator$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignCreatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contentItems<T extends Prisma.Creator$contentItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Creator$contentItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  creatorIdentities<T extends Prisma.Creator$creatorIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Creator$creatorIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreatorIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  promotionMetrics<T extends Prisma.Creator$promotionMetricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Creator$promotionMetricsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromotionDensityMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1997,51 +1997,27 @@ export type CreatorDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Creator.creatorIdentities
+ * Creator.authenticitySignals
  */
-export type Creator$creatorIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Creator$authenticitySignalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the CreatorIdentity
+   * Select specific fields to fetch from the AuthenticitySignal
    */
-  select?: Prisma.CreatorIdentitySelect<ExtArgs> | null
+  select?: Prisma.AuthenticitySignalSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the CreatorIdentity
+   * Omit specific fields from the AuthenticitySignal
    */
-  omit?: Prisma.CreatorIdentityOmit<ExtArgs> | null
+  omit?: Prisma.AuthenticitySignalOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.CreatorIdentityInclude<ExtArgs> | null
-  where?: Prisma.CreatorIdentityWhereInput
-  orderBy?: Prisma.CreatorIdentityOrderByWithRelationInput | Prisma.CreatorIdentityOrderByWithRelationInput[]
-  cursor?: Prisma.CreatorIdentityWhereUniqueInput
+  include?: Prisma.AuthenticitySignalInclude<ExtArgs> | null
+  where?: Prisma.AuthenticitySignalWhereInput
+  orderBy?: Prisma.AuthenticitySignalOrderByWithRelationInput | Prisma.AuthenticitySignalOrderByWithRelationInput[]
+  cursor?: Prisma.AuthenticitySignalWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.CreatorIdentityScalarFieldEnum | Prisma.CreatorIdentityScalarFieldEnum[]
-}
-
-/**
- * Creator.contentItems
- */
-export type Creator$contentItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ContentItem
-   */
-  select?: Prisma.ContentItemSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ContentItem
-   */
-  omit?: Prisma.ContentItemOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentItemInclude<ExtArgs> | null
-  where?: Prisma.ContentItemWhereInput
-  orderBy?: Prisma.ContentItemOrderByWithRelationInput | Prisma.ContentItemOrderByWithRelationInput[]
-  cursor?: Prisma.ContentItemWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ContentItemScalarFieldEnum | Prisma.ContentItemScalarFieldEnum[]
+  distinct?: Prisma.AuthenticitySignalScalarFieldEnum | Prisma.AuthenticitySignalScalarFieldEnum[]
 }
 
 /**
@@ -2069,6 +2045,54 @@ export type Creator$campaignsArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Creator.contentItems
+ */
+export type Creator$contentItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ContentItem
+   */
+  select?: Prisma.ContentItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ContentItem
+   */
+  omit?: Prisma.ContentItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContentItemInclude<ExtArgs> | null
+  where?: Prisma.ContentItemWhereInput
+  orderBy?: Prisma.ContentItemOrderByWithRelationInput | Prisma.ContentItemOrderByWithRelationInput[]
+  cursor?: Prisma.ContentItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContentItemScalarFieldEnum | Prisma.ContentItemScalarFieldEnum[]
+}
+
+/**
+ * Creator.creatorIdentities
+ */
+export type Creator$creatorIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreatorIdentity
+   */
+  select?: Prisma.CreatorIdentitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreatorIdentity
+   */
+  omit?: Prisma.CreatorIdentityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreatorIdentityInclude<ExtArgs> | null
+  where?: Prisma.CreatorIdentityWhereInput
+  orderBy?: Prisma.CreatorIdentityOrderByWithRelationInput | Prisma.CreatorIdentityOrderByWithRelationInput[]
+  cursor?: Prisma.CreatorIdentityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreatorIdentityScalarFieldEnum | Prisma.CreatorIdentityScalarFieldEnum[]
+}
+
+/**
  * Creator.promotionMetrics
  */
 export type Creator$promotionMetricsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2090,30 +2114,6 @@ export type Creator$promotionMetricsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.PromotionDensityMetricScalarFieldEnum | Prisma.PromotionDensityMetricScalarFieldEnum[]
-}
-
-/**
- * Creator.authenticitySignals
- */
-export type Creator$authenticitySignalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AuthenticitySignal
-   */
-  select?: Prisma.AuthenticitySignalSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the AuthenticitySignal
-   */
-  omit?: Prisma.AuthenticitySignalOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AuthenticitySignalInclude<ExtArgs> | null
-  where?: Prisma.AuthenticitySignalWhereInput
-  orderBy?: Prisma.AuthenticitySignalOrderByWithRelationInput | Prisma.AuthenticitySignalOrderByWithRelationInput[]
-  cursor?: Prisma.AuthenticitySignalWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AuthenticitySignalScalarFieldEnum | Prisma.AuthenticitySignalScalarFieldEnum[]
 }
 
 /**

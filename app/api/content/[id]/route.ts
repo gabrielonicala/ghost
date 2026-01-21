@@ -11,26 +11,6 @@ export async function GET(
       where: { id },
       include: {
         creator: true,
-        conversionScores: {
-          orderBy: { computedAt: "desc" },
-          take: 1,
-        },
-        authenticitySignals: {
-          orderBy: { computedAt: "desc" },
-          take: 1,
-        },
-        trustMetrics: {
-          orderBy: { computedAt: "desc" },
-          take: 1,
-        },
-        fatigueMetrics: {
-          orderBy: { computedAt: "desc" },
-          take: 1,
-        },
-        metricsSnapshots: {
-          orderBy: { snapshotAt: "desc" },
-          take: 1,
-        },
       },
     });
 
@@ -41,7 +21,38 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(contentItem);
+    // Fetch latest scores separately
+    const [latestConversionScore, latestAuthenticitySignal, latestTrustMetric, latestFatigueMetric, latestMetricsSnapshot] = await Promise.all([
+      prisma.conversionConfidenceScore.findFirst({
+        where: { contentItemId: id },
+        orderBy: { computedAt: "desc" },
+      }),
+      prisma.authenticitySignal.findFirst({
+        where: { contentItemId: id },
+        orderBy: { computedAt: "desc" },
+      }),
+      prisma.audienceTrustMetric.findFirst({
+        where: { contentItemId: id },
+        orderBy: { computedAt: "desc" },
+      }),
+      prisma.ugcFatigueMetric.findFirst({
+        where: { contentItemId: id },
+        orderBy: { computedAt: "desc" },
+      }),
+      prisma.contentMetricsSnapshot.findFirst({
+        where: { contentItemId: id },
+        orderBy: { snapshotAt: "desc" },
+      }),
+    ]);
+
+    return NextResponse.json({
+      ...contentItem,
+      conversionScores: latestConversionScore ? [latestConversionScore] : [],
+      authenticitySignals: latestAuthenticitySignal ? [latestAuthenticitySignal] : [],
+      trustMetrics: latestTrustMetric ? [latestTrustMetric] : [],
+      fatigueMetrics: latestFatigueMetric ? [latestFatigueMetric] : [],
+      metricsSnapshots: latestMetricsSnapshot ? [latestMetricsSnapshot] : [],
+    });
   } catch (error: any) {
     console.error("Error fetching content:", error);
     return NextResponse.json(

@@ -202,8 +202,8 @@ export type IntegrationWhereInput = {
   lastSyncedAt?: Prisma.DateTimeNullableFilter<"Integration"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Integration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Integration"> | Date | string
-  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   performanceData?: Prisma.CampaignPerformanceListRelationFilter
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }
 
 export type IntegrationOrderByWithRelationInput = {
@@ -215,8 +215,8 @@ export type IntegrationOrderByWithRelationInput = {
   lastSyncedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  organization?: Prisma.OrganizationOrderByWithRelationInput
   performanceData?: Prisma.CampaignPerformanceOrderByRelationAggregateInput
+  organization?: Prisma.OrganizationOrderByWithRelationInput
 }
 
 export type IntegrationWhereUniqueInput = Prisma.AtLeast<{
@@ -231,8 +231,8 @@ export type IntegrationWhereUniqueInput = Prisma.AtLeast<{
   lastSyncedAt?: Prisma.DateTimeNullableFilter<"Integration"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Integration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Integration"> | Date | string
-  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   performanceData?: Prisma.CampaignPerformanceListRelationFilter
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }, "id">
 
 export type IntegrationOrderByWithAggregationInput = {
@@ -271,8 +271,8 @@ export type IntegrationCreateInput = {
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  organization: Prisma.OrganizationCreateNestedOneWithoutIntegrationsInput
   performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutIntegrationInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutIntegrationsInput
 }
 
 export type IntegrationUncheckedCreateInput = {
@@ -295,8 +295,8 @@ export type IntegrationUpdateInput = {
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutIntegrationsNestedInput
   performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutIntegrationNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutIntegrationsNestedInput
 }
 
 export type IntegrationUncheckedUpdateInput = {
@@ -651,8 +651,8 @@ export type IntegrationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   lastSyncedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   performanceData?: boolean | Prisma.Integration$performanceDataArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.IntegrationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["integration"]>
 
@@ -693,8 +693,8 @@ export type IntegrationSelectScalar = {
 
 export type IntegrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "type" | "credentials" | "status" | "lastSyncedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["integration"]>
 export type IntegrationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   performanceData?: boolean | Prisma.Integration$performanceDataArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.IntegrationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type IntegrationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -707,8 +707,8 @@ export type IntegrationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type $IntegrationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Integration"
   objects: {
-    organization: Prisma.$OrganizationPayload<ExtArgs>
     performanceData: Prisma.$CampaignPerformancePayload<ExtArgs>[]
+    organization: Prisma.$OrganizationPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1113,8 +1113,8 @@ readonly fields: IntegrationFieldRefs;
  */
 export interface Prisma__IntegrationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   performanceData<T extends Prisma.Integration$performanceDataArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Integration$performanceDataArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignPerformancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

@@ -236,8 +236,8 @@ export type BrandDetectionWhereInput = {
   matchedText?: Prisma.StringNullableFilter<"BrandDetection"> | string | null
   matchedKeywords?: Prisma.StringNullableListFilter<"BrandDetection">
   createdAt?: Prisma.DateTimeFilter<"BrandDetection"> | Date | string
-  contentItem?: Prisma.XOR<Prisma.ContentItemScalarRelationFilter, Prisma.ContentItemWhereInput>
   brandDictionary?: Prisma.XOR<Prisma.BrandDictionaryScalarRelationFilter, Prisma.BrandDictionaryWhereInput>
+  contentItem?: Prisma.XOR<Prisma.ContentItemScalarRelationFilter, Prisma.ContentItemWhereInput>
 }
 
 export type BrandDetectionOrderByWithRelationInput = {
@@ -249,8 +249,8 @@ export type BrandDetectionOrderByWithRelationInput = {
   matchedText?: Prisma.SortOrderInput | Prisma.SortOrder
   matchedKeywords?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  contentItem?: Prisma.ContentItemOrderByWithRelationInput
   brandDictionary?: Prisma.BrandDictionaryOrderByWithRelationInput
+  contentItem?: Prisma.ContentItemOrderByWithRelationInput
 }
 
 export type BrandDetectionWhereUniqueInput = Prisma.AtLeast<{
@@ -265,8 +265,8 @@ export type BrandDetectionWhereUniqueInput = Prisma.AtLeast<{
   matchedText?: Prisma.StringNullableFilter<"BrandDetection"> | string | null
   matchedKeywords?: Prisma.StringNullableListFilter<"BrandDetection">
   createdAt?: Prisma.DateTimeFilter<"BrandDetection"> | Date | string
-  contentItem?: Prisma.XOR<Prisma.ContentItemScalarRelationFilter, Prisma.ContentItemWhereInput>
   brandDictionary?: Prisma.XOR<Prisma.BrandDictionaryScalarRelationFilter, Prisma.BrandDictionaryWhereInput>
+  contentItem?: Prisma.XOR<Prisma.ContentItemScalarRelationFilter, Prisma.ContentItemWhereInput>
 }, "id">
 
 export type BrandDetectionOrderByWithAggregationInput = {
@@ -306,8 +306,8 @@ export type BrandDetectionCreateInput = {
   matchedText?: string | null
   matchedKeywords?: Prisma.BrandDetectionCreatematchedKeywordsInput | string[]
   createdAt?: Date | string
-  contentItem: Prisma.ContentItemCreateNestedOneWithoutBrandDetectionsInput
   brandDictionary: Prisma.BrandDictionaryCreateNestedOneWithoutDetectionsInput
+  contentItem: Prisma.ContentItemCreateNestedOneWithoutBrandDetectionsInput
 }
 
 export type BrandDetectionUncheckedCreateInput = {
@@ -328,8 +328,8 @@ export type BrandDetectionUpdateInput = {
   matchedText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   matchedKeywords?: Prisma.BrandDetectionUpdatematchedKeywordsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  contentItem?: Prisma.ContentItemUpdateOneRequiredWithoutBrandDetectionsNestedInput
   brandDictionary?: Prisma.BrandDictionaryUpdateOneRequiredWithoutDetectionsNestedInput
+  contentItem?: Prisma.ContentItemUpdateOneRequiredWithoutBrandDetectionsNestedInput
 }
 
 export type BrandDetectionUncheckedUpdateInput = {
@@ -721,8 +721,8 @@ export type BrandDetectionSelect<ExtArgs extends runtime.Types.Extensions.Intern
   matchedText?: boolean
   matchedKeywords?: boolean
   createdAt?: boolean
-  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
   brandDictionary?: boolean | Prisma.BrandDictionaryDefaultArgs<ExtArgs>
+  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["brandDetection"]>
 
 export type BrandDetectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -734,8 +734,8 @@ export type BrandDetectionSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   matchedText?: boolean
   matchedKeywords?: boolean
   createdAt?: boolean
-  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
   brandDictionary?: boolean | Prisma.BrandDictionaryDefaultArgs<ExtArgs>
+  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["brandDetection"]>
 
 export type BrandDetectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -747,8 +747,8 @@ export type BrandDetectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   matchedText?: boolean
   matchedKeywords?: boolean
   createdAt?: boolean
-  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
   brandDictionary?: boolean | Prisma.BrandDictionaryDefaultArgs<ExtArgs>
+  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["brandDetection"]>
 
 export type BrandDetectionSelectScalar = {
@@ -764,23 +764,23 @@ export type BrandDetectionSelectScalar = {
 
 export type BrandDetectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contentItemId" | "brandDictionaryId" | "detectionMethod" | "confidence" | "matchedText" | "matchedKeywords" | "createdAt", ExtArgs["result"]["brandDetection"]>
 export type BrandDetectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
   brandDictionary?: boolean | Prisma.BrandDictionaryDefaultArgs<ExtArgs>
+  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
 }
 export type BrandDetectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
   brandDictionary?: boolean | Prisma.BrandDictionaryDefaultArgs<ExtArgs>
+  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
 }
 export type BrandDetectionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
   brandDictionary?: boolean | Prisma.BrandDictionaryDefaultArgs<ExtArgs>
+  contentItem?: boolean | Prisma.ContentItemDefaultArgs<ExtArgs>
 }
 
 export type $BrandDetectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "BrandDetection"
   objects: {
-    contentItem: Prisma.$ContentItemPayload<ExtArgs>
     brandDictionary: Prisma.$BrandDictionaryPayload<ExtArgs>
+    contentItem: Prisma.$ContentItemPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1185,8 +1185,8 @@ readonly fields: BrandDetectionFieldRefs;
  */
 export interface Prisma__BrandDetectionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  contentItem<T extends Prisma.ContentItemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItemDefaultArgs<ExtArgs>>): Prisma.Prisma__ContentItemClient<runtime.Types.Result.GetResult<Prisma.$ContentItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   brandDictionary<T extends Prisma.BrandDictionaryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BrandDictionaryDefaultArgs<ExtArgs>>): Prisma.Prisma__BrandDictionaryClient<runtime.Types.Result.GetResult<Prisma.$BrandDictionaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  contentItem<T extends Prisma.ContentItemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItemDefaultArgs<ExtArgs>>): Prisma.Prisma__ContentItemClient<runtime.Types.Result.GetResult<Prisma.$ContentItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

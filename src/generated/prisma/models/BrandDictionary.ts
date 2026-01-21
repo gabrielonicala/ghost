@@ -190,8 +190,8 @@ export type BrandDictionaryWhereInput = {
   productNames?: Prisma.StringNullableListFilter<"BrandDictionary">
   createdAt?: Prisma.DateTimeFilter<"BrandDictionary"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BrandDictionary"> | Date | string
-  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   detections?: Prisma.BrandDetectionListRelationFilter
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }
 
 export type BrandDictionaryOrderByWithRelationInput = {
@@ -202,8 +202,8 @@ export type BrandDictionaryOrderByWithRelationInput = {
   productNames?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  organization?: Prisma.OrganizationOrderByWithRelationInput
   detections?: Prisma.BrandDetectionOrderByRelationAggregateInput
+  organization?: Prisma.OrganizationOrderByWithRelationInput
 }
 
 export type BrandDictionaryWhereUniqueInput = Prisma.AtLeast<{
@@ -217,8 +217,8 @@ export type BrandDictionaryWhereUniqueInput = Prisma.AtLeast<{
   productNames?: Prisma.StringNullableListFilter<"BrandDictionary">
   createdAt?: Prisma.DateTimeFilter<"BrandDictionary"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BrandDictionary"> | Date | string
-  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   detections?: Prisma.BrandDetectionListRelationFilter
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }, "id">
 
 export type BrandDictionaryOrderByWithAggregationInput = {
@@ -254,8 +254,8 @@ export type BrandDictionaryCreateInput = {
   productNames?: Prisma.BrandDictionaryCreateproductNamesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
-  organization: Prisma.OrganizationCreateNestedOneWithoutBrandDictionariesInput
   detections?: Prisma.BrandDetectionCreateNestedManyWithoutBrandDictionaryInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutBrandDictionariesInput
 }
 
 export type BrandDictionaryUncheckedCreateInput = {
@@ -276,8 +276,8 @@ export type BrandDictionaryUpdateInput = {
   productNames?: Prisma.BrandDictionaryUpdateproductNamesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBrandDictionariesNestedInput
   detections?: Prisma.BrandDetectionUpdateManyWithoutBrandDictionaryNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBrandDictionariesNestedInput
 }
 
 export type BrandDictionaryUncheckedUpdateInput = {
@@ -635,8 +635,8 @@ export type BrandDictionarySelect<ExtArgs extends runtime.Types.Extensions.Inter
   productNames?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   detections?: boolean | Prisma.BrandDictionary$detectionsArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.BrandDictionaryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["brandDictionary"]>
 
@@ -674,8 +674,8 @@ export type BrandDictionarySelectScalar = {
 
 export type BrandDictionaryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "brandName" | "keywords" | "productNames" | "createdAt" | "updatedAt", ExtArgs["result"]["brandDictionary"]>
 export type BrandDictionaryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   detections?: boolean | Prisma.BrandDictionary$detectionsArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.BrandDictionaryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BrandDictionaryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -688,8 +688,8 @@ export type BrandDictionaryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Ty
 export type $BrandDictionaryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "BrandDictionary"
   objects: {
-    organization: Prisma.$OrganizationPayload<ExtArgs>
     detections: Prisma.$BrandDetectionPayload<ExtArgs>[]
+    organization: Prisma.$OrganizationPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1093,8 +1093,8 @@ readonly fields: BrandDictionaryFieldRefs;
  */
 export interface Prisma__BrandDictionaryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   detections<T extends Prisma.BrandDictionary$detectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BrandDictionary$detectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BrandDetectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

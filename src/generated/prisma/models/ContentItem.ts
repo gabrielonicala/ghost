@@ -254,19 +254,19 @@ export type ContentItemWhereInput = {
   ingestedAt?: Prisma.DateTimeFilter<"ContentItem"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"ContentItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ContentItem"> | Date | string
-  creator?: Prisma.XOR<Prisma.CreatorScalarRelationFilter, Prisma.CreatorWhereInput>
-  campaign?: Prisma.XOR<Prisma.CampaignNullableScalarRelationFilter, Prisma.CampaignWhereInput> | null
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotListRelationFilter
-  transcripts?: Prisma.ContentTranscriptListRelationFilter
-  ocrFrames?: Prisma.ContentOcrFrameListRelationFilter
-  visualFeatures?: Prisma.ContentVisualFeatureListRelationFilter
-  similarityHashes?: Prisma.ContentSimilarityHashListRelationFilter
-  brandDetections?: Prisma.BrandDetectionListRelationFilter
-  authenticitySignals?: Prisma.AuthenticitySignalListRelationFilter
   trustMetrics?: Prisma.AudienceTrustMetricListRelationFilter
-  fatigueMetrics?: Prisma.UgcFatigueMetricListRelationFilter
-  conversionScores?: Prisma.ConversionConfidenceScoreListRelationFilter
+  authenticitySignals?: Prisma.AuthenticitySignalListRelationFilter
+  brandDetections?: Prisma.BrandDetectionListRelationFilter
   performanceData?: Prisma.CampaignPerformanceListRelationFilter
+  campaign?: Prisma.XOR<Prisma.CampaignNullableScalarRelationFilter, Prisma.CampaignWhereInput> | null
+  creator?: Prisma.XOR<Prisma.CreatorScalarRelationFilter, Prisma.CreatorWhereInput>
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotListRelationFilter
+  ocrFrames?: Prisma.ContentOcrFrameListRelationFilter
+  similarityHashes?: Prisma.ContentSimilarityHashListRelationFilter
+  transcripts?: Prisma.ContentTranscriptListRelationFilter
+  visualFeatures?: Prisma.ContentVisualFeatureListRelationFilter
+  conversionScores?: Prisma.XOR<Prisma.ConversionConfidenceScoreNullableScalarRelationFilter, Prisma.ConversionConfidenceScoreWhereInput> | null
+  fatigueMetrics?: Prisma.UgcFatigueMetricListRelationFilter
 }
 
 export type ContentItemOrderByWithRelationInput = {
@@ -284,19 +284,19 @@ export type ContentItemOrderByWithRelationInput = {
   ingestedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  creator?: Prisma.CreatorOrderByWithRelationInput
-  campaign?: Prisma.CampaignOrderByWithRelationInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotOrderByRelationAggregateInput
-  transcripts?: Prisma.ContentTranscriptOrderByRelationAggregateInput
-  ocrFrames?: Prisma.ContentOcrFrameOrderByRelationAggregateInput
-  visualFeatures?: Prisma.ContentVisualFeatureOrderByRelationAggregateInput
-  similarityHashes?: Prisma.ContentSimilarityHashOrderByRelationAggregateInput
-  brandDetections?: Prisma.BrandDetectionOrderByRelationAggregateInput
-  authenticitySignals?: Prisma.AuthenticitySignalOrderByRelationAggregateInput
   trustMetrics?: Prisma.AudienceTrustMetricOrderByRelationAggregateInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricOrderByRelationAggregateInput
-  conversionScores?: Prisma.ConversionConfidenceScoreOrderByRelationAggregateInput
+  authenticitySignals?: Prisma.AuthenticitySignalOrderByRelationAggregateInput
+  brandDetections?: Prisma.BrandDetectionOrderByRelationAggregateInput
   performanceData?: Prisma.CampaignPerformanceOrderByRelationAggregateInput
+  campaign?: Prisma.CampaignOrderByWithRelationInput
+  creator?: Prisma.CreatorOrderByWithRelationInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotOrderByRelationAggregateInput
+  ocrFrames?: Prisma.ContentOcrFrameOrderByRelationAggregateInput
+  similarityHashes?: Prisma.ContentSimilarityHashOrderByRelationAggregateInput
+  transcripts?: Prisma.ContentTranscriptOrderByRelationAggregateInput
+  visualFeatures?: Prisma.ContentVisualFeatureOrderByRelationAggregateInput
+  conversionScores?: Prisma.ConversionConfidenceScoreOrderByWithRelationInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricOrderByRelationAggregateInput
 }
 
 export type ContentItemWhereUniqueInput = Prisma.AtLeast<{
@@ -318,19 +318,19 @@ export type ContentItemWhereUniqueInput = Prisma.AtLeast<{
   ingestedAt?: Prisma.DateTimeFilter<"ContentItem"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"ContentItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ContentItem"> | Date | string
-  creator?: Prisma.XOR<Prisma.CreatorScalarRelationFilter, Prisma.CreatorWhereInput>
-  campaign?: Prisma.XOR<Prisma.CampaignNullableScalarRelationFilter, Prisma.CampaignWhereInput> | null
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotListRelationFilter
-  transcripts?: Prisma.ContentTranscriptListRelationFilter
-  ocrFrames?: Prisma.ContentOcrFrameListRelationFilter
-  visualFeatures?: Prisma.ContentVisualFeatureListRelationFilter
-  similarityHashes?: Prisma.ContentSimilarityHashListRelationFilter
-  brandDetections?: Prisma.BrandDetectionListRelationFilter
-  authenticitySignals?: Prisma.AuthenticitySignalListRelationFilter
   trustMetrics?: Prisma.AudienceTrustMetricListRelationFilter
-  fatigueMetrics?: Prisma.UgcFatigueMetricListRelationFilter
-  conversionScores?: Prisma.ConversionConfidenceScoreListRelationFilter
+  authenticitySignals?: Prisma.AuthenticitySignalListRelationFilter
+  brandDetections?: Prisma.BrandDetectionListRelationFilter
   performanceData?: Prisma.CampaignPerformanceListRelationFilter
+  campaign?: Prisma.XOR<Prisma.CampaignNullableScalarRelationFilter, Prisma.CampaignWhereInput> | null
+  creator?: Prisma.XOR<Prisma.CreatorScalarRelationFilter, Prisma.CreatorWhereInput>
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotListRelationFilter
+  ocrFrames?: Prisma.ContentOcrFrameListRelationFilter
+  similarityHashes?: Prisma.ContentSimilarityHashListRelationFilter
+  transcripts?: Prisma.ContentTranscriptListRelationFilter
+  visualFeatures?: Prisma.ContentVisualFeatureListRelationFilter
+  conversionScores?: Prisma.XOR<Prisma.ConversionConfidenceScoreNullableScalarRelationFilter, Prisma.ConversionConfidenceScoreWhereInput> | null
+  fatigueMetrics?: Prisma.UgcFatigueMetricListRelationFilter
 }, "id" | "platform_platformContentId">
 
 export type ContentItemOrderByWithAggregationInput = {
@@ -386,19 +386,19 @@ export type ContentItemCreateInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
-  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
+  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateInput = {
@@ -416,17 +416,17 @@ export type ContentItemUncheckedCreateInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUpdateInput = {
@@ -442,19 +442,19 @@ export type ContentItemUpdateInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
-  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
+  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateInput = {
@@ -472,17 +472,17 @@ export type ContentItemUncheckedUpdateInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateManyInput = {
@@ -865,18 +865,18 @@ export type ContentItemCreateWithoutCreatorInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
+  performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
   campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
   ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
   similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
-  trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
   fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
-  performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutCreatorInput = {
@@ -893,17 +893,17 @@ export type ContentItemUncheckedCreateWithoutCreatorInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutCreatorInput = {
@@ -965,18 +965,18 @@ export type ContentItemCreateWithoutCampaignInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
+  performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
   creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
   ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
   similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
-  trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
   fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
-  performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutCampaignInput = {
@@ -993,17 +993,17 @@ export type ContentItemUncheckedCreateWithoutCampaignInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutCampaignInput = {
@@ -1045,18 +1045,18 @@ export type ContentItemCreateWithoutMetricsSnapshotsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
-  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
+  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutMetricsSnapshotsInput = {
@@ -1074,16 +1074,16 @@ export type ContentItemUncheckedCreateWithoutMetricsSnapshotsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutMetricsSnapshotsInput = {
@@ -1115,18 +1115,18 @@ export type ContentItemUpdateWithoutMetricsSnapshotsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
-  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
+  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutMetricsSnapshotsInput = {
@@ -1144,16 +1144,16 @@ export type ContentItemUncheckedUpdateWithoutMetricsSnapshotsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateWithoutTranscriptsInput = {
@@ -1169,18 +1169,18 @@ export type ContentItemCreateWithoutTranscriptsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
+  performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
   campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
   ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
   similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
-  trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
   fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
-  performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutTranscriptsInput = {
@@ -1198,16 +1198,16 @@ export type ContentItemUncheckedCreateWithoutTranscriptsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
+  performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
   ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
   similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
-  trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
-  performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutTranscriptsInput = {
@@ -1239,18 +1239,18 @@ export type ContentItemUpdateWithoutTranscriptsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
+  performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
   campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
   ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
   similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
-  trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
-  performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutTranscriptsInput = {
@@ -1268,16 +1268,16 @@ export type ContentItemUncheckedUpdateWithoutTranscriptsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
+  performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
   ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
   similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
-  trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
-  performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateWithoutOcrFramesInput = {
@@ -1293,18 +1293,18 @@ export type ContentItemCreateWithoutOcrFramesInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
+  performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
   campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
   transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
   visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
-  trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
   fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
-  performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutOcrFramesInput = {
@@ -1322,16 +1322,16 @@ export type ContentItemUncheckedCreateWithoutOcrFramesInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
+  performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
   transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
   visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
-  trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
-  performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutOcrFramesInput = {
@@ -1363,18 +1363,18 @@ export type ContentItemUpdateWithoutOcrFramesInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
+  performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
   campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
   transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
   visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
-  trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
-  performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutOcrFramesInput = {
@@ -1392,16 +1392,16 @@ export type ContentItemUncheckedUpdateWithoutOcrFramesInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
+  performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
   transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
   visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
-  trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
-  performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateWithoutVisualFeaturesInput = {
@@ -1417,18 +1417,18 @@ export type ContentItemCreateWithoutVisualFeaturesInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
+  performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
   campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
   ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
   similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
-  trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
   fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
-  performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutVisualFeaturesInput = {
@@ -1446,16 +1446,16 @@ export type ContentItemUncheckedCreateWithoutVisualFeaturesInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
+  performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
   ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
   similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
-  trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
-  performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutVisualFeaturesInput = {
@@ -1487,18 +1487,18 @@ export type ContentItemUpdateWithoutVisualFeaturesInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
+  performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
   campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
   ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
   similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
-  trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
-  performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutVisualFeaturesInput = {
@@ -1516,16 +1516,16 @@ export type ContentItemUncheckedUpdateWithoutVisualFeaturesInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
+  performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
   ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
   similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
-  trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
-  performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateWithoutSimilarityHashesInput = {
@@ -1541,18 +1541,18 @@ export type ContentItemCreateWithoutSimilarityHashesInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
-  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
+  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutSimilarityHashesInput = {
@@ -1570,16 +1570,16 @@ export type ContentItemUncheckedCreateWithoutSimilarityHashesInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutSimilarityHashesInput = {
@@ -1611,18 +1611,18 @@ export type ContentItemUpdateWithoutSimilarityHashesInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
-  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
+  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutSimilarityHashesInput = {
@@ -1640,16 +1640,16 @@ export type ContentItemUncheckedUpdateWithoutSimilarityHashesInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateWithoutBrandDetectionsInput = {
@@ -1665,18 +1665,18 @@ export type ContentItemCreateWithoutBrandDetectionsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
-  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
+  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutBrandDetectionsInput = {
@@ -1694,16 +1694,16 @@ export type ContentItemUncheckedCreateWithoutBrandDetectionsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutBrandDetectionsInput = {
@@ -1735,18 +1735,18 @@ export type ContentItemUpdateWithoutBrandDetectionsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
-  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
+  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutBrandDetectionsInput = {
@@ -1764,16 +1764,16 @@ export type ContentItemUncheckedUpdateWithoutBrandDetectionsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateWithoutAuthenticitySignalsInput = {
@@ -1789,18 +1789,18 @@ export type ContentItemCreateWithoutAuthenticitySignalsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
-  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
+  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutAuthenticitySignalsInput = {
@@ -1818,16 +1818,16 @@ export type ContentItemUncheckedCreateWithoutAuthenticitySignalsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutAuthenticitySignalsInput = {
@@ -1859,18 +1859,18 @@ export type ContentItemUpdateWithoutAuthenticitySignalsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
-  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
+  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutAuthenticitySignalsInput = {
@@ -1888,16 +1888,16 @@ export type ContentItemUncheckedUpdateWithoutAuthenticitySignalsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateWithoutTrustMetricsInput = {
@@ -1913,18 +1913,18 @@ export type ContentItemCreateWithoutTrustMetricsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
-  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
   authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
+  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutTrustMetricsInput = {
@@ -1942,16 +1942,16 @@ export type ContentItemUncheckedCreateWithoutTrustMetricsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutTrustMetricsInput = {
@@ -1983,18 +1983,18 @@ export type ContentItemUpdateWithoutTrustMetricsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
-  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
+  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutTrustMetricsInput = {
@@ -2012,16 +2012,16 @@ export type ContentItemUncheckedUpdateWithoutTrustMetricsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateWithoutFatigueMetricsInput = {
@@ -2037,18 +2037,18 @@ export type ContentItemCreateWithoutFatigueMetricsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
-  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
+  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutFatigueMetricsInput = {
@@ -2066,16 +2066,16 @@ export type ContentItemUncheckedCreateWithoutFatigueMetricsInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutFatigueMetricsInput = {
@@ -2107,18 +2107,18 @@ export type ContentItemUpdateWithoutFatigueMetricsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
-  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
+  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutFatigueMetricsInput = {
@@ -2136,16 +2136,16 @@ export type ContentItemUncheckedUpdateWithoutFatigueMetricsInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateWithoutConversionScoresInput = {
@@ -2161,18 +2161,18 @@ export type ContentItemCreateWithoutConversionScoresInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
-  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceCreateNestedManyWithoutContentItemInput
+  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutConversionScoresInput = {
@@ -2190,16 +2190,16 @@ export type ContentItemUncheckedCreateWithoutConversionScoresInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
   performanceData?: Prisma.CampaignPerformanceUncheckedCreateNestedManyWithoutContentItemInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutConversionScoresInput = {
@@ -2231,18 +2231,18 @@ export type ContentItemUpdateWithoutConversionScoresInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
-  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
+  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutConversionScoresInput = {
@@ -2260,16 +2260,16 @@ export type ContentItemUncheckedUpdateWithoutConversionScoresInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateWithoutPerformanceDataInput = {
@@ -2285,18 +2285,18 @@ export type ContentItemCreateWithoutPerformanceDataInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
-  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionCreateNestedManyWithoutContentItemInput
+  campaign?: Prisma.CampaignCreateNestedOneWithoutContentItemsInput
+  creator: Prisma.CreatorCreateNestedOneWithoutContentItemsInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedOneWithoutContentItemInput
   fatigueMetrics?: Prisma.UgcFatigueMetricCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemUncheckedCreateWithoutPerformanceDataInput = {
@@ -2314,16 +2314,16 @@ export type ContentItemUncheckedCreateWithoutPerformanceDataInput = {
   ingestedAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
-  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
-  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedCreateNestedManyWithoutContentItemInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedCreateNestedManyWithoutContentItemInput
+  brandDetections?: Prisma.BrandDetectionUncheckedCreateNestedManyWithoutContentItemInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedCreateNestedManyWithoutContentItemInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedCreateNestedManyWithoutContentItemInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedCreateNestedManyWithoutContentItemInput
+  transcripts?: Prisma.ContentTranscriptUncheckedCreateNestedManyWithoutContentItemInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedCreateNestedManyWithoutContentItemInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedOneWithoutContentItemInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedCreateNestedManyWithoutContentItemInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedCreateNestedManyWithoutContentItemInput
 }
 
 export type ContentItemCreateOrConnectWithoutPerformanceDataInput = {
@@ -2355,18 +2355,18 @@ export type ContentItemUpdateWithoutPerformanceDataInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
-  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
+  campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
+  creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutPerformanceDataInput = {
@@ -2384,16 +2384,16 @@ export type ContentItemUncheckedUpdateWithoutPerformanceDataInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemCreateManyCreatorInput = {
@@ -2425,18 +2425,18 @@ export type ContentItemUpdateWithoutCreatorInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
+  performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
   campaign?: Prisma.CampaignUpdateOneWithoutContentItemsNestedInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
   ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
   similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
-  trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
-  performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutCreatorInput = {
@@ -2453,17 +2453,17 @@ export type ContentItemUncheckedUpdateWithoutCreatorInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateManyWithoutCreatorInput = {
@@ -2511,18 +2511,18 @@ export type ContentItemUpdateWithoutCampaignInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
+  performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
   creator?: Prisma.CreatorUpdateOneRequiredWithoutContentItemsNestedInput
   metricsSnapshots?: Prisma.ContentMetricsSnapshotUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
   ocrFrames?: Prisma.ContentOcrFrameUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
   similarityHashes?: Prisma.ContentSimilarityHashUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUpdateManyWithoutContentItemNestedInput
-  trustMetrics?: Prisma.AudienceTrustMetricUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUpdateOneWithoutContentItemNestedInput
   fatigueMetrics?: Prisma.UgcFatigueMetricUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUpdateManyWithoutContentItemNestedInput
-  performanceData?: Prisma.CampaignPerformanceUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateWithoutCampaignInput = {
@@ -2539,17 +2539,17 @@ export type ContentItemUncheckedUpdateWithoutCampaignInput = {
   ingestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
-  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
-  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
-  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
-  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
-  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
-  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
   trustMetrics?: Prisma.AudienceTrustMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
-  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateManyWithoutContentItemNestedInput
+  authenticitySignals?: Prisma.AuthenticitySignalUncheckedUpdateManyWithoutContentItemNestedInput
+  brandDetections?: Prisma.BrandDetectionUncheckedUpdateManyWithoutContentItemNestedInput
   performanceData?: Prisma.CampaignPerformanceUncheckedUpdateManyWithoutContentItemNestedInput
+  metricsSnapshots?: Prisma.ContentMetricsSnapshotUncheckedUpdateManyWithoutContentItemNestedInput
+  ocrFrames?: Prisma.ContentOcrFrameUncheckedUpdateManyWithoutContentItemNestedInput
+  similarityHashes?: Prisma.ContentSimilarityHashUncheckedUpdateManyWithoutContentItemNestedInput
+  transcripts?: Prisma.ContentTranscriptUncheckedUpdateManyWithoutContentItemNestedInput
+  visualFeatures?: Prisma.ContentVisualFeatureUncheckedUpdateManyWithoutContentItemNestedInput
+  conversionScores?: Prisma.ConversionConfidenceScoreUncheckedUpdateOneWithoutContentItemNestedInput
+  fatigueMetrics?: Prisma.UgcFatigueMetricUncheckedUpdateManyWithoutContentItemNestedInput
 }
 
 export type ContentItemUncheckedUpdateManyWithoutCampaignInput = {
@@ -2574,31 +2574,29 @@ export type ContentItemUncheckedUpdateManyWithoutCampaignInput = {
  */
 
 export type ContentItemCountOutputType = {
-  metricsSnapshots: number
-  transcripts: number
-  ocrFrames: number
-  visualFeatures: number
-  similarityHashes: number
-  brandDetections: number
-  authenticitySignals: number
   trustMetrics: number
-  fatigueMetrics: number
-  conversionScores: number
+  authenticitySignals: number
+  brandDetections: number
   performanceData: number
+  metricsSnapshots: number
+  ocrFrames: number
+  similarityHashes: number
+  transcripts: number
+  visualFeatures: number
+  fatigueMetrics: number
 }
 
 export type ContentItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  metricsSnapshots?: boolean | ContentItemCountOutputTypeCountMetricsSnapshotsArgs
-  transcripts?: boolean | ContentItemCountOutputTypeCountTranscriptsArgs
-  ocrFrames?: boolean | ContentItemCountOutputTypeCountOcrFramesArgs
-  visualFeatures?: boolean | ContentItemCountOutputTypeCountVisualFeaturesArgs
-  similarityHashes?: boolean | ContentItemCountOutputTypeCountSimilarityHashesArgs
-  brandDetections?: boolean | ContentItemCountOutputTypeCountBrandDetectionsArgs
-  authenticitySignals?: boolean | ContentItemCountOutputTypeCountAuthenticitySignalsArgs
   trustMetrics?: boolean | ContentItemCountOutputTypeCountTrustMetricsArgs
-  fatigueMetrics?: boolean | ContentItemCountOutputTypeCountFatigueMetricsArgs
-  conversionScores?: boolean | ContentItemCountOutputTypeCountConversionScoresArgs
+  authenticitySignals?: boolean | ContentItemCountOutputTypeCountAuthenticitySignalsArgs
+  brandDetections?: boolean | ContentItemCountOutputTypeCountBrandDetectionsArgs
   performanceData?: boolean | ContentItemCountOutputTypeCountPerformanceDataArgs
+  metricsSnapshots?: boolean | ContentItemCountOutputTypeCountMetricsSnapshotsArgs
+  ocrFrames?: boolean | ContentItemCountOutputTypeCountOcrFramesArgs
+  similarityHashes?: boolean | ContentItemCountOutputTypeCountSimilarityHashesArgs
+  transcripts?: boolean | ContentItemCountOutputTypeCountTranscriptsArgs
+  visualFeatures?: boolean | ContentItemCountOutputTypeCountVisualFeaturesArgs
+  fatigueMetrics?: boolean | ContentItemCountOutputTypeCountFatigueMetricsArgs
 }
 
 /**
@@ -2614,43 +2612,8 @@ export type ContentItemCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.
 /**
  * ContentItemCountOutputType without action
  */
-export type ContentItemCountOutputTypeCountMetricsSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ContentMetricsSnapshotWhereInput
-}
-
-/**
- * ContentItemCountOutputType without action
- */
-export type ContentItemCountOutputTypeCountTranscriptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ContentTranscriptWhereInput
-}
-
-/**
- * ContentItemCountOutputType without action
- */
-export type ContentItemCountOutputTypeCountOcrFramesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ContentOcrFrameWhereInput
-}
-
-/**
- * ContentItemCountOutputType without action
- */
-export type ContentItemCountOutputTypeCountVisualFeaturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ContentVisualFeatureWhereInput
-}
-
-/**
- * ContentItemCountOutputType without action
- */
-export type ContentItemCountOutputTypeCountSimilarityHashesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ContentSimilarityHashWhereInput
-}
-
-/**
- * ContentItemCountOutputType without action
- */
-export type ContentItemCountOutputTypeCountBrandDetectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.BrandDetectionWhereInput
+export type ContentItemCountOutputTypeCountTrustMetricsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AudienceTrustMetricWhereInput
 }
 
 /**
@@ -2663,22 +2626,8 @@ export type ContentItemCountOutputTypeCountAuthenticitySignalsArgs<ExtArgs exten
 /**
  * ContentItemCountOutputType without action
  */
-export type ContentItemCountOutputTypeCountTrustMetricsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AudienceTrustMetricWhereInput
-}
-
-/**
- * ContentItemCountOutputType without action
- */
-export type ContentItemCountOutputTypeCountFatigueMetricsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UgcFatigueMetricWhereInput
-}
-
-/**
- * ContentItemCountOutputType without action
- */
-export type ContentItemCountOutputTypeCountConversionScoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ConversionConfidenceScoreWhereInput
+export type ContentItemCountOutputTypeCountBrandDetectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BrandDetectionWhereInput
 }
 
 /**
@@ -2686,6 +2635,48 @@ export type ContentItemCountOutputTypeCountConversionScoresArgs<ExtArgs extends 
  */
 export type ContentItemCountOutputTypeCountPerformanceDataArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CampaignPerformanceWhereInput
+}
+
+/**
+ * ContentItemCountOutputType without action
+ */
+export type ContentItemCountOutputTypeCountMetricsSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContentMetricsSnapshotWhereInput
+}
+
+/**
+ * ContentItemCountOutputType without action
+ */
+export type ContentItemCountOutputTypeCountOcrFramesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContentOcrFrameWhereInput
+}
+
+/**
+ * ContentItemCountOutputType without action
+ */
+export type ContentItemCountOutputTypeCountSimilarityHashesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContentSimilarityHashWhereInput
+}
+
+/**
+ * ContentItemCountOutputType without action
+ */
+export type ContentItemCountOutputTypeCountTranscriptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContentTranscriptWhereInput
+}
+
+/**
+ * ContentItemCountOutputType without action
+ */
+export type ContentItemCountOutputTypeCountVisualFeaturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContentVisualFeatureWhereInput
+}
+
+/**
+ * ContentItemCountOutputType without action
+ */
+export type ContentItemCountOutputTypeCountFatigueMetricsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UgcFatigueMetricWhereInput
 }
 
 
@@ -2704,19 +2695,19 @@ export type ContentItemSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   ingestedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
-  campaign?: boolean | Prisma.ContentItem$campaignArgs<ExtArgs>
-  metricsSnapshots?: boolean | Prisma.ContentItem$metricsSnapshotsArgs<ExtArgs>
-  transcripts?: boolean | Prisma.ContentItem$transcriptsArgs<ExtArgs>
-  ocrFrames?: boolean | Prisma.ContentItem$ocrFramesArgs<ExtArgs>
-  visualFeatures?: boolean | Prisma.ContentItem$visualFeaturesArgs<ExtArgs>
-  similarityHashes?: boolean | Prisma.ContentItem$similarityHashesArgs<ExtArgs>
-  brandDetections?: boolean | Prisma.ContentItem$brandDetectionsArgs<ExtArgs>
-  authenticitySignals?: boolean | Prisma.ContentItem$authenticitySignalsArgs<ExtArgs>
   trustMetrics?: boolean | Prisma.ContentItem$trustMetricsArgs<ExtArgs>
-  fatigueMetrics?: boolean | Prisma.ContentItem$fatigueMetricsArgs<ExtArgs>
-  conversionScores?: boolean | Prisma.ContentItem$conversionScoresArgs<ExtArgs>
+  authenticitySignals?: boolean | Prisma.ContentItem$authenticitySignalsArgs<ExtArgs>
+  brandDetections?: boolean | Prisma.ContentItem$brandDetectionsArgs<ExtArgs>
   performanceData?: boolean | Prisma.ContentItem$performanceDataArgs<ExtArgs>
+  campaign?: boolean | Prisma.ContentItem$campaignArgs<ExtArgs>
+  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
+  metricsSnapshots?: boolean | Prisma.ContentItem$metricsSnapshotsArgs<ExtArgs>
+  ocrFrames?: boolean | Prisma.ContentItem$ocrFramesArgs<ExtArgs>
+  similarityHashes?: boolean | Prisma.ContentItem$similarityHashesArgs<ExtArgs>
+  transcripts?: boolean | Prisma.ContentItem$transcriptsArgs<ExtArgs>
+  visualFeatures?: boolean | Prisma.ContentItem$visualFeaturesArgs<ExtArgs>
+  conversionScores?: boolean | Prisma.ContentItem$conversionScoresArgs<ExtArgs>
+  fatigueMetrics?: boolean | Prisma.ContentItem$fatigueMetricsArgs<ExtArgs>
   _count?: boolean | Prisma.ContentItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contentItem"]>
 
@@ -2735,8 +2726,8 @@ export type ContentItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   ingestedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
   campaign?: boolean | Prisma.ContentItem$campaignArgs<ExtArgs>
+  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contentItem"]>
 
 export type ContentItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2754,8 +2745,8 @@ export type ContentItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   ingestedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
   campaign?: boolean | Prisma.ContentItem$campaignArgs<ExtArgs>
+  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contentItem"]>
 
 export type ContentItemSelectScalar = {
@@ -2777,46 +2768,46 @@ export type ContentItemSelectScalar = {
 
 export type ContentItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "creatorId" | "campaignId" | "platform" | "platformContentId" | "contentType" | "mediaUrl" | "thumbnailUrl" | "caption" | "publishedAt" | "detectedAt" | "ingestedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["contentItem"]>
 export type ContentItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
-  campaign?: boolean | Prisma.ContentItem$campaignArgs<ExtArgs>
-  metricsSnapshots?: boolean | Prisma.ContentItem$metricsSnapshotsArgs<ExtArgs>
-  transcripts?: boolean | Prisma.ContentItem$transcriptsArgs<ExtArgs>
-  ocrFrames?: boolean | Prisma.ContentItem$ocrFramesArgs<ExtArgs>
-  visualFeatures?: boolean | Prisma.ContentItem$visualFeaturesArgs<ExtArgs>
-  similarityHashes?: boolean | Prisma.ContentItem$similarityHashesArgs<ExtArgs>
-  brandDetections?: boolean | Prisma.ContentItem$brandDetectionsArgs<ExtArgs>
-  authenticitySignals?: boolean | Prisma.ContentItem$authenticitySignalsArgs<ExtArgs>
   trustMetrics?: boolean | Prisma.ContentItem$trustMetricsArgs<ExtArgs>
-  fatigueMetrics?: boolean | Prisma.ContentItem$fatigueMetricsArgs<ExtArgs>
-  conversionScores?: boolean | Prisma.ContentItem$conversionScoresArgs<ExtArgs>
+  authenticitySignals?: boolean | Prisma.ContentItem$authenticitySignalsArgs<ExtArgs>
+  brandDetections?: boolean | Prisma.ContentItem$brandDetectionsArgs<ExtArgs>
   performanceData?: boolean | Prisma.ContentItem$performanceDataArgs<ExtArgs>
+  campaign?: boolean | Prisma.ContentItem$campaignArgs<ExtArgs>
+  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
+  metricsSnapshots?: boolean | Prisma.ContentItem$metricsSnapshotsArgs<ExtArgs>
+  ocrFrames?: boolean | Prisma.ContentItem$ocrFramesArgs<ExtArgs>
+  similarityHashes?: boolean | Prisma.ContentItem$similarityHashesArgs<ExtArgs>
+  transcripts?: boolean | Prisma.ContentItem$transcriptsArgs<ExtArgs>
+  visualFeatures?: boolean | Prisma.ContentItem$visualFeaturesArgs<ExtArgs>
+  conversionScores?: boolean | Prisma.ContentItem$conversionScoresArgs<ExtArgs>
+  fatigueMetrics?: boolean | Prisma.ContentItem$fatigueMetricsArgs<ExtArgs>
   _count?: boolean | Prisma.ContentItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ContentItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
   campaign?: boolean | Prisma.ContentItem$campaignArgs<ExtArgs>
+  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
 }
 export type ContentItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
   campaign?: boolean | Prisma.ContentItem$campaignArgs<ExtArgs>
+  creator?: boolean | Prisma.CreatorDefaultArgs<ExtArgs>
 }
 
 export type $ContentItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ContentItem"
   objects: {
-    creator: Prisma.$CreatorPayload<ExtArgs>
-    campaign: Prisma.$CampaignPayload<ExtArgs> | null
-    metricsSnapshots: Prisma.$ContentMetricsSnapshotPayload<ExtArgs>[]
-    transcripts: Prisma.$ContentTranscriptPayload<ExtArgs>[]
-    ocrFrames: Prisma.$ContentOcrFramePayload<ExtArgs>[]
-    visualFeatures: Prisma.$ContentVisualFeaturePayload<ExtArgs>[]
-    similarityHashes: Prisma.$ContentSimilarityHashPayload<ExtArgs>[]
-    brandDetections: Prisma.$BrandDetectionPayload<ExtArgs>[]
-    authenticitySignals: Prisma.$AuthenticitySignalPayload<ExtArgs>[]
     trustMetrics: Prisma.$AudienceTrustMetricPayload<ExtArgs>[]
-    fatigueMetrics: Prisma.$UgcFatigueMetricPayload<ExtArgs>[]
-    conversionScores: Prisma.$ConversionConfidenceScorePayload<ExtArgs>[]
+    authenticitySignals: Prisma.$AuthenticitySignalPayload<ExtArgs>[]
+    brandDetections: Prisma.$BrandDetectionPayload<ExtArgs>[]
     performanceData: Prisma.$CampaignPerformancePayload<ExtArgs>[]
+    campaign: Prisma.$CampaignPayload<ExtArgs> | null
+    creator: Prisma.$CreatorPayload<ExtArgs>
+    metricsSnapshots: Prisma.$ContentMetricsSnapshotPayload<ExtArgs>[]
+    ocrFrames: Prisma.$ContentOcrFramePayload<ExtArgs>[]
+    similarityHashes: Prisma.$ContentSimilarityHashPayload<ExtArgs>[]
+    transcripts: Prisma.$ContentTranscriptPayload<ExtArgs>[]
+    visualFeatures: Prisma.$ContentVisualFeaturePayload<ExtArgs>[]
+    conversionScores: Prisma.$ConversionConfidenceScorePayload<ExtArgs> | null
+    fatigueMetrics: Prisma.$UgcFatigueMetricPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3227,19 +3218,19 @@ readonly fields: ContentItemFieldRefs;
  */
 export interface Prisma__ContentItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  creator<T extends Prisma.CreatorDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatorDefaultArgs<ExtArgs>>): Prisma.Prisma__CreatorClient<runtime.Types.Result.GetResult<Prisma.$CreatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  campaign<T extends Prisma.ContentItem$campaignArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$campaignArgs<ExtArgs>>): Prisma.Prisma__CampaignClient<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  metricsSnapshots<T extends Prisma.ContentItem$metricsSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$metricsSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentMetricsSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  transcripts<T extends Prisma.ContentItem$transcriptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$transcriptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentTranscriptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  ocrFrames<T extends Prisma.ContentItem$ocrFramesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$ocrFramesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentOcrFramePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  visualFeatures<T extends Prisma.ContentItem$visualFeaturesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$visualFeaturesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentVisualFeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  similarityHashes<T extends Prisma.ContentItem$similarityHashesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$similarityHashesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentSimilarityHashPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  brandDetections<T extends Prisma.ContentItem$brandDetectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$brandDetectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BrandDetectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  authenticitySignals<T extends Prisma.ContentItem$authenticitySignalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$authenticitySignalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthenticitySignalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   trustMetrics<T extends Prisma.ContentItem$trustMetricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$trustMetricsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AudienceTrustMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  fatigueMetrics<T extends Prisma.ContentItem$fatigueMetricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$fatigueMetricsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UgcFatigueMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  conversionScores<T extends Prisma.ContentItem$conversionScoresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$conversionScoresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversionConfidenceScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  authenticitySignals<T extends Prisma.ContentItem$authenticitySignalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$authenticitySignalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthenticitySignalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  brandDetections<T extends Prisma.ContentItem$brandDetectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$brandDetectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BrandDetectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   performanceData<T extends Prisma.ContentItem$performanceDataArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$performanceDataArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignPerformancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campaign<T extends Prisma.ContentItem$campaignArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$campaignArgs<ExtArgs>>): Prisma.Prisma__CampaignClient<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  creator<T extends Prisma.CreatorDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreatorDefaultArgs<ExtArgs>>): Prisma.Prisma__CreatorClient<runtime.Types.Result.GetResult<Prisma.$CreatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  metricsSnapshots<T extends Prisma.ContentItem$metricsSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$metricsSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentMetricsSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ocrFrames<T extends Prisma.ContentItem$ocrFramesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$ocrFramesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentOcrFramePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  similarityHashes<T extends Prisma.ContentItem$similarityHashesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$similarityHashesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentSimilarityHashPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transcripts<T extends Prisma.ContentItem$transcriptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$transcriptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentTranscriptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  visualFeatures<T extends Prisma.ContentItem$visualFeaturesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$visualFeaturesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentVisualFeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversionScores<T extends Prisma.ContentItem$conversionScoresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$conversionScoresArgs<ExtArgs>>): Prisma.Prisma__ConversionConfidenceScoreClient<runtime.Types.Result.GetResult<Prisma.$ConversionConfidenceScorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  fatigueMetrics<T extends Prisma.ContentItem$fatigueMetricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContentItem$fatigueMetricsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UgcFatigueMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3679,6 +3670,102 @@ export type ContentItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
+ * ContentItem.trustMetrics
+ */
+export type ContentItem$trustMetricsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AudienceTrustMetric
+   */
+  select?: Prisma.AudienceTrustMetricSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AudienceTrustMetric
+   */
+  omit?: Prisma.AudienceTrustMetricOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AudienceTrustMetricInclude<ExtArgs> | null
+  where?: Prisma.AudienceTrustMetricWhereInput
+  orderBy?: Prisma.AudienceTrustMetricOrderByWithRelationInput | Prisma.AudienceTrustMetricOrderByWithRelationInput[]
+  cursor?: Prisma.AudienceTrustMetricWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AudienceTrustMetricScalarFieldEnum | Prisma.AudienceTrustMetricScalarFieldEnum[]
+}
+
+/**
+ * ContentItem.authenticitySignals
+ */
+export type ContentItem$authenticitySignalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuthenticitySignal
+   */
+  select?: Prisma.AuthenticitySignalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuthenticitySignal
+   */
+  omit?: Prisma.AuthenticitySignalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthenticitySignalInclude<ExtArgs> | null
+  where?: Prisma.AuthenticitySignalWhereInput
+  orderBy?: Prisma.AuthenticitySignalOrderByWithRelationInput | Prisma.AuthenticitySignalOrderByWithRelationInput[]
+  cursor?: Prisma.AuthenticitySignalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuthenticitySignalScalarFieldEnum | Prisma.AuthenticitySignalScalarFieldEnum[]
+}
+
+/**
+ * ContentItem.brandDetections
+ */
+export type ContentItem$brandDetectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BrandDetection
+   */
+  select?: Prisma.BrandDetectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BrandDetection
+   */
+  omit?: Prisma.BrandDetectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BrandDetectionInclude<ExtArgs> | null
+  where?: Prisma.BrandDetectionWhereInput
+  orderBy?: Prisma.BrandDetectionOrderByWithRelationInput | Prisma.BrandDetectionOrderByWithRelationInput[]
+  cursor?: Prisma.BrandDetectionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BrandDetectionScalarFieldEnum | Prisma.BrandDetectionScalarFieldEnum[]
+}
+
+/**
+ * ContentItem.performanceData
+ */
+export type ContentItem$performanceDataArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CampaignPerformance
+   */
+  select?: Prisma.CampaignPerformanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CampaignPerformance
+   */
+  omit?: Prisma.CampaignPerformanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CampaignPerformanceInclude<ExtArgs> | null
+  where?: Prisma.CampaignPerformanceWhereInput
+  orderBy?: Prisma.CampaignPerformanceOrderByWithRelationInput | Prisma.CampaignPerformanceOrderByWithRelationInput[]
+  cursor?: Prisma.CampaignPerformanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CampaignPerformanceScalarFieldEnum | Prisma.CampaignPerformanceScalarFieldEnum[]
+}
+
+/**
  * ContentItem.campaign
  */
 export type ContentItem$campaignArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3722,30 +3809,6 @@ export type ContentItem$metricsSnapshotsArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
- * ContentItem.transcripts
- */
-export type ContentItem$transcriptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ContentTranscript
-   */
-  select?: Prisma.ContentTranscriptSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ContentTranscript
-   */
-  omit?: Prisma.ContentTranscriptOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentTranscriptInclude<ExtArgs> | null
-  where?: Prisma.ContentTranscriptWhereInput
-  orderBy?: Prisma.ContentTranscriptOrderByWithRelationInput | Prisma.ContentTranscriptOrderByWithRelationInput[]
-  cursor?: Prisma.ContentTranscriptWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ContentTranscriptScalarFieldEnum | Prisma.ContentTranscriptScalarFieldEnum[]
-}
-
-/**
  * ContentItem.ocrFrames
  */
 export type ContentItem$ocrFramesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3767,30 +3830,6 @@ export type ContentItem$ocrFramesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.ContentOcrFrameScalarFieldEnum | Prisma.ContentOcrFrameScalarFieldEnum[]
-}
-
-/**
- * ContentItem.visualFeatures
- */
-export type ContentItem$visualFeaturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ContentVisualFeature
-   */
-  select?: Prisma.ContentVisualFeatureSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ContentVisualFeature
-   */
-  omit?: Prisma.ContentVisualFeatureOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContentVisualFeatureInclude<ExtArgs> | null
-  where?: Prisma.ContentVisualFeatureWhereInput
-  orderBy?: Prisma.ContentVisualFeatureOrderByWithRelationInput | Prisma.ContentVisualFeatureOrderByWithRelationInput[]
-  cursor?: Prisma.ContentVisualFeatureWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ContentVisualFeatureScalarFieldEnum | Prisma.ContentVisualFeatureScalarFieldEnum[]
 }
 
 /**
@@ -3818,75 +3857,70 @@ export type ContentItem$similarityHashesArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
- * ContentItem.brandDetections
+ * ContentItem.transcripts
  */
-export type ContentItem$brandDetectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ContentItem$transcriptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the BrandDetection
+   * Select specific fields to fetch from the ContentTranscript
    */
-  select?: Prisma.BrandDetectionSelect<ExtArgs> | null
+  select?: Prisma.ContentTranscriptSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the BrandDetection
+   * Omit specific fields from the ContentTranscript
    */
-  omit?: Prisma.BrandDetectionOmit<ExtArgs> | null
+  omit?: Prisma.ContentTranscriptOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.BrandDetectionInclude<ExtArgs> | null
-  where?: Prisma.BrandDetectionWhereInput
-  orderBy?: Prisma.BrandDetectionOrderByWithRelationInput | Prisma.BrandDetectionOrderByWithRelationInput[]
-  cursor?: Prisma.BrandDetectionWhereUniqueInput
+  include?: Prisma.ContentTranscriptInclude<ExtArgs> | null
+  where?: Prisma.ContentTranscriptWhereInput
+  orderBy?: Prisma.ContentTranscriptOrderByWithRelationInput | Prisma.ContentTranscriptOrderByWithRelationInput[]
+  cursor?: Prisma.ContentTranscriptWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.BrandDetectionScalarFieldEnum | Prisma.BrandDetectionScalarFieldEnum[]
+  distinct?: Prisma.ContentTranscriptScalarFieldEnum | Prisma.ContentTranscriptScalarFieldEnum[]
 }
 
 /**
- * ContentItem.authenticitySignals
+ * ContentItem.visualFeatures
  */
-export type ContentItem$authenticitySignalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ContentItem$visualFeaturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AuthenticitySignal
+   * Select specific fields to fetch from the ContentVisualFeature
    */
-  select?: Prisma.AuthenticitySignalSelect<ExtArgs> | null
+  select?: Prisma.ContentVisualFeatureSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AuthenticitySignal
+   * Omit specific fields from the ContentVisualFeature
    */
-  omit?: Prisma.AuthenticitySignalOmit<ExtArgs> | null
+  omit?: Prisma.ContentVisualFeatureOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticitySignalInclude<ExtArgs> | null
-  where?: Prisma.AuthenticitySignalWhereInput
-  orderBy?: Prisma.AuthenticitySignalOrderByWithRelationInput | Prisma.AuthenticitySignalOrderByWithRelationInput[]
-  cursor?: Prisma.AuthenticitySignalWhereUniqueInput
+  include?: Prisma.ContentVisualFeatureInclude<ExtArgs> | null
+  where?: Prisma.ContentVisualFeatureWhereInput
+  orderBy?: Prisma.ContentVisualFeatureOrderByWithRelationInput | Prisma.ContentVisualFeatureOrderByWithRelationInput[]
+  cursor?: Prisma.ContentVisualFeatureWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.AuthenticitySignalScalarFieldEnum | Prisma.AuthenticitySignalScalarFieldEnum[]
+  distinct?: Prisma.ContentVisualFeatureScalarFieldEnum | Prisma.ContentVisualFeatureScalarFieldEnum[]
 }
 
 /**
- * ContentItem.trustMetrics
+ * ContentItem.conversionScores
  */
-export type ContentItem$trustMetricsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ContentItem$conversionScoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AudienceTrustMetric
+   * Select specific fields to fetch from the ConversionConfidenceScore
    */
-  select?: Prisma.AudienceTrustMetricSelect<ExtArgs> | null
+  select?: Prisma.ConversionConfidenceScoreSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AudienceTrustMetric
+   * Omit specific fields from the ConversionConfidenceScore
    */
-  omit?: Prisma.AudienceTrustMetricOmit<ExtArgs> | null
+  omit?: Prisma.ConversionConfidenceScoreOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AudienceTrustMetricInclude<ExtArgs> | null
-  where?: Prisma.AudienceTrustMetricWhereInput
-  orderBy?: Prisma.AudienceTrustMetricOrderByWithRelationInput | Prisma.AudienceTrustMetricOrderByWithRelationInput[]
-  cursor?: Prisma.AudienceTrustMetricWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AudienceTrustMetricScalarFieldEnum | Prisma.AudienceTrustMetricScalarFieldEnum[]
+  include?: Prisma.ConversionConfidenceScoreInclude<ExtArgs> | null
+  where?: Prisma.ConversionConfidenceScoreWhereInput
 }
 
 /**
@@ -3911,54 +3945,6 @@ export type ContentItem$fatigueMetricsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.UgcFatigueMetricScalarFieldEnum | Prisma.UgcFatigueMetricScalarFieldEnum[]
-}
-
-/**
- * ContentItem.conversionScores
- */
-export type ContentItem$conversionScoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ConversionConfidenceScore
-   */
-  select?: Prisma.ConversionConfidenceScoreSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ConversionConfidenceScore
-   */
-  omit?: Prisma.ConversionConfidenceScoreOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ConversionConfidenceScoreInclude<ExtArgs> | null
-  where?: Prisma.ConversionConfidenceScoreWhereInput
-  orderBy?: Prisma.ConversionConfidenceScoreOrderByWithRelationInput | Prisma.ConversionConfidenceScoreOrderByWithRelationInput[]
-  cursor?: Prisma.ConversionConfidenceScoreWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ConversionConfidenceScoreScalarFieldEnum | Prisma.ConversionConfidenceScoreScalarFieldEnum[]
-}
-
-/**
- * ContentItem.performanceData
- */
-export type ContentItem$performanceDataArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CampaignPerformance
-   */
-  select?: Prisma.CampaignPerformanceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CampaignPerformance
-   */
-  omit?: Prisma.CampaignPerformanceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CampaignPerformanceInclude<ExtArgs> | null
-  where?: Prisma.CampaignPerformanceWhereInput
-  orderBy?: Prisma.CampaignPerformanceOrderByWithRelationInput | Prisma.CampaignPerformanceOrderByWithRelationInput[]
-  cursor?: Prisma.CampaignPerformanceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CampaignPerformanceScalarFieldEnum | Prisma.CampaignPerformanceScalarFieldEnum[]
 }
 
 /**
