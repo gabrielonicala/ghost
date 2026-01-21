@@ -72,20 +72,32 @@ export async function POST(request: NextRequest) {
       if (existingCreator) {
         creator = existingCreator as any;
       } else {
+        // Generate ID using cuid-like format (Prisma uses cuid())
+        // Simple cuid generator: 'c' + timestamp + random string
+        const timestamp = Date.now().toString(36);
+        const random = Math.random().toString(36).substring(2, 15);
+        const creatorId = `c${timestamp}${random}`;
+        
         const { data: newCreator, error } = await supabase
           .from("Creator")
           .insert({
+            id: creatorId,
             platform,
             platformId: `test_${Date.now()}`,
             username,
             displayName: username,
             followerCount: 10000,
             verified: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           })
           .select()
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error("Supabase insert error:", error);
+          throw error;
+        }
         creator = newCreator as any;
       }
     }
@@ -93,31 +105,90 @@ export async function POST(request: NextRequest) {
     // Generate a unique content ID
     const platformContentId = `test_${Date.now()}_${Math.random().toString(36).substring(7)}`;
 
-    // Create content item
-    const contentItem = await prisma.contentItem.create({
-      data: {
-        creatorId: creator.id,
-        platform,
-        platformContentId,
-        contentType,
-        mediaUrl,
-        thumbnailUrl,
-        caption,
-        publishedAt: new Date(),
-      },
-    });
+    // Create content item - try Prisma first, fallback to Supabase
+    let contentItem;
+    try {
+      contentItem = await prisma.contentItem.create({
+        data: {
+          creatorId: creator.id,
+          platform,
+          platformContentId,
+          contentType,
+          mediaUrl,
+          thumbnailUrl,
+          caption,
+          publishedAt: new Date(),
+        },
+      });
 
-    // Create initial metrics snapshot
-    await prisma.contentMetricsSnapshot.create({
-      data: {
+      // Create initial metrics snapshot
+      await prisma.contentMetricsSnapshot.create({
+        data: {
+          contentItemId: contentItem.id,
+          views: Math.floor(Math.random() * 10000) + 1000,
+          likes: Math.floor(Math.random() * 5000) + 500,
+          comments: Math.floor(Math.random() * 500) + 50,
+          shares: Math.floor(Math.random() * 200) + 20,
+          saves: Math.floor(Math.random() * 300) + 30,
+        },
+      });
+    } catch (prismaError: any) {
+      // If Prisma fails, use Supabase
+      if (!supabase) {
+        throw new Error("Prisma connection failed and Supabase client is not available.");
+      }
+
+      console.warn("Prisma content creation failed, using Supabase:", prismaError);
+      
+      // Generate content item ID
+      const timestamp = Date.now().toString(36);
+      const random = Math.random().toString(36).substring(2, 15);
+      const contentItemId = `c${timestamp}${random}`;
+      
+      const { data: newContentItem, error: contentError } = await supabase
+        .from("ContentItem")
+        .insert({
+          id: contentItemId,
+          creatorId: creator.id,
+          platform,
+          platformContentId,
+          contentType,
+          mediaUrl,
+          thumbnailUrl: thumbnailUrl || null,
+          caption: caption || null,
+          publishedAt: new Date().toISOString(),
+          detectedAt: new Date().toISOString(),
+          ingestedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        })
+        .select()
+        .single();
+
+      if (contentError) {
+        console.error("Supabase content insert error:", contentError);
+        throw contentError;
+      }
+      contentItem = newContentItem as any;
+
+      // Create metrics snapshot
+      const metricsId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
+      const { error: metricsError } = await supabase.from("ContentMetricsSnapshot").insert({
+        id: metricsId,
         contentItemId: contentItem.id,
         views: Math.floor(Math.random() * 10000) + 1000,
         likes: Math.floor(Math.random() * 5000) + 500,
         comments: Math.floor(Math.random() * 500) + 50,
         shares: Math.floor(Math.random() * 200) + 20,
         saves: Math.floor(Math.random() * 300) + 30,
-      },
-    });
+        snapshotAt: new Date().toISOString(),
+      });
+
+      if (metricsError) {
+        console.warn("Failed to create metrics snapshot:", metricsError);
+        // Don't throw - content was created successfully
+      }
+    }
 
     // Trigger background processing (ACCS scoring)
     if (organizationId) {
