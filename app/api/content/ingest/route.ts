@@ -1,0 +1,120 @@
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { getPlatformAdapter } from "@/lib/ingestion/platform-adapters";
+import { detectBrandContent } from "@/lib/detection/brand-detection";
+import { inngest } from "@/lib/inngest/client";
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { platform, contentId, organizationId } = body;
+
+    if (!platform || !contentId || !organizationId) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Fetch content from platform
+    const adapter = getPlatformAdapter(platform);
+    const platformContent = await adapter.fetchContent(contentId);
+
+    if (!platformContent) {
+      return NextResponse.json(
+        { error: "Content not found" },
+        { status: 404 }
+      );
+    }
+
+    // Resolve or create creator
+    let creator = await prisma.creator.findUnique({
+      where: {
+        platform_platformId: {
+          platform: platformContent.platform,
+          platformId: platformContent.creator.platformId,
+        },
+      },
+    });
+
+    if (!creator) {
+      creator = await prisma.creator.create({
+        data: {
+          platform: platformContent.platform,
+          platformId: platformContent.creator.platformId,
+          username: platformContent.creator.username,
+          displayName: platformContent.creator.displayName,
+          profileImageUrl: platformContent.creator.profileImageUrl,
+          followerCount: platformContent.creator.followerCount,
+          verified: platformContent.creator.verified || false,
+        },
+      });
+    }
+
+    // Check if content already exists
+    const existingContent = await prisma.contentItem.findUnique({
+      where: {
+        platform_platformContentId: {
+          platform: platformContent.platform,
+          platformContentId: platformContent.platformContentId,
+        },
+      },
+    });
+
+    if (existingContent) {
+      return NextResponse.json(
+        { error: "Content already ingested", contentId: existingContent.id },
+        { status: 409 }
+      );
+    }
+
+    // Create content item
+    const contentItem = await prisma.contentItem.create({
+      data: {
+        creatorId: creator.id,
+        platform: platformContent.platform,
+        platformContentId: platformContent.platformContentId,
+        contentType: platformContent.contentType,
+        mediaUrl: platformContent.mediaUrl,
+        thumbnailUrl: platformContent.thumbnailUrl,
+        caption: platformContent.caption,
+        publishedAt: platformContent.publishedAt,
+      },
+    });
+
+    // Create initial metrics snapshot
+    if (platformContent.metrics) {
+      await prisma.contentMetricsSnapshot.create({
+        data: {
+          contentItemId: contentItem.id,
+          views: platformContent.metrics.views,
+          likes: platformContent.metrics.likes,
+          comments: platformContent.metrics.comments,
+          shares: platformContent.metrics.shares,
+          saves: platformContent.metrics.saves,
+        },
+      });
+    }
+
+    // Trigger background processing
+    await inngest.send({
+      name: "content/process",
+      data: {
+        contentItemId: contentItem.id,
+        organizationId,
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      contentItemId: contentItem.id,
+    });
+  } catch (error: any) {
+    console.error("Content ingestion error:", error);
+    return NextResponse.json(
+      { error: error.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+

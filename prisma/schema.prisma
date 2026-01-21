@@ -1,0 +1,414 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// Core Identity & Organization
+// ============================================
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users           User[]
+  campaigns       Campaign[]
+  brandDictionaries BrandDictionary[]
+  integrations    Integration[]
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String?
+  organizationId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+// ============================================
+// Creator & Influencer Intelligence
+// ============================================
+
+model Creator {
+  id                String   @id @default(cuid())
+  platform          String   // 'instagram', 'tiktok', 'youtube', etc.
+  platformId        String   // Original platform ID
+  username          String
+  displayName       String?
+  profileImageUrl   String?
+  followerCount     Int?
+  verified          Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Cross-platform identity resolution
+  creatorIdentities CreatorIdentity[]
+  contentItems      ContentItem[]
+  campaigns         CampaignCreator[]
+  promotionMetrics  PromotionDensityMetric[]
+  authenticitySignals AuthenticitySignal[]
+
+  @@unique([platform, platformId])
+  @@index([platform, username])
+}
+
+model CreatorIdentity {
+  id         String   @id @default(cuid())
+  creatorId  String
+  platform   String
+  platformId String
+  username   String
+  verified   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  creator Creator @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@unique([platform, platformId])
+  @@index([creatorId])
+}
+
+// ============================================
+// Campaign Management
+// ============================================
+
+model Campaign {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  brief          String?
+  status         String   @default("draft") // draft, active, completed, archived
+  startDate      DateTime?
+  endDate        DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  creators         CampaignCreator[]
+  contentItems     ContentItem[]
+  performanceData  CampaignPerformance[]
+
+  @@index([organizationId, status])
+}
+
+model CampaignCreator {
+  id         String   @id @default(cuid())
+  campaignId String
+  creatorId  String
+  status     String   @default("assigned") // assigned, delivered, approved, rejected
+  assignedAt DateTime @default(now())
+  deliveredAt DateTime?
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  creator  Creator  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, creatorId])
+  @@index([campaignId])
+  @@index([creatorId])
+}
+
+// ============================================
+// Content Library & Intelligence
+// ============================================
+
+model ContentItem {
+  id                String   @id @default(cuid())
+  creatorId         String
+  campaignId        String?
+  platform          String
+  platformContentId String
+  contentType       String   // 'video', 'image', 'reel', 'post'
+  mediaUrl          String
+  thumbnailUrl      String?
+  caption           String?
+  publishedAt       DateTime
+  detectedAt        DateTime @default(now()) // When we detected it
+  ingestedAt        DateTime @default(now())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  creator              Creator                    @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  campaign             Campaign?                  @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  metricsSnapshots     ContentMetricsSnapshot[]
+  transcripts          ContentTranscript[]
+  ocrFrames            ContentOcrFrame[]
+  visualFeatures       ContentVisualFeature[]
+  similarityHashes     ContentSimilarityHash[]
+  brandDetections      BrandDetection[]
+  authenticitySignals  AuthenticitySignal[]
+  trustMetrics         AudienceTrustMetric[]
+  fatigueMetrics       UgcFatigueMetric[]
+  conversionScores     ConversionConfidenceScore[]
+
+  @@unique([platform, platformContentId])
+  @@index([creatorId])
+  @@index([campaignId])
+  @@index([publishedAt])
+  @@index([detectedAt])
+}
+
+model ContentMetricsSnapshot {
+  id            String   @id @default(cuid())
+  contentItemId String
+  snapshotAt    DateTime @default(now())
+  views         Int?
+  likes         Int?
+  comments      Int?
+  shares        Int?
+  saves         Int?
+  engagementRate Float?
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([contentItemId, snapshotAt])
+}
+
+model ContentTranscript {
+  id            String   @id @default(cuid())
+  contentItemId String
+  text          String   @db.Text
+  language      String   @default("en")
+  confidence    Float?
+  createdAt     DateTime @default(now())
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([contentItemId])
+}
+
+model ContentOcrFrame {
+  id            String   @id @default(cuid())
+  contentItemId String
+  frameIndex    Int
+  text          String   @db.Text
+  confidence    Float?
+  boundingBoxes Json?    // Array of {x, y, width, height, text}
+  createdAt     DateTime @default(now())
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([contentItemId])
+}
+
+model ContentVisualFeature {
+  id            String   @id @default(cuid())
+  contentItemId String
+  embedding     String?  // JSON array of floats for vector similarity search
+  hash          String?  // Perceptual hash for duplicate detection
+  dominantColors Json?    // Array of color values
+  createdAt     DateTime @default(now())
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([contentItemId])
+}
+
+model ContentSimilarityHash {
+  id            String   @id @default(cuid())
+  contentItemId String
+  hashType      String   // 'structural', 'visual', 'audio'
+  hashValue     String
+  createdAt     DateTime @default(now())
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([contentItemId, hashType])
+  @@index([hashValue])
+}
+
+// ============================================
+// Brand Detection (Untagged Content)
+// ============================================
+
+model BrandDictionary {
+  id             String   @id @default(cuid())
+  organizationId String
+  brandName      String
+  keywords       String[] // Array of keywords to detect
+  productNames   String[] // Array of product names
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization  Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  detections    BrandDetection[]
+
+  @@index([organizationId])
+}
+
+model BrandDetection {
+  id                String   @id @default(cuid())
+  contentItemId     String
+  brandDictionaryId String
+  detectionMethod   String   // 'caption', 'transcript', 'ocr', 'visual', 'behavior'
+  confidence        Float
+  matchedText       String?  @db.Text
+  matchedKeywords   String[]
+  createdAt         DateTime @default(now())
+
+  contentItem     ContentItem     @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+  brandDictionary BrandDictionary @relation(fields: [brandDictionaryId], references: [id], onDelete: Cascade)
+
+  @@index([contentItemId])
+  @@index([brandDictionaryId])
+  @@index([detectionMethod])
+}
+
+// ============================================
+// ACCS Scoring System
+// ============================================
+
+model AuthenticitySignal {
+  id            String   @id @default(cuid())
+  contentItemId String?
+  creatorId     String?
+  score         Float    // 0-100
+  scriptLikelihood Float? // 0-100
+  reusedHookDetected Boolean @default(false)
+  transcriptEntropy Float?
+  phraseReuseCount  Int?
+  naturalPacingScore Float?
+  brandMentionTiming Float? // Early = higher, forced = lower
+  hookOriginality    Float?
+  visualContinuity   Float?
+  reasonBreakdown    Json?  // Detailed breakdown
+  computedAt    DateTime @default(now())
+
+  contentItem ContentItem? @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+  creator     Creator?     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@index([contentItemId])
+  @@index([creatorId])
+  @@index([computedAt])
+}
+
+model AudienceTrustMetric {
+  id                    String   @id @default(cuid())
+  contentItemId         String
+  trustIndex            Float    // 0-100
+  engagementQualityGrade String? // A, B, C, D, F
+  purchaseIntentConfidence Float? // 0-100
+  commentSentimentPolarity Float? // -1 to 1
+  questionDensity       Float?
+  purchaseIntentKeywords Int?
+  repeatCommenterFrequency Float?
+  saveToViewRatio       Float?
+  replyDepthAverage     Float?
+  emojiToTextRatio      Float?
+  computedAt            DateTime @default(now())
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([contentItemId])
+  @@index([computedAt])
+}
+
+model PromotionDensityMetric {
+  id                    String   @id @default(cuid())
+  creatorId             String
+  periodDays            Int      // 30, 60, 90
+  promotionalPostRatio  Float    // 0-1
+  competingBrandsCount  Int?
+  categoryOverlapFreq   Float?
+  promotionClustering   Float?
+  sponsoredSpacingAvg   Float?   // Days between sponsored posts
+  saturationRiskLevel   String?  // low, medium, high
+  recommendedCooldown   Int?     // Days
+  computedAt            DateTime @default(now())
+
+  creator Creator @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@index([creatorId, periodDays])
+  @@index([computedAt])
+}
+
+model UgcFatigueMetric {
+  id                    String   @id @default(cuid())
+  contentItemId         String
+  fatigueRiskScore      Float    // 0-100
+  creativeOriginalityPercentile Float?
+  structuralSimilarity  Float?
+  hookPatternReuseFreq  Float?
+  visualCompositionOverlap Float?
+  audioTrendSaturation  Float?
+  brandLevelRepetition  Float?
+  industryLevelExhaustion Float?
+  overusedFormatWarnings String[] // Array of warning messages
+  computedAt            DateTime @default(now())
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([contentItemId])
+  @@index([computedAt])
+}
+
+model ConversionConfidenceScore {
+  id                    String   @id @default(cuid())
+  contentItemId         String
+  score                 Float    // 0-100 (ACCS)
+  authenticityScore     Float
+  audienceTrustScore    Float
+  promotionSaturationScore Float // Inverted - lower saturation = higher score
+  fatigueRiskScore      Float    // Inverted - lower fatigue = higher score
+  predictedPerformanceTier String? // 'high', 'medium', 'low'
+  recommendedUse        String[] // ['paid_social', 'homepage', 'email', etc.]
+  confidenceInterval    Json?    // {lower, upper}
+  reasonAttribution     Json?    // Detailed reasoning
+  computedAt            DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@unique([contentItemId]) // One score per content item (latest)
+  @@index([score])
+  @@index([computedAt])
+}
+
+// ============================================
+// Integrations & Performance Data
+// ============================================
+
+model Integration {
+  id             String   @id @default(cuid())
+  organizationId String
+  type           String   // 'shopify', 'meta_ads', 'tiktok_ads', 'ga4'
+  credentials    Json     // Encrypted credentials
+  status         String   @default("active") // active, error, disconnected
+  lastSyncedAt   DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization      Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  performanceData   CampaignPerformance[]
+
+  @@index([organizationId])
+}
+
+model CampaignPerformance {
+  id             String   @id @default(cuid())
+  campaignId     String
+  integrationId  String?
+  contentItemId  String?
+  metricType     String   // 'conversion', 'impression', 'click', 'roas', etc.
+  value          Float
+  metadata       Json?
+  recordedAt     DateTime @default(now())
+
+  campaign    Campaign     @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  integration Integration? @relation(fields: [integrationId], references: [id], onDelete: SetNull)
+  contentItem ContentItem? @relation(fields: [contentItemId], references: [id], onDelete: SetNull)
+
+  @@index([campaignId])
+  @@index([contentItemId])
+  @@index([recordedAt])
+}
