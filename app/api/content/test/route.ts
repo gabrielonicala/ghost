@@ -33,35 +33,42 @@ export async function POST(request: NextRequest) {
 
     // Create or find creator - try Prisma first, fallback to Supabase
     let creator;
-    try {
-      creator = await prisma.creator.findFirst({
-        where: {
-          platform,
-          username,
-        },
-      });
-
-      if (!creator) {
-        creator = await prisma.creator.create({
-          data: {
+    
+    // Only try Prisma if it's available
+    if (prisma) {
+      try {
+        creator = await prisma.creator.findFirst({
+          where: {
             platform,
-            platformId: `test_${Date.now()}`,
             username,
-            displayName: username,
-            followerCount: 10000,
-            verified: false,
           },
         });
+
+        if (!creator) {
+          creator = await prisma.creator.create({
+            data: {
+              platform,
+              platformId: `test_${Date.now()}`,
+              username,
+              displayName: username,
+              followerCount: 10000,
+              verified: false,
+            },
+          });
+        }
+      } catch (prismaError: any) {
+        console.warn("Prisma connection failed, will try Supabase:", prismaError);
+        // Don't set creator here - let it fall through to Supabase logic below
       }
-    } catch (prismaError: any) {
-      // If Prisma fails and Supabase is available, try using Supabase client
+    }
+
+    // If creator not found via Prisma, try Supabase
+    if (!creator) {
       if (!supabase) {
-        throw new Error("Prisma connection failed and Supabase client is not available. Please check your environment variables.");
+        throw new Error("Neither Prisma nor Supabase client is available. Please check your environment variables.");
       }
       
-      console.warn("Prisma connection failed, trying Supabase client:", prismaError);
-      
-      // Use Supabase for queries if Prisma doesn't work
+      // Use Supabase for queries
       const { data: existingCreator } = await supabase
         .from("Creator")
         .select("*")
@@ -69,11 +76,10 @@ export async function POST(request: NextRequest) {
         .eq("username", username)
         .single();
 
-      if (existingCreator) {
+      if (existingCreator && !existingCreator.error) {
         creator = existingCreator as any;
       } else {
         // Generate ID using cuid-like format (Prisma uses cuid())
-        // Simple cuid generator: 'c' + timestamp + random string
         const timestamp = Date.now().toString(36);
         const random = Math.random().toString(36).substring(2, 15);
         const creatorId = `c${timestamp}${random}`;
@@ -107,8 +113,10 @@ export async function POST(request: NextRequest) {
 
     // Create content item - try Prisma first, fallback to Supabase
     let contentItem;
-    try {
-      contentItem = await prisma.contentItem.create({
+    
+    if (prisma) {
+      try {
+        contentItem = await prisma.contentItem.create({
         data: {
           creatorId: creator.id,
           platform,
@@ -131,14 +139,17 @@ export async function POST(request: NextRequest) {
           shares: Math.floor(Math.random() * 200) + 20,
           saves: Math.floor(Math.random() * 300) + 30,
         },
-      });
-    } catch (prismaError: any) {
-      // If Prisma fails, use Supabase
+        });
+      } catch (prismaError: any) {
+        console.warn("Prisma content creation failed, using Supabase:", prismaError);
+      }
+    }
+    
+    // If content item not created via Prisma, use Supabase
+    if (!contentItem) {
       if (!supabase) {
         throw new Error("Prisma connection failed and Supabase client is not available.");
       }
-
-      console.warn("Prisma content creation failed, using Supabase:", prismaError);
       
       // Generate content item ID
       const timestamp = Date.now().toString(36);
