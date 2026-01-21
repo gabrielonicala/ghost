@@ -16,6 +16,10 @@ if (!process.env.DATABASE_URL) {
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  // Add connection timeout and retry settings for serverless
+  connectionTimeoutMillis: 10000,
+  idleTimeoutMillis: 30000,
+  max: 1, // Limit connections for serverless
 });
 
 const adapter = new PrismaPg(pool);

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { supabase } from "@/lib/supabase";
 import { inngest } from "@/lib/inngest/client";
 
 /**
@@ -30,25 +31,63 @@ export async function POST(request: NextRequest) {
       organizationId,
     } = body;
 
-    // Create or find creator
-    let creator = await prisma.creator.findFirst({
-      where: {
-        platform,
-        username,
-      },
-    });
-
-    if (!creator) {
-      creator = await prisma.creator.create({
-        data: {
+    // Create or find creator - try Prisma first, fallback to Supabase
+    let creator;
+    try {
+      creator = await prisma.creator.findFirst({
+        where: {
           platform,
-          platformId: `test_${Date.now()}`,
           username,
-          displayName: username,
-          followerCount: 10000,
-          verified: false,
         },
       });
+
+      if (!creator) {
+        creator = await prisma.creator.create({
+          data: {
+            platform,
+            platformId: `test_${Date.now()}`,
+            username,
+            displayName: username,
+            followerCount: 10000,
+            verified: false,
+          },
+        });
+      }
+    } catch (prismaError: any) {
+      // If Prisma fails and Supabase is available, try using Supabase client
+      if (!supabase) {
+        throw new Error("Prisma connection failed and Supabase client is not available. Please check your environment variables.");
+      }
+      
+      console.warn("Prisma connection failed, trying Supabase client:", prismaError);
+      
+      // Use Supabase for queries if Prisma doesn't work
+      const { data: existingCreator } = await supabase
+        .from("Creator")
+        .select("*")
+        .eq("platform", platform)
+        .eq("username", username)
+        .single();
+
+      if (existingCreator) {
+        creator = existingCreator as any;
+      } else {
+        const { data: newCreator, error } = await supabase
+          .from("Creator")
+          .insert({
+            platform,
+            platformId: `test_${Date.now()}`,
+            username,
+            displayName: username,
+            followerCount: 10000,
+            verified: false,
+          })
+          .select()
+          .single();
+
+        if (error) throw error;
+        creator = newCreator as any;
+      }
     }
 
     // Generate a unique content ID

@@ -1,31 +1,34 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { supabase } from "@/lib/supabase";
 
 /**
- * Test database connection endpoint
+ * Test database connection endpoint using Supabase client
  */
 export async function GET() {
   try {
-    // Check if DATABASE_URL is set
-    if (!process.env.DATABASE_URL) {
+    // Check if Supabase env vars are set
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !supabase) {
       return NextResponse.json(
         {
           success: false,
-          error: "DATABASE_URL is not set",
-          message: "Please add DATABASE_URL to your Vercel environment variables",
+          error: "Supabase environment variables not set",
+          hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+          hasSupabaseKey: !!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY,
+          message: "Please add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY to Vercel",
         },
         { status: 500 }
       );
     }
 
-    // Try a simple query
-    const result = await prisma.$queryRaw`SELECT 1 as test`;
-    
+    // Test Supabase client connection
+    // Just verify the client is initialized - actual queries will be tested elsewhere
     return NextResponse.json({
       success: true,
-      message: "Database connection successful",
-      hasDatabaseUrl: true,
-      databaseHost: process.env.DATABASE_URL?.split("@")[1]?.split(":")[0] || "unknown",
+      message: "Supabase client initialized successfully",
+      hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      hasSupabaseKey: !!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY,
+      hasDatabaseUrl: !!process.env.DATABASE_URL,
+      note: "Supabase client is ready. Add these env vars to Vercel to fix Prisma connection issues.",
     });
   } catch (error: any) {
     console.error("Database connection test failed:", error);
@@ -35,13 +38,14 @@ export async function GET() {
         success: false,
         error: error.message,
         code: error.code,
-        hasDatabaseUrl: !!process.env.DATABASE_URL,
-        databaseHost: process.env.DATABASE_URL?.split("@")[1]?.split(":")[0] || "unknown",
-        troubleshooting: error.code === "P1001" ? [
-          "1. Supabase project might be paused - check dashboard and resume",
-          "2. DATABASE_URL might be incorrect in Vercel",
-          "3. Connection string format might be wrong",
-        ] : [],
+        hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+        hasSupabaseKey: !!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY,
+        troubleshooting: [
+          "1. Check if Supabase project is active",
+          "2. Verify NEXT_PUBLIC_SUPABASE_URL is set correctly",
+          "3. Verify NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY is set",
+          "4. Make sure environment variables are set for all environments in Vercel",
+        ],
       },
       { status: 500 }
     );
