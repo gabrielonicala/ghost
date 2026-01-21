@@ -36,12 +36,12 @@ export const processContentItem = inngest.createFunction(
           // const audioBuffer = await extractAudio(contentItem.mediaUrl);
           // const result = await transcribeAudio(audioBuffer);
           // return result.text;
-          return undefined; // Placeholder
+          return undefined as string | undefined; // Placeholder
         } catch (error) {
           console.error("Transcription error:", error);
-          return undefined;
+          return undefined as string | undefined;
         }
-      });
+      }) || undefined;
 
       if (transcript) {
         await prisma.contentTranscript.create({
@@ -152,14 +152,14 @@ export const processContentItem = inngest.createFunction(
           : undefined,
         creatorHistory: {
           previousPromotions: creatorPromotions
-            .map((p) => p.caption || "")
-            .filter((c) => c.length > 0),
+            .map((p: { caption: string | null }) => p.caption || "")
+            .filter((c: string) => c.length > 0),
           scriptPatterns: [],
-          promotionalPosts: creatorPromotions.map((p) => ({
+          promotionalPosts: creatorPromotions.map((p: { publishedAt: Date }) => ({
             date: p.publishedAt,
           })),
         },
-        similarContent: similarContent.map((item) => ({
+        similarContent: similarContent.map((item: { id: string }) => ({
           id: item.id,
           structure: {},
           similarity: 0.5, // Would calculate actual similarity

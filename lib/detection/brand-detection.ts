@@ -112,7 +112,7 @@ function detectKeywords(
   text: string,
   keywords: string[],
   productNames: string[]
-): DetectionResult {
+): Omit<DetectionResult, "method"> {
   const lowerText = text.toLowerCase();
   const matchedKeywords: string[] = [];
   let maxConfidence = 0;
@@ -164,7 +164,7 @@ async function saveDetection(
   contentItemId: string,
   brandDictionaryId: string,
   method: string,
-  result: DetectionResult
+  result: Omit<DetectionResult, "method">
 ): Promise<void> {
   await prisma.brandDetection.create({
     data: {
