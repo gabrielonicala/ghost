@@ -182,10 +182,33 @@ export function ContentLibrary() {
               <CardTitle>No Score Available</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-600">
-                This content item hasn't been scored yet. Processing may still be in
-                progress.
+              <p className="text-sm text-gray-600 mb-4">
+                This content item hasn't been scored yet. Click the button below to calculate the ACCS score.
               </p>
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch(`/api/content/${selectedContent.id}/score`, {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ 
+                        organizationId: "clx0000000000000000000000" // TODO: Get from user context
+                      }),
+                    });
+                    if (response.ok) {
+                      // Refresh content
+                      fetchContent();
+                    } else {
+                      alert("Failed to calculate score");
+                    }
+                  } catch (error) {
+                    alert("Error calculating score");
+                  }
+                }}
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Calculate ACCS Score
+              </button>
             </CardContent>
           </Card>
         ) : (

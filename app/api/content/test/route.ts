@@ -201,15 +201,100 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Trigger background processing (ACCS scoring)
+    // Calculate ACCS score immediately (instead of background job)
+    // This ensures scores are available right away
     if (organizationId) {
-      await inngest.send({
-        name: "content/process",
-        data: {
+      try {
+        // Import scoring function
+        const { calculateACCS } = await import("@/lib/scoring/accs");
+        
+        // Get metrics for scoring
+        let latestMetrics: any = null;
+        let creatorPromotions: any[] = [];
+        
+        if (prisma) {
+          latestMetrics = await prisma.contentMetricsSnapshot.findFirst({
+            where: { contentItemId: contentItem.id },
+            orderBy: { snapshotAt: "desc" },
+          });
+          creatorPromotions = await prisma.contentItem.findMany({
+            where: {
+              creatorId: creator.id,
+              id: { not: contentItem.id },
+            },
+            take: 20,
+            select: { caption: true, publishedAt: true },
+          });
+        } else if (supabase) {
+          const { data: metrics } = await supabase
+            .from("ContentMetricsSnapshot")
+            .select("*")
+            .eq("contentItemId", contentItem.id)
+            .order("snapshotAt", { ascending: false })
+            .limit(1)
+            .single();
+          latestMetrics = metrics;
+        }
+        
+        // Calculate score
+        const score = await calculateACCS({
           contentItemId: contentItem.id,
-          organizationId,
-        },
-      });
+          caption: caption || undefined,
+          engagementMetrics: latestMetrics ? {
+            views: latestMetrics.views,
+            likes: latestMetrics.likes,
+            comments: latestMetrics.comments,
+            shares: latestMetrics.shares,
+            saves: latestMetrics.saves,
+          } : undefined,
+          creatorHistory: {
+            previousPromotions: creatorPromotions.map((p: any) => p.caption || "").filter((c: string) => c.length > 0),
+            scriptPatterns: [],
+            promotionalPosts: creatorPromotions.map((p: any) => ({ 
+              date: typeof p.publishedAt === "string" ? new Date(p.publishedAt) : p.publishedAt 
+            })),
+          },
+          similarContent: [],
+        });
+        
+        // Save score
+        if (prisma) {
+          await prisma.conversionConfidenceScore.create({
+            data: {
+              contentItemId: contentItem.id,
+              score: score.score,
+              authenticityScore: score.authenticity.score,
+              audienceTrustScore: score.audienceTrust.score,
+              promotionSaturationScore: score.promotionSaturation.score,
+              fatigueRiskScore: score.fatigueRisk.score,
+              predictedPerformanceTier: score.predictedPerformanceTier,
+              recommendedUse: score.recommendedUse,
+              confidenceInterval: score.confidenceInterval,
+              reasonAttribution: score.reasonAttribution,
+            },
+          });
+        } else if (supabase) {
+          const scoreId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
+          await supabase.from("ConversionConfidenceScore").insert({
+            id: scoreId,
+            contentItemId: contentItem.id,
+            score: score.score,
+            authenticityScore: score.authenticity.score,
+            audienceTrustScore: score.audienceTrust.score,
+            promotionSaturationScore: score.promotionSaturation.score,
+            fatigueRiskScore: score.fatigueRisk.score,
+            predictedPerformanceTier: score.predictedPerformanceTier,
+            recommendedUse: score.recommendedUse,
+            confidenceInterval: score.confidenceInterval,
+            reasonAttribution: score.reasonAttribution,
+            computedAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+        }
+      } catch (scoreError: any) {
+        // Don't fail the request if scoring fails - just log it
+        console.warn("Error calculating ACCS score (non-fatal):", scoreError.message);
+      }
     }
 
     return NextResponse.json({
