@@ -31,6 +31,7 @@ export default function Home() {
             </p>
           </div>
           <AddTestContent />
+          <TestMediaProcessing />
           <ContentLibrary />
         </div>
       </main>

@@ -35,9 +35,9 @@ export async function POST(request: NextRequest) {
       platform = "instagram",
       username = "test_creator",
       caption = "Check out this amazing product! #sponsored",
-      mediaUrl = "https://via.placeholder.com/1080x1080",
-      thumbnailUrl = "https://via.placeholder.com/400x400",
-      contentType = "image",
+      mediaUrl = body.mediaUrl || "https://via.placeholder.com/1080x1080",
+      thumbnailUrl = body.thumbnailUrl || "https://via.placeholder.com/400x400",
+      contentType = body.contentType || "image",
     } = body;
 
     // Use authenticated user's organizationId
