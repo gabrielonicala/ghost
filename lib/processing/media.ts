@@ -106,9 +106,7 @@ export async function performOCR(imageUrl: string): Promise<{
     const imageBuffer = await downloadFile(imageUrl);
     
     // Perform OCR
-    const {
-      data: { text, confidence, words },
-    } = await Tesseract.recognize(imageBuffer, "eng", {
+    const result = await Tesseract.recognize(imageBuffer, "eng", {
       logger: (m) => {
         // Suppress verbose logging in production
         if (m.status === "recognizing text") {
@@ -117,8 +115,11 @@ export async function performOCR(imageUrl: string): Promise<{
       },
     });
 
-    // Extract bounding boxes from words
-    const boundingBoxes = words?.map((word) => ({
+    const text = result.data.text;
+    const confidence = result.data.confidence || 0;
+
+    // Extract bounding boxes from words if available
+    const boundingBoxes = result.data.words?.map((word: any) => ({
       x: word.bbox.x0,
       y: word.bbox.y0,
       width: word.bbox.x1 - word.bbox.x0,
