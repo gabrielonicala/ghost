@@ -3,7 +3,14 @@ import { prisma } from "@/lib/prisma";
 import { supabase } from "@/lib/supabase";
 import { calculateACCS } from "@/lib/scoring/accs";
 import { detectBrandContent } from "@/lib/detection/brand-detection";
-import { performOCR, transcribeAudio, extractFrames } from "@/lib/processing/media";
+import {
+  performOCR,
+  transcribeAudio,
+  extractFrames,
+  generateVisualEmbedding,
+  calculatePerceptualHash,
+  extractDominantColors,
+} from "@/lib/processing/media";
 
 /**
  * Process content item: OCR, transcription, brand detection, ACCS scoring
@@ -45,11 +52,9 @@ export const processContentItem = inngest.createFunction(
     if (contentItem.contentType === "video" || contentItem.contentType === "reel") {
       transcript = await step.run("transcribe-audio", async () => {
         try {
-          // TODO: Extract audio and transcribe
-          // const audioBuffer = await extractAudio(contentItem.mediaUrl);
-          // const result = await transcribeAudio(audioBuffer);
-          // return result.text;
-          return undefined as string | undefined; // Placeholder
+          // Use OpenAI Whisper API directly with video URL
+          const result = await transcribeAudio(contentItem.mediaUrl);
+          return result.text;
         } catch (error) {
           console.error("Transcription error:", error);
           return undefined as string | undefined;
@@ -140,7 +145,7 @@ export const processContentItem = inngest.createFunction(
       }
     });
 
-    // Step 5: Calculate ACCS score
+    // Step 6: Calculate ACCS score
     const accsScore = await step.run("calculate-accs", async () => {
       if (!prisma && !supabase) {
         throw new Error("No database client available for ACCS calculation");
