@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { supabase } from "@/lib/supabase";
 import { inngest } from "@/lib/inngest/client";
+import { getAuthenticatedUser } from "@/lib/auth/get-user";
 
 /**
  * Test endpoint to add sample content for testing
@@ -9,6 +10,15 @@ import { inngest } from "@/lib/inngest/client";
  */
 export async function POST(request: NextRequest) {
   try {
+    // Get authenticated user
+    const user = await getAuthenticatedUser();
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     // Check if DATABASE_URL is set
     if (!process.env.DATABASE_URL) {
       return NextResponse.json(
@@ -28,8 +38,10 @@ export async function POST(request: NextRequest) {
       mediaUrl = "https://via.placeholder.com/1080x1080",
       thumbnailUrl = "https://via.placeholder.com/400x400",
       contentType = "image",
-      organizationId = "clt0000000000000000000000", // Default test organization ID
     } = body;
+
+    // Use authenticated user's organizationId
+    const organizationId = user.organizationId;
 
     // Create or find creator - try Prisma first, fallback to Supabase
     let creator;
@@ -201,8 +213,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Use default organizationId if not provided
-    const finalOrganizationId = organizationId || "clt0000000000000000000000";
+    // Use authenticated user's organizationId
+    const finalOrganizationId = organizationId;
 
     // Trigger Inngest background processing (always send event if Event Key is available)
     if (!process.env.INNGEST_EVENT_KEY) {

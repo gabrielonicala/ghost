@@ -19,7 +19,7 @@ model Organization {
 }
 
 model User {
-  id             String       @id @default(cuid())
+  id             String       @id // Uses Supabase Auth UUID
   email          String       @unique
   name           String?
   organizationId String
