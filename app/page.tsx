@@ -2,6 +2,7 @@
 
 import { ContentLibrary } from "@/components/content-library";
 import { AddTestContent } from "@/components/add-test-content";
+import { TestMediaProcessing } from "@/components/test-media-processing";
 import { AuthHeader } from "@/components/auth-header";
 import { useAuth } from "@/contexts/auth-context";
 
