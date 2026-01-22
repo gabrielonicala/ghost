@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       mediaUrl = "https://via.placeholder.com/1080x1080",
       thumbnailUrl = "https://via.placeholder.com/400x400",
       contentType = "image",
-      organizationId,
+      organizationId = "clt0000000000000000000000", // Default test organization ID
     } = body;
 
     // Create or find creator - try Prisma first, fallback to Supabase
@@ -201,34 +201,35 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Trigger Inngest background processing
-    if (organizationId) {
-      if (!process.env.INNGEST_EVENT_KEY) {
-        console.warn("INNGEST_EVENT_KEY not set - events cannot be sent. Add Event Key to Vercel environment variables.");
-      } else {
-        try {
-          const result = await inngest.send({
-            name: "content/process",
-            data: {
-              contentItemId: contentItem.id,
-              organizationId,
-            },
-          });
-          console.log("Inngest event sent successfully for content:", contentItem.id, result);
-        } catch (inngestError: any) {
-          console.error("Failed to send Inngest event:", {
-            message: inngestError.message,
-            stack: inngestError.stack,
-            hasEventKey: !!process.env.INNGEST_EVENT_KEY,
-          });
-          // Don't fail the request if Inngest fails
-        }
+    // Use default organizationId if not provided
+    const finalOrganizationId = organizationId || "clt0000000000000000000000";
+
+    // Trigger Inngest background processing (always send event if Event Key is available)
+    if (!process.env.INNGEST_EVENT_KEY) {
+      console.warn("INNGEST_EVENT_KEY not set - events cannot be sent. Add Event Key to Vercel environment variables.");
+    } else {
+      try {
+        const result = await inngest.send({
+          name: "content/process",
+          data: {
+            contentItemId: contentItem.id,
+            organizationId: finalOrganizationId,
+          },
+        });
+        console.log("Inngest event sent successfully for content:", contentItem.id, result);
+      } catch (inngestError: any) {
+        console.error("Failed to send Inngest event:", {
+          message: inngestError.message,
+          stack: inngestError.stack,
+          hasEventKey: !!process.env.INNGEST_EVENT_KEY,
+        });
+        // Don't fail the request if Inngest fails
       }
     }
 
     // Calculate ACCS score immediately (in addition to background job)
     // This ensures scores are available right away
-    if (organizationId) {
+    if (finalOrganizationId) {
       try {
         // Import scoring function
         const { calculateACCS } = await import("@/lib/scoring/accs");
