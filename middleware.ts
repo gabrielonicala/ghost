@@ -35,8 +35,14 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protect API routes (except auth routes)
-  if (request.nextUrl.pathname.startsWith("/api/") && !request.nextUrl.pathname.startsWith("/api/auth/")) {
+  // Protect API routes (except auth routes and Inngest endpoint)
+  // Inngest uses its own signing key authentication, not user auth
+  if (
+    request.nextUrl.pathname.startsWith("/api/") &&
+    !request.nextUrl.pathname.startsWith("/api/auth/") &&
+    !request.nextUrl.pathname.startsWith("/api/inngest") &&
+    !request.nextUrl.pathname.startsWith("/api/test-inngest")
+  ) {
     if (!user) {
       return NextResponse.json(
         { error: "Unauthorized" },
