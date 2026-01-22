@@ -203,18 +203,26 @@ export async function POST(request: NextRequest) {
 
     // Trigger Inngest background processing
     if (organizationId) {
-      try {
-        await inngest.send({
-          name: "content/process",
-          data: {
-            contentItemId: contentItem.id,
-            organizationId,
-          },
-        });
-        console.log("Inngest event sent for content:", contentItem.id);
-      } catch (inngestError: any) {
-        console.warn("Failed to send Inngest event (non-fatal):", inngestError.message);
-        // Don't fail the request if Inngest fails
+      if (!process.env.INNGEST_EVENT_KEY) {
+        console.warn("INNGEST_EVENT_KEY not set - events cannot be sent. Add Event Key to Vercel environment variables.");
+      } else {
+        try {
+          const result = await inngest.send({
+            name: "content/process",
+            data: {
+              contentItemId: contentItem.id,
+              organizationId,
+            },
+          });
+          console.log("Inngest event sent successfully for content:", contentItem.id, result);
+        } catch (inngestError: any) {
+          console.error("Failed to send Inngest event:", {
+            message: inngestError.message,
+            stack: inngestError.stack,
+            hasEventKey: !!process.env.INNGEST_EVENT_KEY,
+          });
+          // Don't fail the request if Inngest fails
+        }
       }
     }
 
