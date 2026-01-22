@@ -56,6 +56,7 @@ export async function middleware(request: NextRequest) {
     !request.nextUrl.pathname.startsWith("/api/auth/") &&
     request.nextUrl.pathname !== "/login" &&
     request.nextUrl.pathname !== "/signup" &&
+    !request.nextUrl.pathname.startsWith("/auth/callback") &&
     !request.nextUrl.pathname.startsWith("/_next/") &&
     !request.nextUrl.pathname.startsWith("/api/test-inngest")
   ) {

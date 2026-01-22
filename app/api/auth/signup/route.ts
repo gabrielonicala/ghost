@@ -24,12 +24,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Sign up user
+    const redirectTo = `${process.env.NEXT_PUBLIC_APP_URL || "https://ghost-livid.vercel.app"}/auth/callback`;
+    
     const {
       data: { user },
       error: signUpError,
     } = await supabaseClient.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: redirectTo,
+      },
     });
 
     if (signUpError || !user) {
