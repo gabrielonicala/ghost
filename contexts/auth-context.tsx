@@ -18,9 +18,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [organizationId, setOrganizationId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClientSupabase();
+  
+  // Only create Supabase client if env vars are available (client-side only)
+  let supabase: ReturnType<typeof createClientSupabase> | null = null;
+  try {
+    supabase = createClientSupabase();
+  } catch (error) {
+    console.warn("Supabase client creation failed:", error);
+  }
 
   const refresh = async () => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+    
     try {
       const {
         data: { user },
@@ -46,6 +58,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+    
     refresh();
 
     const {
@@ -66,7 +83,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     setUser(null);
     setOrganizationId(null);
   };

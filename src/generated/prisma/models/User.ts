@@ -241,7 +241,7 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
-  id?: string
+  id: string
   email: string
   name?: string | null
   createdAt?: Date | string
@@ -250,7 +250,7 @@ export type UserCreateInput = {
 }
 
 export type UserUncheckedCreateInput = {
-  id?: string
+  id: string
   email: string
   name?: string | null
   organizationId: string
@@ -277,7 +277,7 @@ export type UserUncheckedUpdateInput = {
 }
 
 export type UserCreateManyInput = {
-  id?: string
+  id: string
   email: string
   name?: string | null
   organizationId: string
@@ -386,7 +386,7 @@ export type NullableStringFieldUpdateOperationsInput = {
 }
 
 export type UserCreateWithoutOrganizationInput = {
-  id?: string
+  id: string
   email: string
   name?: string | null
   createdAt?: Date | string
@@ -394,7 +394,7 @@ export type UserCreateWithoutOrganizationInput = {
 }
 
 export type UserUncheckedCreateWithoutOrganizationInput = {
-  id?: string
+  id: string
   email: string
   name?: string | null
   createdAt?: Date | string
@@ -440,7 +440,7 @@ export type UserScalarWhereInput = {
 }
 
 export type UserCreateManyOrganizationInput = {
-  id?: string
+  id: string
   email: string
   name?: string | null
   createdAt?: Date | string

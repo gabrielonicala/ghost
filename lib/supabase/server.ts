@@ -11,6 +11,7 @@ export async function createServerSupabaseClient() {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
+    // During build time, return null gracefully
     return null;
   }
 

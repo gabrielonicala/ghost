@@ -119,7 +119,10 @@ export async function performOCR(imageUrl: string): Promise<{
     const confidence = result.data.confidence || 0;
 
     // Extract bounding boxes from words if available
-    const boundingBoxes = result.data.words?.map((word: any) => ({
+    // Tesseract.js returns words in result.data.words, but TypeScript types may not include it
+    // We'll access it safely with type assertion
+    const words = (result.data as any).words;
+    const boundingBoxes = words?.map((word: any) => ({
       x: word.bbox.x0,
       y: word.bbox.y0,
       width: word.bbox.x1 - word.bbox.x0,
@@ -154,24 +157,32 @@ export async function transcribeAudio(
   confidence: number;
 }> {
   try {
-    let file: File | Buffer;
+    let fileBuffer: Buffer;
     let filename: string;
 
     if (typeof audioBufferOrUrl === "string") {
       // If it's a URL, download it
-      const buffer = await downloadFile(audioBufferOrUrl);
+      fileBuffer = await downloadFile(audioBufferOrUrl);
       // Determine file type from URL
       const extension = audioBufferOrUrl.split(".").pop()?.toLowerCase() || "mp4";
       filename = `audio.${extension}`;
-      file = buffer;
     } else {
-      // If it's a buffer, create a File object
-      file = audioBufferOrUrl;
+      // If it's a buffer, use it directly
+      fileBuffer = audioBufferOrUrl;
       filename = "audio.mp3";
     }
 
-    // Create a File-like object for OpenAI
-    const fileForOpenAI = new File([file], filename, {
+    // Convert Buffer to Blob for OpenAI File API
+    // OpenAI expects a File or Blob, so we convert Buffer to Uint8Array first
+    const uint8Array = new Uint8Array(fileBuffer);
+    const blob = new Blob([uint8Array], {
+      type: filename.endsWith(".mp4") || filename.endsWith(".mov")
+        ? "video/mp4"
+        : "audio/mpeg",
+    });
+    
+    // Create a File object from the Blob
+    const fileForOpenAI = new File([blob], filename, {
       type: filename.endsWith(".mp4") || filename.endsWith(".mov")
         ? "video/mp4"
         : "audio/mpeg",
@@ -295,21 +306,17 @@ export async function extractDominantColors(
     // Download image
     const imageBuffer = await downloadFile(imageUrl);
     
-    // Resize for faster processing
+    // Resize for faster processing and get raw pixel data
     const resized = await sharp(imageBuffer)
       .resize(200, 200, { fit: "inside" })
       .raw()
       .toBuffer();
 
-    const { data, info } = await sharp(imageBuffer)
+    // Get image metadata
+    const metadata = await sharp(imageBuffer)
       .resize(200, 200, { fit: "inside" })
-      .stats()
-      .toBuffer({ resolveWithObject: true });
+      .metadata();
 
-    // Get dominant colors using k-means or simple histogram
-    // For simplicity, we'll use sharp's stats which gives us channel statistics
-    // In production, you might want to use a more sophisticated color extraction
-    
     // Simple approach: sample colors from the image
     const colors: Array<{ r: number; g: number; b: number; count: number }> = [];
     const step = Math.floor(resized.length / (count * 3));
