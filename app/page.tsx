@@ -10,8 +10,8 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-muted-foreground">Loading...</div>
       </div>
     );
   }
@@ -19,13 +19,13 @@ export default function Home() {
   return (
     <>
       <AuthHeader />
-      <main className="min-h-screen p-8">
+      <main className="min-h-screen p-8 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-2">
+            <h1 className="text-4xl font-bold mb-2 text-foreground">
               Creator Intelligence & UGC Performance Platform
             </h1>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Not all UGC converts. We tell you which content actually will — before you
               spend money.
             </p>

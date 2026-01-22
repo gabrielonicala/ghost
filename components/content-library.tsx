@@ -108,13 +108,13 @@ export function ContentLibrary() {
           </div>
         </div>
 
-        {loading ? (
-          <div className="text-center py-8">Loading...</div>
-        ) : contentItems.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            No content items found
-          </div>
-        ) : (
+          {loading ? (
+            <div className="text-center py-8 text-muted-foreground">Loading...</div>
+          ) : contentItems.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              No content items found
+            </div>
+          ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {contentItems.map((item) => (
               <Card
@@ -153,16 +153,16 @@ export function ContentLibrary() {
                       className="w-full h-48 object-cover rounded mb-2"
                     />
                   ) : (
-                    <div className="w-full h-48 bg-gray-200 rounded mb-2 flex items-center justify-center">
+                    <div className="w-full h-48 bg-muted rounded mb-2 flex items-center justify-center text-muted-foreground">
                       No thumbnail
                     </div>
                   )}
                   {item.caption && (
-                    <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
                       {item.caption}
                     </p>
                   )}
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     {formatDate(item.publishedAt)}
                   </p>
                 </CardContent>
@@ -182,7 +182,7 @@ export function ContentLibrary() {
               <CardTitle>No Score Available</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-muted-foreground mb-4">
                 This content item hasn't been scored yet. Click the button below to calculate the ACCS score.
               </p>
               <button
@@ -217,7 +217,7 @@ export function ContentLibrary() {
               <CardTitle>Select Content</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Click on a content item to view its ACCS score and analysis.
               </p>
             </CardContent>

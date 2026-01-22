@@ -49,7 +49,7 @@ export function AddTestContent() {
         <CardTitle>Add Test Content</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           Add sample content to test the platform. This creates a test creator and content item
           with mock engagement metrics.
         </p>
@@ -61,7 +61,7 @@ export function AddTestContent() {
           {loading ? "Adding..." : "Add Test Content"}
         </button>
         {message && (
-          <p className={`mt-4 text-sm ${message.includes("✅") ? "text-green-600" : "text-red-600"}`}>
+          <p className={`mt-4 text-sm ${message.includes("✅") ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
             {message}
           </p>
         )}

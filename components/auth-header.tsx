@@ -14,9 +14,9 @@ export function AuthHeader() {
 
   if (loading) {
     return (
-      <div className="bg-white border-b p-4">
+      <div className="bg-background border-b border-border p-4">
         <div className="max-w-7xl mx-auto flex justify-end">
-          <div className="text-gray-500">Loading...</div>
+          <div className="text-muted-foreground">Loading...</div>
         </div>
       </div>
     );
@@ -27,14 +27,14 @@ export function AuthHeader() {
   }
 
   return (
-    <div className="bg-white border-b p-4">
+    <div className="bg-background border-b border-border p-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-foreground">
           Signed in as <span className="font-medium">{user.email}</span>
         </div>
         <button
           onClick={handleSignOut}
-          className="text-sm text-red-600 hover:text-red-700"
+          className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
         >
           Sign Out
         </button>
