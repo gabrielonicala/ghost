@@ -201,7 +201,24 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Calculate ACCS score immediately (instead of background job)
+    // Trigger Inngest background processing
+    if (organizationId) {
+      try {
+        await inngest.send({
+          name: "content/process",
+          data: {
+            contentItemId: contentItem.id,
+            organizationId,
+          },
+        });
+        console.log("Inngest event sent for content:", contentItem.id);
+      } catch (inngestError: any) {
+        console.warn("Failed to send Inngest event (non-fatal):", inngestError.message);
+        // Don't fail the request if Inngest fails
+      }
+    }
+
+    // Calculate ACCS score immediately (in addition to background job)
     // This ensures scores are available right away
     if (organizationId) {
       try {

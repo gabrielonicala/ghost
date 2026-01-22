@@ -185,3 +185,4 @@ If you want to use Supabase auth later:
 - Supabase projects can pause after inactivity (free tier)
 - Wake it up in the Supabase dashboard
 
+

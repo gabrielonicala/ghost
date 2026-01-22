@@ -33,3 +33,4 @@ Go to **Vercel Dashboard → Your Project → Settings → Environment Variables
 
 The test endpoint will now use Supabase client instead of direct Prisma connection.
 
+

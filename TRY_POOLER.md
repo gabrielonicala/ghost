@@ -66,3 +66,4 @@ Try these:
    - Sometimes dashboard shows active but database isn't ready
    - Try a simple query in Supabase SQL Editor
 
+

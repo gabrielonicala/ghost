@@ -141,3 +141,4 @@ Everything else can be added later as you need those features.
 5. **Generate Prisma client:** `npm run db:generate`
 6. **Start dev server:** `npm run dev`
 
+

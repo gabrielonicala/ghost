@@ -99,3 +99,4 @@ If it works, you'll see tables being created. If it fails, check:
 - Using port 5432 (not 6543)
 - Using direct connection (not pooler)
 
+

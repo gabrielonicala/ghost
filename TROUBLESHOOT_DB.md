@@ -78,3 +78,4 @@ To prevent pausing:
 - Or upgrade to a paid plan (no auto-pause)
 - Or set up a cron job to ping your database weekly
 
+

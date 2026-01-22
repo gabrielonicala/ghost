@@ -103,3 +103,4 @@ But for now, you only need `DATABASE_URL` to get started!
 - Check that your password doesn't have special characters that need URL encoding
 - Try resetting your database password in Supabase dashboard
 
+
