@@ -17,7 +17,6 @@ export async function GET(request: NextRequest) {
     console.log("Attempting to send Inngest event:", testEvent);
     console.log("Inngest client config:", {
       id: inngest.id,
-      name: inngest.name,
       hasEventKey: !!process.env.INNGEST_EVENT_KEY,
       hasSigningKey: !!process.env.INNGEST_SIGNING_KEY,
     });
