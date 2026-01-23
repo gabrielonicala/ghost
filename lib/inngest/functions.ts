@@ -91,7 +91,31 @@ export const processContentItem = inngest.createFunction(
       if (contentItem.contentType === "image" || contentItem.contentType === "post") {
         // MANDATORY: OCR must succeed for images
         const ocrResult = await performOCR(contentItem.mediaUrl);
-        return ocrResult.text ? [ocrResult.text] : [];
+        const text = ocrResult.text || "";
+        
+        // Save OCR result to database for images too
+        if (text && prisma) {
+          await prisma.contentOcrFrame.create({
+            data: {
+              contentItemId: contentItem.id,
+              frameIndex: 0, // Images have a single "frame" at index 0
+              text: text,
+              confidence: ocrResult.confidence,
+            },
+          });
+        } else if (text && supabase) {
+          const frameId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
+          await supabase.from("ContentOcrFrame").insert({
+            id: frameId,
+            contentItemId: contentItem.id,
+            frameIndex: 0, // Images have a single "frame" at index 0
+            text: text,
+            confidence: ocrResult.confidence,
+            createdAt: new Date().toISOString(),
+          });
+        }
+        
+        return text ? [text] : [];
       } else if (contentItem.contentType === "video" || contentItem.contentType === "reel") {
         // Extract frames and OCR them (1 frame for videos)
         const frames = await extractFrames(contentItem.mediaUrl, 1);
