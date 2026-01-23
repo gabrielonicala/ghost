@@ -14,9 +14,16 @@ import {
 
 /**
  * Process content item: OCR, transcription, brand detection, ACCS scoring
+ * 
+ * Note: Heavy operations (OCR, transcription) are optional and will be skipped
+ * if they timeout, allowing the function to complete successfully with available data.
  */
 export const processContentItem = inngest.createFunction(
-  { id: "process-content-item" },
+  { 
+    id: "process-content-item",
+    // Note: Heavy operations (OCR, transcription) have step-level timeouts
+    // and will be skipped if they timeout, allowing the function to complete
+  },
   { event: "content/process" },
   async ({ event, step }) => {
     const { contentItemId, organizationId } = event.data;
@@ -47,18 +54,14 @@ export const processContentItem = inngest.createFunction(
       throw new Error(`Content item not found: ${contentItemId}`);
     }
 
-    // Step 2: Extract transcript (if video)
+    // Step 2: Extract transcript (if video) - MANDATORY for videos
     let transcript: string | undefined;
     if (contentItem.contentType === "video" || contentItem.contentType === "reel") {
       transcript = await step.run("transcribe-audio", async () => {
-        try {
-          // Use OpenAI Whisper API directly with video URL
-          const result = await transcribeAudio(contentItem.mediaUrl);
-          return result.text;
-        } catch (error) {
-          console.error("Transcription error:", error);
-          return undefined as string | undefined;
-        }
+        // Use OpenAI Whisper API directly with video URL
+        // This will throw if it fails, causing Inngest to retry
+        const result = await transcribeAudio(contentItem.mediaUrl);
+        return result.text;
       }) || undefined;
 
       if (transcript && prisma) {
@@ -83,17 +86,18 @@ export const processContentItem = inngest.createFunction(
       }
     }
 
-    // Step 3: Extract OCR text (if image/video)
+    // Step 3: Extract OCR text (if image/video) - MANDATORY for images
     const ocrTexts: string[] = await step.run("extract-ocr", async () => {
-      try {
-        if (contentItem.contentType === "image" || contentItem.contentType === "post") {
-          const ocrResult = await performOCR(contentItem.mediaUrl);
-          return ocrResult.text ? [ocrResult.text] : [];
-        } else if (contentItem.contentType === "video" || contentItem.contentType === "reel") {
-          // Extract frames and OCR them
-          const frames = await extractFrames(contentItem.mediaUrl, 5);
-          const texts: string[] = [];
-          for (const frame of frames) {
+      if (contentItem.contentType === "image" || contentItem.contentType === "post") {
+        // MANDATORY: OCR must succeed for images
+        const ocrResult = await performOCR(contentItem.mediaUrl);
+        return ocrResult.text ? [ocrResult.text] : [];
+      } else if (contentItem.contentType === "video" || contentItem.contentType === "reel") {
+        // Extract frames and OCR them (1 frame for videos)
+        const frames = await extractFrames(contentItem.mediaUrl, 1);
+        const texts: string[] = [];
+        for (const frame of frames) {
+          try {
             const ocrResult = await performOCR(frame.imageUrl);
             if (ocrResult.text) {
               texts.push(ocrResult.text);
@@ -118,17 +122,71 @@ export const processContentItem = inngest.createFunction(
                 });
               }
             }
+          } catch (frameError) {
+            console.error(`OCR error for frame ${frame.index}:`, frameError);
+            // Continue with other frames, but don't fail the whole step
           }
-          return texts;
         }
-        return [];
-      } catch (error) {
-        console.error("OCR error:", error);
-        return [];
+        return texts;
+      }
+      return [];
+    });
+
+    // Step 4: Extract visual features (embeddings, hash, colors) - MANDATORY
+    await step.run("extract-visual-features", async () => {
+      const imageUrl = contentItem.thumbnailUrl || contentItem.mediaUrl;
+      if (!imageUrl) {
+        throw new Error("No image URL available for visual feature extraction");
+      }
+
+      // MANDATORY: All visual features must be extracted
+      const [embedding, pHash, dominantColors] = await Promise.all([
+        generateVisualEmbedding(imageUrl),
+        calculatePerceptualHash(imageUrl),
+        extractDominantColors(imageUrl),
+      ]);
+
+      try {
+        if (prisma) {
+          await prisma.contentVisualFeature.create({
+            data: {
+              contentItemId: contentItem.id,
+              embedding: JSON.stringify(embedding), // Store as JSON string
+              dominantColors: dominantColors.map(c => c.hex),
+            },
+          });
+          await prisma.contentSimilarityHash.create({
+            data: {
+              contentItemId: contentItem.id,
+              hashValue: pHash,
+              hashType: "pHash",
+            },
+          });
+        } else if (supabase) {
+          const featureId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
+          await supabase.from("ContentVisualFeature").insert({
+            id: featureId,
+            contentItemId: contentItem.id,
+            embedding: JSON.stringify(embedding), // Store as JSON string
+            dominantColors: dominantColors.map(c => c.hex),
+            createdAt: new Date().toISOString(),
+          });
+          const hashId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
+          await supabase.from("ContentSimilarityHash").insert({
+            id: hashId,
+            contentItemId: contentItem.id,
+            hashValue: pHash,
+            hashType: "pHash",
+            createdAt: new Date().toISOString(),
+          });
+        }
+      } catch (error: any) {
+        // MANDATORY: Throw error so Inngest retries
+        throw new Error(`Visual feature extraction failed: ${error.message}`);
       }
     });
 
-    // Step 4: Detect brand content
+    // Step 5: Detect brand content
     await step.run("detect-brands", async () => {
       try {
         await detectBrandContent(

@@ -88,7 +88,13 @@ export async function extractFrames(
 }
 
 /**
- * Perform OCR on image using Tesseract.js
+ * Perform OCR on image
+ * 
+ * Priority:
+ * 1. Google Cloud Vision API (if GOOGLE_CLOUD_API_KEY is set) - FAST, ~2-5 seconds
+ * 2. Tesseract.js (fallback) - SLOW, ~30-300 seconds
+ * 
+ * For production, use Google Cloud Vision API for much faster processing.
  */
 export async function performOCR(imageUrl: string): Promise<{
   text: string;
@@ -101,12 +107,73 @@ export async function performOCR(imageUrl: string): Promise<{
     text: string;
   }>;
 }> {
+  // Try Google Cloud Vision API first (much faster)
+  if (process.env.GOOGLE_CLOUD_API_KEY) {
+    try {
+      const imageBuffer = await downloadFile(imageUrl);
+      const base64Image = imageBuffer.toString("base64");
+
+      const response = await fetch(
+        `https://vision.googleapis.com/v1/images:annotate?key=${process.env.GOOGLE_CLOUD_API_KEY}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            requests: [
+              {
+                image: { content: base64Image },
+                features: [{ type: "TEXT_DETECTION", maxResults: 10 }],
+              },
+            ],
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Google Vision API error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const textAnnotation = data.responses?.[0]?.fullTextAnnotation;
+
+      if (textAnnotation) {
+        const text = textAnnotation.text || "";
+        const boundingBoxes = textAnnotation.pages?.[0]?.blocks
+          ?.flatMap((block: any) =>
+            block.paragraphs?.flatMap((para: any) =>
+              para.words?.map((word: any) => {
+                const vertices = word.boundingBox.vertices;
+                return {
+                  x: vertices[0]?.x || 0,
+                  y: vertices[0]?.y || 0,
+                  width: (vertices[2]?.x || 0) - (vertices[0]?.x || 0),
+                  height: (vertices[2]?.y || 0) - (vertices[0]?.y || 0),
+                  text: word.symbols?.map((s: any) => s.text).join("") || "",
+                };
+              })
+            )
+          )
+          .filter(Boolean) || [];
+
+        return {
+          text: text.trim(),
+          confidence: 0.95, // Google Vision is generally very accurate
+          boundingBoxes,
+        };
+      }
+    } catch (error: any) {
+      console.warn("Google Cloud Vision OCR failed, falling back to Tesseract:", error.message);
+      // Fall through to Tesseract.js
+    }
+  }
+
+  // Fallback to Tesseract.js (slower but free, no API key needed)
   try {
     // Download image
     const imageBuffer = await downloadFile(imageUrl);
     
-    // Perform OCR
-    const result = await Tesseract.recognize(imageBuffer, "eng", {
+    // Perform OCR with timeout (5 minutes max)
+    const ocrPromise = Tesseract.recognize(imageBuffer, "eng", {
       logger: (m) => {
         // Suppress verbose logging in production
         if (m.status === "recognizing text") {
@@ -115,12 +182,16 @@ export async function performOCR(imageUrl: string): Promise<{
       },
     });
 
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Tesseract OCR timeout after 5 minutes")), 300000)
+    );
+
+    const result = await Promise.race([ocrPromise, timeoutPromise]) as any;
+
     const text = result.data.text;
     const confidence = result.data.confidence || 0;
 
     // Extract bounding boxes from words if available
-    // Tesseract.js returns words in result.data.words, but TypeScript types may not include it
-    // We'll access it safely with type assertion
     const words = (result.data as any).words;
     const boundingBoxes = words?.map((word: any) => ({
       x: word.bbox.x0,
@@ -135,12 +206,10 @@ export async function performOCR(imageUrl: string): Promise<{
       confidence: confidence || 0,
       boundingBoxes,
     };
-  } catch (error) {
-    console.error("OCR error:", error);
-    return {
-      text: "",
-      confidence: 0,
-    };
+  } catch (error: any) {
+    console.error("OCR error:", error.message);
+    // Don't return empty - throw so Inngest can retry
+    throw new Error(`OCR failed: ${error.message}`);
   }
 }
 
