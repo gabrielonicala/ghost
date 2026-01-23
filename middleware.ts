@@ -56,15 +56,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // Redirect unauthenticated users to login (except auth pages and public assets)
+  // Redirect unauthenticated users to login (except auth pages, public assets, and Inngest)
+  // Inngest uses its own signing key authentication, not user auth
   if (
     !user &&
     !request.nextUrl.pathname.startsWith("/api/auth/") &&
+    !request.nextUrl.pathname.startsWith("/api/inngest") &&
+    !request.nextUrl.pathname.startsWith("/api/test-inngest") &&
     request.nextUrl.pathname !== "/login" &&
     request.nextUrl.pathname !== "/signup" &&
     !request.nextUrl.pathname.startsWith("/auth/callback") &&
-    !request.nextUrl.pathname.startsWith("/_next/") &&
-    !request.nextUrl.pathname.startsWith("/api/test-inngest")
+    !request.nextUrl.pathname.startsWith("/_next/")
   ) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
