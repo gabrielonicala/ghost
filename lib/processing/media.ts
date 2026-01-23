@@ -8,14 +8,55 @@ const openai = new OpenAI({
 
 /**
  * Download a file from URL and return as Buffer
+ * Handles various platforms with appropriate headers
  */
 async function downloadFile(url: string): Promise<Buffer> {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to download file: ${response.statusText}`);
+  // Detect platform and set appropriate headers
+  const headers: HeadersInit = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "*/*",
+    "Accept-Language": "en-US,en;q=0.9",
+  };
+
+  // Add platform-specific headers
+  if (url.includes("tiktok.com")) {
+    headers["Referer"] = "https://www.tiktok.com/";
+    headers["Origin"] = "https://www.tiktok.com";
+  } else if (url.includes("youtube.com") || url.includes("youtu.be")) {
+    headers["Referer"] = "https://www.youtube.com/";
+  } else if (url.includes("instagram.com")) {
+    headers["Referer"] = "https://www.instagram.com/";
   }
-  const arrayBuffer = await response.arrayBuffer();
-  return Buffer.from(arrayBuffer);
+
+  try {
+    const response = await fetch(url, { headers });
+    
+    if (!response.ok) {
+      // Provide more helpful error messages
+      if (response.status === 403) {
+        throw new Error(
+          `Access forbidden (403). This URL may be:\n` +
+          `- A signed/authenticated URL that has expired\n` +
+          `- Protected and requires authentication\n` +
+          `- Blocked by the platform\n\n` +
+          `For TikTok/Instagram/YouTube: Try using a direct video file URL or download the video first.`
+        );
+      }
+      if (response.status === 404) {
+        throw new Error(`File not found (404). The URL may be invalid or expired.`);
+      }
+      throw new Error(`Failed to download file: ${response.status} ${response.statusText}`);
+    }
+    
+    const arrayBuffer = await response.arrayBuffer();
+    return Buffer.from(arrayBuffer);
+  } catch (error: any) {
+    // Re-throw with more context if it's already our custom error
+    if (error.message.includes("Access forbidden") || error.message.includes("File not found")) {
+      throw error;
+    }
+    throw new Error(`Download failed: ${error.message}`);
+  }
 }
 
 /**
@@ -230,6 +271,17 @@ export async function transcribeAudio(
     let filename: string;
 
     if (typeof audioBufferOrUrl === "string") {
+      // Check if it's a problematic URL
+      if (audioBufferOrUrl.includes("tiktok.com") && audioBufferOrUrl.includes("tos/maliva")) {
+        throw new Error(
+          "TikTok signed URLs expire and cannot be downloaded directly.\n\n" +
+          "Solutions:\n" +
+          "1. Download the video to your computer first, then upload it to a public URL (e.g., Cloudinary, S3)\n" +
+          "2. Use a direct video file URL (not a TikTok CDN URL)\n" +
+          "3. Use YouTube or other platforms that provide direct video URLs"
+        );
+      }
+      
       // If it's a URL, download it
       fileBuffer = await downloadFile(audioBufferOrUrl);
       // Determine file type from URL
