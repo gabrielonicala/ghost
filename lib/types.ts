@@ -62,5 +62,17 @@ export interface ContentItemWithScores {
     displayName?: string;
   };
   accsScore?: ACCSScore;
+  ocrFrames?: Array<{
+    id: string;
+    frameIndex: number;
+    text: string;
+    confidence: number;
+  }>;
+  transcripts?: Array<{
+    id: string;
+    text: string;
+    language: string;
+    confidence: number;
+  }>;
 }
 

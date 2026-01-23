@@ -41,6 +41,9 @@ export function ContentLibrary() {
           username: item.creator.username,
           displayName: item.creator.displayName,
         },
+        // Include OCR and transcript data
+        ocrFrames: item.ocrFrames || [],
+        transcripts: item.transcripts || [],
         accsScore: item.conversionScores?.[0] ? {
           score: item.conversionScores[0].score,
           authenticity: {
@@ -173,9 +176,75 @@ export function ContentLibrary() {
       </div>
 
       {/* Score Details Sidebar */}
-      <div>
+      <div className="space-y-4">
         {selectedContent && selectedContent.accsScore ? (
-          <ACCSScoreCard score={selectedContent.accsScore} />
+          <>
+            <ACCSScoreCard score={selectedContent.accsScore} />
+            
+            {/* Extracted Text Section */}
+            {((selectedContent.ocrFrames && selectedContent.ocrFrames.length > 0) || 
+              (selectedContent.transcripts && selectedContent.transcripts.length > 0)) && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Extracted Text</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* OCR Text */}
+                  {selectedContent.ocrFrames && selectedContent.ocrFrames.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-medium mb-2 text-foreground">
+                        OCR Text (from image)
+                      </h4>
+                      <div className="bg-muted p-3 rounded text-sm text-foreground max-h-48 overflow-y-auto">
+                        {selectedContent.ocrFrames.map((frame: any, idx: number) => (
+                          <div key={idx} className="mb-2">
+                            {frame.text && (
+                              <>
+                                <p className="whitespace-pre-wrap">{frame.text}</p>
+                                {frame.confidence && (
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    Confidence: {(frame.confidence * 100).toFixed(1)}%
+                                  </p>
+                                )}
+                              </>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Transcript */}
+                  {selectedContent.transcripts && selectedContent.transcripts.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-medium mb-2 text-foreground">
+                        Transcript (from video/audio)
+                      </h4>
+                      <div className="bg-muted p-3 rounded text-sm text-foreground max-h-48 overflow-y-auto">
+                        {selectedContent.transcripts.map((transcript: any, idx: number) => (
+                          <div key={idx}>
+                            <p className="whitespace-pre-wrap">{transcript.text}</p>
+                            {transcript.language && (
+                              <p className="text-xs text-muted-foreground mt-1">
+                                Language: {transcript.language}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {(!selectedContent.ocrFrames || selectedContent.ocrFrames.length === 0) &&
+                   (!selectedContent.transcripts || selectedContent.transcripts.length === 0) && (
+                    <p className="text-sm text-muted-foreground">
+                      No extracted text available yet. Processing may still be in progress.
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </>
         ) : selectedContent ? (
           <Card>
             <CardHeader>
