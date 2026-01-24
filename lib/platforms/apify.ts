@@ -161,7 +161,7 @@ export async function downloadTikTokVideo(
     shouldDownloadVideos: true, // Get direct video URL
   });
 
-  console.log("[Apify TikTok] Got results:", JSON.stringify(results, null, 2).slice(0, 1000));
+  console.log("[Apify TikTok] Got results:", JSON.stringify(results, null, 2).slice(0, 2000));
 
   if (!results || results.length === 0) {
     console.log("[Apify TikTok] No results returned");
@@ -171,35 +171,36 @@ export async function downloadTikTokVideo(
   const video = results[0];
   console.log("[Apify TikTok] Video object keys:", Object.keys(video));
 
-  // Try multiple possible field names for video URL
+  // The video URL is in videoMeta.downloadAddr or mediaUrls[0]
+  // These are direct MP4 URLs hosted on Apify's key-value store
   const videoUrl = 
-    video.videoUrl || 
-    video.downloadUrl ||
-    video.videoMeta?.downloadUrl ||
-    video.video?.downloadAddr || 
-    video.video?.playAddr ||
-    video.webVideoUrl ||
-    video.videoUrlNoWaterMark ||
-    video.videoUrlWithWaterMark;
+    video.videoMeta?.downloadAddr ||  // Primary: direct download URL from Apify
+    video.mediaUrls?.[0] ||            // Alternative: first media URL
+    video.videoUrl ||                  // Fallback options
+    video.downloadUrl;
 
   console.log("[Apify TikTok] Extracted videoUrl:", videoUrl);
+  
+  if (!videoUrl) {
+    console.log("[Apify TikTok] Full video object:", JSON.stringify(video, null, 2));
+  }
 
   return {
     videoUrl: videoUrl,
-    thumbnailUrl: video.coverUrl || video.covers?.default || video.video?.cover,
-    caption: video.text || video.desc || video.description,
+    thumbnailUrl: video.videoMeta?.coverUrl || video.videoMeta?.originalCoverUrl,
+    caption: video.text,
     author: {
-      username: video.authorMeta?.name || video.author?.uniqueId || video.authorUniqueId,
-      displayName: video.authorMeta?.nickName || video.author?.nickname || video.authorName,
+      username: video.authorMeta?.name,
+      displayName: video.authorMeta?.nickName,
       profileUrl: video.authorMeta?.profileUrl,
     },
     metrics: {
-      views: video.playCount || video.stats?.playCount || video.videoMeta?.playCount,
-      likes: video.diggCount || video.stats?.diggCount || video.videoMeta?.diggCount,
-      comments: video.commentCount || video.stats?.commentCount || video.videoMeta?.commentCount,
-      shares: video.shareCount || video.stats?.shareCount || video.videoMeta?.shareCount,
+      views: video.playCount,
+      likes: video.diggCount,
+      comments: video.commentCount,
+      shares: video.shareCount,
     },
-    duration: video.videoMeta?.duration || video.video?.duration || video.duration,
+    duration: video.videoMeta?.duration,
     publishedAt: video.createTime ? new Date(video.createTime * 1000) : undefined,
   };
 }
