@@ -378,41 +378,52 @@ export async function transcribeAudio(
       
       // Platforms that require Apify for video download
       if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform)) {
+        console.log(`[Transcribe] Detected ${platformInfo.platform} URL, checking Apify config...`);
+        
         // Check if Apify is configured
-        if (isApifyConfigured()) {
-          console.log(`Using Apify to download ${platformInfo.platform} video...`);
-          try {
-            const apifyResult = await downloadVideoWithApify(
-              audioBufferOrUrl,
-              platformInfo.platform as "tiktok" | "instagram" | "facebook"
-            );
-            
-            if (apifyResult?.videoUrl) {
-              // Download the actual video file
-              const videoBuffer = await downloadVideoFile(apifyResult.videoUrl);
-              
-              // Now transcribe the downloaded video
-              return transcribeAudio(videoBuffer, language);
-            }
-          } catch (apifyError: any) {
-            console.error("Apify download failed:", apifyError.message);
-            throw new Error(
-              `Failed to download ${platformInfo.platform} video via Apify: ${apifyError.message}\n\n` +
-              "The video might be private, deleted, or the URL format is not supported."
-            );
-          }
+        if (!isApifyConfigured()) {
+          // Apify not configured - show helpful error
+          throw new Error(
+            `${platformInfo.platform.charAt(0).toUpperCase() + platformInfo.platform.slice(1)} videos require Apify for download.\n\n` +
+            "To enable:\n" +
+            "1. Sign up at apify.com\n" +
+            "2. Get your API token from Settings → Integrations\n" +
+            "3. Add APIFY_API_TOKEN to your environment variables\n\n" +
+            "Alternative:\n" +
+            "Download the video manually and upload to cloud storage (Cloudinary, S3), then provide the direct URL."
+          );
         }
         
-        // Apify not configured - show helpful error
-        throw new Error(
-          `${platformInfo.platform.charAt(0).toUpperCase() + platformInfo.platform.slice(1)} videos require Apify for download.\n\n` +
-          "To enable:\n" +
-          "1. Sign up at apify.com\n" +
-          "2. Get your API token from Settings → Integrations\n" +
-          "3. Add APIFY_API_TOKEN to your environment variables\n\n" +
-          "Alternative:\n" +
-          "Download the video manually and upload to cloud storage (Cloudinary, S3), then provide the direct URL."
-        );
+        console.log(`[Transcribe] Using Apify to download ${platformInfo.platform} video...`);
+        
+        try {
+          const apifyResult = await downloadVideoWithApify(
+            audioBufferOrUrl,
+            platformInfo.platform as "tiktok" | "instagram" | "facebook"
+          );
+          
+          if (!apifyResult?.videoUrl) {
+            throw new Error(
+              `Apify did not return a video URL. The video might be private, deleted, or not a video post.`
+            );
+          }
+          
+          console.log(`[Transcribe] Got video URL from Apify, downloading...`);
+          
+          // Download the actual video file
+          const videoBuffer = await downloadVideoFile(apifyResult.videoUrl);
+          
+          console.log(`[Transcribe] Video downloaded (${videoBuffer.length} bytes), transcribing...`);
+          
+          // Now transcribe the downloaded video
+          return transcribeAudio(videoBuffer, language);
+        } catch (apifyError: any) {
+          console.error("[Transcribe] Apify download failed:", apifyError.message);
+          throw new Error(
+            `Failed to download ${platformInfo.platform} video via Apify: ${apifyError.message}\n\n` +
+            "The video might be private, deleted, or the URL format is not supported."
+          );
+        }
       }
     }
 

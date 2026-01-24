@@ -39,7 +39,9 @@ interface ApifyRunResult {
  * Check if Apify is configured
  */
 export function isApifyConfigured(): boolean {
-  return !!process.env.APIFY_API_TOKEN;
+  const hasToken = !!process.env.APIFY_API_TOKEN;
+  console.log(`[Apify] isApifyConfigured check: hasToken=${hasToken}, tokenLength=${process.env.APIFY_API_TOKEN?.length || 0}`);
+  return hasToken;
 }
 
 /**
