@@ -128,26 +128,51 @@ export const processContentItem = inngest.createFunction(
           try {
             console.log("[OCR] Using Video Intelligence API for video text extraction");
             
-            // Get the video URL - for Apify videos, we need to use the mediaUrl
-            // which should be the direct video file URL
-            const videoUrl = contentItem.mediaUrl;
+            // For TikTok/Instagram/Facebook, we need to get the video from Apify first
+            // The contentItem.mediaUrl is the original platform URL, not the video file
+            const { detectPlatform } = await import("@/lib/platforms");
+            const { downloadVideoWithApify, isApifyConfigured } = await import("@/lib/platforms/apify");
             
-            // Download the video first since Video Intelligence needs direct access
-            // For Apify URLs, download and pass as buffer
+            const platformInfo = detectPlatform(contentItem.mediaUrl);
             let videoBuffer: Buffer | undefined;
-            if (videoUrl.includes("api.apify.com")) {
-              const response = await fetch(videoUrl);
+            
+            if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform) && isApifyConfigured()) {
+              console.log("[OCR] Fetching video from Apify for", platformInfo.platform);
+              const apifyResult = await downloadVideoWithApify(
+                contentItem.mediaUrl,
+                platformInfo.platform as "tiktok" | "instagram" | "facebook"
+              );
+              
+              if (apifyResult?.videoUrl) {
+                console.log("[OCR] Got Apify video URL:", apifyResult.videoUrl);
+                // Download the video
+                const response = await fetch(apifyResult.videoUrl, {
+                  headers: {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                  },
+                });
+                if (response.ok) {
+                  const arrayBuffer = await response.arrayBuffer();
+                  videoBuffer = Buffer.from(arrayBuffer);
+                  console.log("[OCR] Downloaded video for analysis:", videoBuffer.length, "bytes");
+                }
+              }
+            } else if (contentItem.mediaUrl.includes("api.apify.com")) {
+              // Direct Apify URL
+              const response = await fetch(contentItem.mediaUrl);
               if (response.ok) {
                 const arrayBuffer = await response.arrayBuffer();
                 videoBuffer = Buffer.from(arrayBuffer);
-                console.log("[OCR] Downloaded video for analysis:", videoBuffer.length, "bytes");
+                console.log("[OCR] Downloaded Apify video:", videoBuffer.length, "bytes");
               }
             }
             
-            const result = await extractTextFromVideo(
-              videoBuffer ? undefined : videoUrl,
-              videoBuffer
-            );
+            if (!videoBuffer) {
+              throw new Error("Could not download video for text extraction");
+            }
+            
+            // Video Intelligence API with base64 content works with API key
+            const result = await extractTextFromVideo(undefined, videoBuffer);
             
             if (result.fullText) {
               texts.push(result.fullText);
