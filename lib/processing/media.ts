@@ -321,7 +321,7 @@ export async function transcribeAudio(
     if (typeof audioBufferOrUrl === "string") {
       const platformInfo = detectPlatform(audioBufferOrUrl);
       
-      // YouTube: Try to get captions first (faster and free)
+      // YouTube: Try to get captions (YouTube URLs are web pages, not video files)
       if (platformInfo?.platform === "youtube") {
         const videoId = extractYouTubeVideoId(audioBufferOrUrl);
         if (videoId) {
@@ -334,6 +334,18 @@ export async function transcribeAudio(
               confidence: 0.9, // YouTube auto-captions are generally accurate
             };
           }
+          
+          // No captions available - YouTube URLs can't be downloaded directly
+          throw new Error(
+            "YouTube video has no captions available.\n\n" +
+            "YouTube URLs are web pages, not direct video files. Without captions, " +
+            "we cannot transcribe the video directly.\n\n" +
+            "Solutions:\n" +
+            "1. Try a different YouTube video that has captions enabled\n" +
+            "2. Download the video using a tool like yt-dlp, upload to cloud storage (Cloudinary, S3), " +
+            "and provide the direct video file URL\n" +
+            "3. Enable captions on the YouTube video if you own it"
+          );
         }
       }
       
