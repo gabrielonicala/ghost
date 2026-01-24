@@ -7,6 +7,9 @@ import {
   extractYouTubeVideoId,
   getYouTubeThumbnailUrl,
   downloadVideo,
+  isApifyConfigured,
+  downloadVideoWithApify,
+  downloadVideoFile,
 } from "@/lib/platforms";
 
 const openai = new OpenAI({
@@ -100,6 +103,30 @@ export async function extractFrames(
     let thumbnailBuffer: Buffer | null = null;
     
     // Platform-specific thumbnail extraction
+    
+    // For TikTok/Instagram/Facebook, try Apify first
+    if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform)) {
+      if (isApifyConfigured()) {
+        try {
+          const apifyResult = await downloadVideoWithApify(
+            videoUrl,
+            platformInfo.platform as "tiktok" | "instagram" | "facebook"
+          );
+          
+          if (apifyResult?.thumbnailUrl) {
+            const response = await fetch(apifyResult.thumbnailUrl);
+            if (response.ok) {
+              const arrayBuffer = await response.arrayBuffer();
+              thumbnailBuffer = Buffer.from(arrayBuffer);
+              thumbnailUrl = apifyResult.thumbnailUrl;
+            }
+          }
+        } catch {
+          // Apify failed, continue to fallback
+        }
+      }
+    }
+    
     if (platformInfo?.platform === "youtube") {
       const videoId = extractYouTubeVideoId(videoUrl);
       if (videoId) {
@@ -349,25 +376,42 @@ export async function transcribeAudio(
         }
       }
       
-      // TikTok signed URLs check
-      if (audioBufferOrUrl.includes("tiktok.com") && audioBufferOrUrl.includes("tos/maliva")) {
-        throw new Error(
-          "TikTok signed URLs expire and cannot be downloaded directly.\n\n" +
-          "Solutions:\n" +
-          "1. Download the video to your computer first, then upload it to a public URL (e.g., Cloudinary, S3)\n" +
-          "2. Use a direct video file URL (not a TikTok CDN URL)\n" +
-          "3. Use YouTube which is fully supported"
-        );
-      }
-      
-      // Check if platform requires external download
+      // Platforms that require Apify for video download
       if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform)) {
+        // Check if Apify is configured
+        if (isApifyConfigured()) {
+          console.log(`Using Apify to download ${platformInfo.platform} video...`);
+          try {
+            const apifyResult = await downloadVideoWithApify(
+              audioBufferOrUrl,
+              platformInfo.platform as "tiktok" | "instagram" | "facebook"
+            );
+            
+            if (apifyResult?.videoUrl) {
+              // Download the actual video file
+              const videoBuffer = await downloadVideoFile(apifyResult.videoUrl);
+              
+              // Now transcribe the downloaded video
+              return transcribeAudio(videoBuffer, language);
+            }
+          } catch (apifyError: any) {
+            console.error("Apify download failed:", apifyError.message);
+            throw new Error(
+              `Failed to download ${platformInfo.platform} video via Apify: ${apifyError.message}\n\n` +
+              "The video might be private, deleted, or the URL format is not supported."
+            );
+          }
+        }
+        
+        // Apify not configured - show helpful error
         throw new Error(
-          `${platformInfo.platform.charAt(0).toUpperCase() + platformInfo.platform.slice(1)} videos cannot be downloaded directly.\n\n` +
-          "Solutions:\n" +
-          "1. Download the video manually and upload to cloud storage (Cloudinary, S3)\n" +
-          "2. Provide a direct video file URL\n" +
-          "3. Use YouTube which is fully supported"
+          `${platformInfo.platform.charAt(0).toUpperCase() + platformInfo.platform.slice(1)} videos require Apify for download.\n\n` +
+          "To enable:\n" +
+          "1. Sign up at apify.com\n" +
+          "2. Get your API token from Settings → Integrations\n" +
+          "3. Add APIFY_API_TOKEN to your environment variables\n\n" +
+          "Alternative:\n" +
+          "Download the video manually and upload to cloud storage (Cloudinary, S3), then provide the direct URL."
         );
       }
     }

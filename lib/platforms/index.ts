@@ -22,3 +22,14 @@ export {
   type VideoDownloadResult,
 } from "./video-download";
 
+export {
+  isApifyConfigured,
+  downloadVideoWithApify,
+  downloadVideoFile,
+  downloadTikTokVideo,
+  downloadInstagramVideo,
+  downloadFacebookVideo,
+  downloadYouTubeVideo as downloadYouTubeVideoWithApify,
+  type ApifyVideoResult,
+} from "./apify";
+
