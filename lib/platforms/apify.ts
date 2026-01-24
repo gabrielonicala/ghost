@@ -44,13 +44,15 @@ export function isApifyConfigured(): boolean {
 
 /**
  * Get the appropriate Apify actor for a platform
+ * Note: Actor IDs use ~ instead of / in API URLs
  */
 function getActorId(platform: string): string {
+  // Actor IDs for API calls use ~ instead of /
   const actors: Record<string, string> = {
-    tiktok: "clockworks/tiktok-scraper",
-    instagram: "apify/instagram-scraper",
-    facebook: "apify/facebook-posts-scraper",
-    youtube: "streamers/youtube-scraper",
+    tiktok: "clockworks~tiktok-scraper",
+    instagram: "apify~instagram-scraper",
+    facebook: "apify~facebook-posts-scraper",
+    youtube: "streamers~youtube-scraper",
   };
 
   const actorId = actors[platform];
@@ -136,7 +138,7 @@ async function runActor(
 export async function downloadTikTokVideo(
   url: string
 ): Promise<ApifyVideoResult | null> {
-  const results = await runActor("clockworks/tiktok-scraper", {
+  const results = await runActor("clockworks~tiktok-scraper", {
     postURLs: [url],
     resultsPerPage: 1,
     shouldDownloadVideos: false, // We just need the URL
@@ -175,7 +177,7 @@ export async function downloadTikTokVideo(
 export async function downloadInstagramVideo(
   url: string
 ): Promise<ApifyVideoResult | null> {
-  const results = await runActor("apify/instagram-scraper", {
+  const results = await runActor("apify~instagram-scraper", {
     directUrls: [url],
     resultsType: "posts",
     resultsLimit: 1,
@@ -217,7 +219,7 @@ export async function downloadInstagramVideo(
 export async function downloadFacebookVideo(
   url: string
 ): Promise<ApifyVideoResult | null> {
-  const results = await runActor("apify/facebook-posts-scraper", {
+  const results = await runActor("apify~facebook-posts-scraper", {
     startUrls: [{ url }],
     resultsLimit: 1,
     includeVideoTranscript: true,
@@ -261,7 +263,7 @@ export async function downloadFacebookVideo(
 export async function downloadYouTubeVideo(
   url: string
 ): Promise<ApifyVideoResult | null> {
-  const results = await runActor("streamers/youtube-scraper", {
+  const results = await runActor("streamers~youtube-scraper", {
     startUrls: [{ url }],
     maxResults: 1,
     maxResultsShorts: 0,
