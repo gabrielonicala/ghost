@@ -136,39 +136,70 @@ async function runActor(
 
 /**
  * Download TikTok video using Apify
+ * Uses clockworks/tiktok-scraper actor
  */
 export async function downloadTikTokVideo(
   url: string
 ): Promise<ApifyVideoResult | null> {
+  console.log("[Apify TikTok] Starting scrape for:", url);
+  
   const results = await runActor("clockworks~tiktok-scraper", {
     postURLs: [url],
+    commentsPerPost: 0,
+    excludePinnedPosts: false,
+    maxFollowersPerProfile: 0,
+    maxFollowingPerProfile: 0,
+    maxRepliesPerComment: 0,
+    proxyCountryCode: "None",
     resultsPerPage: 1,
-    shouldDownloadVideos: false, // We just need the URL
-    shouldDownloadCovers: false,
+    scrapeRelatedVideos: false,
+    shouldDownloadAvatars: false,
+    shouldDownloadCovers: true, // Get thumbnail
+    shouldDownloadMusicCovers: false,
+    shouldDownloadSlideshowImages: false,
+    shouldDownloadSubtitles: true, // Get subtitles if available
+    shouldDownloadVideos: true, // Get direct video URL
   });
 
+  console.log("[Apify TikTok] Got results:", JSON.stringify(results, null, 2).slice(0, 1000));
+
   if (!results || results.length === 0) {
+    console.log("[Apify TikTok] No results returned");
     return null;
   }
 
   const video = results[0];
+  console.log("[Apify TikTok] Video object keys:", Object.keys(video));
+
+  // Try multiple possible field names for video URL
+  const videoUrl = 
+    video.videoUrl || 
+    video.downloadUrl ||
+    video.videoMeta?.downloadUrl ||
+    video.video?.downloadAddr || 
+    video.video?.playAddr ||
+    video.webVideoUrl ||
+    video.videoUrlNoWaterMark ||
+    video.videoUrlWithWaterMark;
+
+  console.log("[Apify TikTok] Extracted videoUrl:", videoUrl);
 
   return {
-    videoUrl: video.videoUrl || video.video?.downloadAddr || video.video?.playAddr,
-    thumbnailUrl: video.coverUrl || video.video?.cover,
-    caption: video.text || video.desc,
+    videoUrl: videoUrl,
+    thumbnailUrl: video.coverUrl || video.covers?.default || video.video?.cover,
+    caption: video.text || video.desc || video.description,
     author: {
-      username: video.authorMeta?.name || video.author?.uniqueId,
-      displayName: video.authorMeta?.nickName || video.author?.nickname,
+      username: video.authorMeta?.name || video.author?.uniqueId || video.authorUniqueId,
+      displayName: video.authorMeta?.nickName || video.author?.nickname || video.authorName,
       profileUrl: video.authorMeta?.profileUrl,
     },
     metrics: {
-      views: video.playCount || video.stats?.playCount,
-      likes: video.diggCount || video.stats?.diggCount,
-      comments: video.commentCount || video.stats?.commentCount,
-      shares: video.shareCount || video.stats?.shareCount,
+      views: video.playCount || video.stats?.playCount || video.videoMeta?.playCount,
+      likes: video.diggCount || video.stats?.diggCount || video.videoMeta?.diggCount,
+      comments: video.commentCount || video.stats?.commentCount || video.videoMeta?.commentCount,
+      shares: video.shareCount || video.stats?.shareCount || video.videoMeta?.shareCount,
     },
-    duration: video.videoMeta?.duration || video.video?.duration,
+    duration: video.videoMeta?.duration || video.video?.duration || video.duration,
     publishedAt: video.createTime ? new Date(video.createTime * 1000) : undefined,
   };
 }
