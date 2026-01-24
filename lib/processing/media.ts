@@ -17,6 +17,72 @@ const openai = new OpenAI({
 });
 
 /**
+ * Detect file type from buffer magic bytes
+ * Returns filename with appropriate extension
+ */
+function detectFileTypeFromBuffer(buffer: Buffer): string {
+  // Check first few bytes for common formats
+  const header = buffer.slice(0, 12);
+  
+  // MP4/M4A - starts with ftyp at position 4
+  if (header.length >= 8 && header.slice(4, 8).toString() === "ftyp") {
+    return "video.mp4";
+  }
+  
+  // WebM - starts with 0x1A45DFA3
+  if (header[0] === 0x1a && header[1] === 0x45 && header[2] === 0xdf && header[3] === 0xa3) {
+    return "video.webm";
+  }
+  
+  // MPEG audio (MP3) - starts with 0xFF 0xFB or ID3
+  if ((header[0] === 0xff && header[1] === 0xfb) || header.slice(0, 3).toString() === "ID3") {
+    return "audio.mp3";
+  }
+  
+  // WAV - starts with RIFF
+  if (header.slice(0, 4).toString() === "RIFF") {
+    return "audio.wav";
+  }
+  
+  // OGG - starts with OggS
+  if (header.slice(0, 4).toString() === "OggS") {
+    return "audio.ogg";
+  }
+  
+  // FLAC - starts with fLaC
+  if (header.slice(0, 4).toString() === "fLaC") {
+    return "audio.flac";
+  }
+  
+  // Default to MP4 (most common for video from social platforms)
+  console.log("[detectFileType] Unknown format, defaulting to MP4. Header:", header.slice(0, 8).toString("hex"));
+  return "video.mp4";
+}
+
+/**
+ * Get MIME type from filename
+ */
+function getMimeType(filename: string): string {
+  const ext = filename.split(".").pop()?.toLowerCase() || "";
+  
+  const mimeTypes: Record<string, string> = {
+    mp4: "video/mp4",
+    mov: "video/mp4",
+    webm: "video/webm",
+    mpeg: "video/mpeg",
+    mp3: "audio/mpeg",
+    mpga: "audio/mpeg",
+    m4a: "audio/mp4",
+    wav: "audio/wav",
+    ogg: "audio/ogg",
+    oga: "audio/ogg",
+    flac: "audio/flac",
+  };
+  
+  return mimeTypes[ext] || "video/mp4";
+}
+
+/**
  * Download a file from URL and return as Buffer
  * Handles various platforms with appropriate headers
  */
@@ -434,29 +500,25 @@ export async function transcribeAudio(
       // If it's a URL, download it
       fileBuffer = await downloadFile(audioBufferOrUrl);
       // Determine file type from URL
-      const extension = audioBufferOrUrl.split(".").pop()?.toLowerCase() || "mp4";
+      const extension = audioBufferOrUrl.split(".").pop()?.toLowerCase()?.split("?")[0] || "mp4";
       filename = `audio.${extension}`;
     } else {
-      // If it's a buffer, use it directly
+      // If it's a buffer, detect format from magic bytes
       fileBuffer = audioBufferOrUrl;
-      filename = "audio.mp3";
+      filename = detectFileTypeFromBuffer(fileBuffer);
     }
+
+    // Determine MIME type from filename
+    const mimeType = getMimeType(filename);
+    console.log(`[Transcribe] Using filename: ${filename}, MIME type: ${mimeType}, buffer size: ${fileBuffer.length}`);
 
     // Convert Buffer to Blob for OpenAI File API
     // OpenAI expects a File or Blob, so we convert Buffer to Uint8Array first
     const uint8Array = new Uint8Array(fileBuffer);
-    const blob = new Blob([uint8Array], {
-      type: filename.endsWith(".mp4") || filename.endsWith(".mov")
-        ? "video/mp4"
-        : "audio/mpeg",
-    });
+    const blob = new Blob([uint8Array], { type: mimeType });
     
     // Create a File object from the Blob
-    const fileForOpenAI = new File([blob], filename, {
-      type: filename.endsWith(".mp4") || filename.endsWith(".mov")
-        ? "video/mp4"
-        : "audio/mpeg",
-    });
+    const fileForOpenAI = new File([blob], filename, { type: mimeType });
 
     // Call OpenAI Whisper API
     const transcription = await openai.audio.transcriptions.create({
