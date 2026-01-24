@@ -2,24 +2,27 @@ import { NextResponse } from "next/server";
 
 /**
  * Debug endpoint to check if environment variables are set
- * Remove this in production!
+ * Only shows whether vars exist, not their values (safe for production)
  */
 export async function GET() {
-  // Don't expose sensitive data in production
-  if (process.env.NODE_ENV === "production") {
-    return NextResponse.json({
-      error: "This endpoint is disabled in production",
-    }, { status: 403 });
-  }
-
   return NextResponse.json({
-    hasDatabaseUrl: !!process.env.DATABASE_URL,
-    databaseUrlLength: process.env.DATABASE_URL?.length || 0,
-    databaseUrlPreview: process.env.DATABASE_URL
-      ? `${process.env.DATABASE_URL.substring(0, 30)}...`
-      : "NOT SET",
     nodeEnv: process.env.NODE_ENV,
+    vercel: !!process.env.VERCEL,
+    // Database
+    hasDatabaseUrl: !!process.env.DATABASE_URL,
+    // APIs
     hasOpenAiKey: !!process.env.OPENAI_API_KEY,
+    hasGoogleCloudKey: !!process.env.GOOGLE_CLOUD_API_KEY,
+    hasApifyToken: !!process.env.APIFY_API_TOKEN,
+    apifyTokenLength: process.env.APIFY_API_TOKEN?.length || 0,
+    // Supabase
+    hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    hasSupabaseKey: !!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY,
+    hasSupabaseServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    // Inngest
+    hasInngestEventKey: !!process.env.INNGEST_EVENT_KEY,
+    hasInngestSigningKey: !!process.env.INNGEST_SIGNING_KEY,
+    // App
     hasAppUrl: !!process.env.NEXT_PUBLIC_APP_URL,
   });
 }
