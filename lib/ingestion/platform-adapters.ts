@@ -1,4 +1,5 @@
 import type { Platform } from "@/lib/types";
+import { YouTubeAdapter } from "@/lib/platforms/youtube";
 
 export interface PlatformContent {
   platform: Platform;
@@ -123,11 +124,8 @@ export class TikTokAdapter implements PlatformAdapter {
   }
 }
 
-/**
- * YouTube adapter - uses YouTube Data API v3
- * Re-exported from the platforms module for full implementation
- */
-export { YouTubeAdapter } from "@/lib/platforms/youtube";
+// YouTubeAdapter is imported from @/lib/platforms/youtube and re-exported
+export { YouTubeAdapter };
 
 /**
  * Factory to get the appropriate adapter
