@@ -11,6 +11,10 @@ import {
   calculatePerceptualHash,
   extractDominantColors,
 } from "@/lib/processing/media";
+import {
+  extractTextFromVideo,
+  isVideoIntelligenceAvailable,
+} from "@/lib/processing/video-intelligence";
 
 /**
  * Process content item: OCR, transcription, brand detection, ACCS scoring
@@ -117,9 +121,70 @@ export const processContentItem = inngest.createFunction(
         
         return text ? [text] : [];
       } else if (contentItem.contentType === "video" || contentItem.contentType === "reel") {
-        // Extract frames and OCR them (1 frame for videos)
-        const frames = await extractFrames(contentItem.mediaUrl, 1);
         const texts: string[] = [];
+        
+        // Try Google Cloud Video Intelligence API first (better for text overlays)
+        if (isVideoIntelligenceAvailable()) {
+          try {
+            console.log("[OCR] Using Video Intelligence API for video text extraction");
+            
+            // Get the video URL - for Apify videos, we need to use the mediaUrl
+            // which should be the direct video file URL
+            const videoUrl = contentItem.mediaUrl;
+            
+            // Download the video first since Video Intelligence needs direct access
+            // For Apify URLs, download and pass as buffer
+            let videoBuffer: Buffer | undefined;
+            if (videoUrl.includes("api.apify.com")) {
+              const response = await fetch(videoUrl);
+              if (response.ok) {
+                const arrayBuffer = await response.arrayBuffer();
+                videoBuffer = Buffer.from(arrayBuffer);
+                console.log("[OCR] Downloaded video for analysis:", videoBuffer.length, "bytes");
+              }
+            }
+            
+            const result = await extractTextFromVideo(
+              videoBuffer ? undefined : videoUrl,
+              videoBuffer
+            );
+            
+            if (result.fullText) {
+              texts.push(result.fullText);
+              
+              // Save to database
+              if (prisma) {
+                await prisma.contentOcrFrame.create({
+                  data: {
+                    contentItemId: contentItem.id,
+                    frameIndex: 0,
+                    text: result.fullText,
+                    confidence: 0.9,
+                  },
+                });
+              } else if (supabase) {
+                const frameId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
+                await supabase.from("ContentOcrFrame").insert({
+                  id: frameId,
+                  contentItemId: contentItem.id,
+                  frameIndex: 0,
+                  text: result.fullText,
+                  confidence: 0.9,
+                  createdAt: new Date().toISOString(),
+                });
+              }
+            }
+            
+            return texts;
+          } catch (viError: any) {
+            console.error("[OCR] Video Intelligence API failed, falling back to thumbnail OCR:", viError.message);
+            // Fall through to thumbnail-based OCR
+          }
+        }
+        
+        // Fallback: Extract frames and OCR them (thumbnail only)
+        console.log("[OCR] Using thumbnail-based OCR for video");
+        const frames = await extractFrames(contentItem.mediaUrl, 1);
         for (const frame of frames) {
           try {
             const ocrResult = await performOCR(frame.imageUrl);
@@ -148,7 +213,6 @@ export const processContentItem = inngest.createFunction(
             }
           } catch (frameError) {
             console.error(`OCR error for frame ${frame.index}:`, frameError);
-            // Continue with other frames, but don't fail the whole step
           }
         }
         return texts;
