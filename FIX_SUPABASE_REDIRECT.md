@@ -41,3 +41,5 @@ Create `app/auth/callback/route.ts` to handle the redirect.
 - By default, it's set to `http://localhost:3000`
 - You need to update it to your production URL
 
+
+

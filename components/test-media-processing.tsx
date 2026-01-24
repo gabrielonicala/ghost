@@ -138,7 +138,8 @@ export function TestMediaProcessing() {
 
           <div className="text-xs text-muted-foreground space-y-1">
             <p><strong>OCR Test:</strong> Use an image URL with visible text (e.g., product images, memes with text)</p>
-            <p><strong>Transcription Test:</strong> Use a direct video file URL (MP4, MOV) - YouTube links will extract thumbnail only</p>
+            <p><strong>Transcription Test:</strong> YouTube URLs fully supported! Uses YouTube captions when available, falls back to Whisper API</p>
+            <p className="text-amber-600 dark:text-amber-400"><strong>Note:</strong> TikTok, Instagram, Facebook require manual video download first</p>
             <p><strong>Check Results:</strong> Go to Inngest Dashboard → Monitor → Runs to see processing steps</p>
           </div>
         </div>
@@ -146,4 +147,6 @@ export function TestMediaProcessing() {
     </Card>
   );
 }
+
+
 

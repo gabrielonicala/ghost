@@ -133,3 +133,5 @@ I'll create a better test endpoint that accepts real URLs.
 - YouTube videos (will extract thumbnail for OCR, but transcription needs actual video file)
 - Note: For full transcription, you need a direct video file URL, not YouTube link
 
+
+

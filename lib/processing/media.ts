@@ -1,6 +1,13 @@
 import Tesseract from "tesseract.js";
 import OpenAI from "openai";
 import sharp from "sharp";
+import {
+  detectPlatform,
+  isDirectMediaUrl,
+  extractYouTubeVideoId,
+  getYouTubeThumbnailUrl,
+  downloadVideo,
+} from "@/lib/platforms";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -73,50 +80,90 @@ export async function extractAudio(videoUrl: string): Promise<Buffer> {
 
 /**
  * Extract frames from video for OCR
- * Note: Sharp doesn't support video frame extraction directly
- * For production, consider using Cloudinary, AWS MediaConvert, or FFmpeg
+ * 
+ * Uses platform-specific methods:
+ * - YouTube: High-quality thumbnails via API
+ * - Direct URLs: Download and process
+ * - Other platforms: Thumbnail extraction where possible
+ * 
+ * Note: For full video frame extraction, consider Cloudinary, AWS MediaConvert, or FFmpeg
  */
 export async function extractFrames(
   videoUrl: string,
   frameCount: number = 5
 ): Promise<Array<{ index: number; imageUrl: string }>> {
   try {
-    // Try to extract thumbnail if it's a video URL
-    // Many video platforms provide thumbnail URLs
-    let thumbnailUrl = videoUrl;
+    // Detect platform
+    const platformInfo = detectPlatform(videoUrl);
     
-    // YouTube thumbnail pattern
-    if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
-      const videoId = videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+    let thumbnailUrl: string | null = null;
+    let thumbnailBuffer: Buffer | null = null;
+    
+    // Platform-specific thumbnail extraction
+    if (platformInfo?.platform === "youtube") {
+      const videoId = extractYouTubeVideoId(videoUrl);
       if (videoId) {
-        thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        // Try different YouTube thumbnail qualities
+        const qualities = ["maxresdefault", "sddefault", "hqdefault", "mqdefault"] as const;
+        
+        for (const quality of qualities) {
+          const url = getYouTubeThumbnailUrl(videoId, quality === "maxresdefault" ? "maxres" : quality === "sddefault" ? "standard" : quality === "hqdefault" ? "high" : "medium");
+          try {
+            const response = await fetch(url);
+            if (response.ok) {
+              const arrayBuffer = await response.arrayBuffer();
+              thumbnailBuffer = Buffer.from(arrayBuffer);
+              thumbnailUrl = url;
+              break;
+            }
+          } catch {
+            continue;
+          }
+        }
+      }
+    } else if (isDirectMediaUrl(videoUrl)) {
+      // For direct URLs, try to download directly
+      try {
+        thumbnailBuffer = await downloadFile(videoUrl);
+        thumbnailUrl = videoUrl;
+      } catch {
+        // Not accessible
+      }
+    } else {
+      // For other platforms, try the URL directly as a last resort
+      try {
+        thumbnailBuffer = await downloadFile(videoUrl);
+        thumbnailUrl = videoUrl;
+      } catch {
+        // Can't download
       }
     }
     
-    // Try to use the thumbnail URL as a frame
-    try {
-      const testBuffer = await downloadFile(thumbnailUrl);
-      const metadata = await sharp(testBuffer).metadata();
-      
-      if (metadata.format && ["jpeg", "jpg", "png", "webp"].includes(metadata.format)) {
-        // It's an image, use it as a frame
-        const resized = await sharp(testBuffer)
-          .resize(800, 600, { fit: "inside" })
-          .jpeg({ quality: 80 })
-          .toBuffer();
+    // Process thumbnail if we have it
+    if (thumbnailBuffer) {
+      try {
+        const metadata = await sharp(thumbnailBuffer).metadata();
         
-        const base64 = resized.toString("base64");
-        const dataUrl = `data:image/jpeg;base64,${base64}`;
-        
-        return [
-          {
-            index: 0,
-            imageUrl: dataUrl,
-          },
-        ];
+        if (metadata.format && ["jpeg", "jpg", "png", "webp", "gif"].includes(metadata.format)) {
+          // It's an image, use it as a frame
+          const resized = await sharp(thumbnailBuffer)
+            .resize(800, 600, { fit: "inside" })
+            .jpeg({ quality: 80 })
+            .toBuffer();
+          
+          const base64 = resized.toString("base64");
+          const dataUrl = `data:image/jpeg;base64,${base64}`;
+          
+          return [
+            {
+              index: 0,
+              imageUrl: dataUrl,
+            },
+          ];
+        }
+      } catch {
+        // Not a valid image
       }
-    } catch {
-      // Not an image, continue
     }
     
     // If we can't extract frames, return empty array
@@ -257,6 +304,9 @@ export async function performOCR(imageUrl: string): Promise<{
 /**
  * Transcribe audio using OpenAI Whisper API
  * Can handle both audio files and video files (extracts audio automatically)
+ * 
+ * For YouTube videos, first tries to fetch existing captions (faster and cheaper)
+ * Falls back to Whisper API if captions aren't available
  */
 export async function transcribeAudio(
   audioBufferOrUrl: Buffer | string,
@@ -267,21 +317,53 @@ export async function transcribeAudio(
   confidence: number;
 }> {
   try {
-    let fileBuffer: Buffer;
-    let filename: string;
-
+    // If it's a URL, check for platform-specific transcription options
     if (typeof audioBufferOrUrl === "string") {
-      // Check if it's a problematic URL
+      const platformInfo = detectPlatform(audioBufferOrUrl);
+      
+      // YouTube: Try to get captions first (faster and free)
+      if (platformInfo?.platform === "youtube") {
+        const videoId = extractYouTubeVideoId(audioBufferOrUrl);
+        if (videoId) {
+          const captions = await tryFetchYouTubeCaptions(videoId);
+          if (captions) {
+            console.log("Using YouTube captions instead of Whisper API");
+            return {
+              text: captions.text,
+              language: captions.language,
+              confidence: 0.9, // YouTube auto-captions are generally accurate
+            };
+          }
+        }
+      }
+      
+      // TikTok signed URLs check
       if (audioBufferOrUrl.includes("tiktok.com") && audioBufferOrUrl.includes("tos/maliva")) {
         throw new Error(
           "TikTok signed URLs expire and cannot be downloaded directly.\n\n" +
           "Solutions:\n" +
           "1. Download the video to your computer first, then upload it to a public URL (e.g., Cloudinary, S3)\n" +
           "2. Use a direct video file URL (not a TikTok CDN URL)\n" +
-          "3. Use YouTube or other platforms that provide direct video URLs"
+          "3. Use YouTube which is fully supported"
         );
       }
       
+      // Check if platform requires external download
+      if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform)) {
+        throw new Error(
+          `${platformInfo.platform.charAt(0).toUpperCase() + platformInfo.platform.slice(1)} videos cannot be downloaded directly.\n\n` +
+          "Solutions:\n" +
+          "1. Download the video manually and upload to cloud storage (Cloudinary, S3)\n" +
+          "2. Provide a direct video file URL\n" +
+          "3. Use YouTube which is fully supported"
+        );
+      }
+    }
+
+    let fileBuffer: Buffer;
+    let filename: string;
+
+    if (typeof audioBufferOrUrl === "string") {
       // If it's a URL, download it
       fileBuffer = await downloadFile(audioBufferOrUrl);
       // Determine file type from URL
@@ -325,6 +407,60 @@ export async function transcribeAudio(
   } catch (error: any) {
     console.error("Transcription error:", error);
     throw new Error(`Transcription failed: ${error.message}`);
+  }
+}
+
+/**
+ * Try to fetch YouTube captions (auto-generated or manual)
+ * Returns null if captions aren't available
+ */
+async function tryFetchYouTubeCaptions(
+  videoId: string
+): Promise<{ text: string; language: string } | null> {
+  try {
+    // Try manual captions first (usually more accurate)
+    const manualUrl = `https://www.youtube.com/api/timedtext?v=${videoId}&lang=en&fmt=json3`;
+    
+    let response = await fetch(manualUrl, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+      },
+    });
+
+    if (!response.ok) {
+      // Try auto-generated captions
+      const autoUrl = `https://www.youtube.com/api/timedtext?v=${videoId}&lang=en&kind=asr&fmt=json3`;
+      response = await fetch(autoUrl, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        },
+      });
+
+      if (!response.ok) {
+        return null;
+      }
+    }
+
+    const data = await response.json();
+    
+    // Extract text from caption data
+    if (data.events) {
+      const segments = data.events
+        .filter((e: any) => e.segs)
+        .flatMap((e: any) => e.segs)
+        .map((s: any) => s.utf8)
+        .filter(Boolean);
+
+      const text = segments.join(" ").replace(/\s+/g, " ").trim();
+      
+      if (text.length > 0) {
+        return { text, language: "en" };
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
   }
 }
 

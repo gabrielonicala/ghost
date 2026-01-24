@@ -124,45 +124,10 @@ export class TikTokAdapter implements PlatformAdapter {
 }
 
 /**
- * YouTube adapter (placeholder - would integrate with YouTube API)
+ * YouTube adapter - uses YouTube Data API v3
+ * Re-exported from the platforms module for full implementation
  */
-export class YouTubeAdapter implements PlatformAdapter {
-  async fetchContent(contentId: string): Promise<PlatformContent | null> {
-    // TODO: Implement YouTube API integration
-    throw new Error("YouTube adapter not implemented");
-  }
-
-  async fetchCreatorContent(
-    creatorId: string,
-    limit: number = 50
-  ): Promise<PlatformContent[]> {
-    // TODO: Implement YouTube API integration
-    throw new Error("YouTube adapter not implemented");
-  }
-
-  normalizeContent(raw: any): PlatformContent {
-    return {
-      platform: "youtube",
-      platformContentId: raw.id,
-      contentType: "video",
-      mediaUrl: `https://www.youtube.com/watch?v=${raw.id}`,
-      thumbnailUrl: raw.snippet.thumbnails.high.url,
-      caption: raw.snippet.description,
-      publishedAt: new Date(raw.snippet.publishedAt),
-      creator: {
-        platformId: raw.snippet.channelId,
-        username: raw.snippet.channelTitle,
-        displayName: raw.snippet.channelTitle,
-        followerCount: raw.channelStatistics?.subscriberCount,
-      },
-      metrics: {
-        views: raw.statistics.viewCount,
-        likes: raw.statistics.likeCount,
-        comments: raw.statistics.commentCount,
-      },
-    };
-  }
-}
+export { YouTubeAdapter } from "@/lib/platforms/youtube";
 
 /**
  * Factory to get the appropriate adapter

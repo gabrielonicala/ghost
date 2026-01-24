@@ -186,3 +186,5 @@ If you want to use Supabase auth later:
 - Wake it up in the Supabase dashboard
 
 
+
+

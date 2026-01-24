@@ -56,3 +56,5 @@ This endpoint:
 - Verify the function is registered in Inngest dashboard
 - Check function logs in Inngest dashboard
 
+
+

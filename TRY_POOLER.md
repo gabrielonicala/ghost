@@ -67,3 +67,5 @@ Try these:
    - Try a simple query in Supabase SQL Editor
 
 
+
+
