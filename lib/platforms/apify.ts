@@ -360,18 +360,42 @@ export async function downloadVideoWithApify(
  * Download the actual video file from the URL returned by Apify
  */
 export async function downloadVideoFile(videoUrl: string): Promise<Buffer> {
+  console.log("[Apify] Downloading video from URL:", videoUrl);
+  
   const response = await fetch(videoUrl, {
     headers: {
       "User-Agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Referer": "https://www.tiktok.com/",
+      "Accept": "*/*",
     },
+    redirect: "follow",
   });
 
   if (!response.ok) {
     throw new Error(`Failed to download video: ${response.status} ${response.statusText}`);
   }
 
+  const contentType = response.headers.get("content-type") || "";
+  console.log("[Apify] Download response content-type:", contentType);
+  
+  // Check if we got HTML instead of video (error page)
+  if (contentType.includes("text/html")) {
+    const text = await response.text();
+    console.log("[Apify] Got HTML instead of video:", text.slice(0, 500));
+    throw new Error("Downloaded content is HTML, not a video file. The video URL may have expired or be invalid.");
+  }
+
   const arrayBuffer = await response.arrayBuffer();
-  return Buffer.from(arrayBuffer);
+  const buffer = Buffer.from(arrayBuffer);
+  
+  console.log("[Apify] Downloaded", buffer.length, "bytes. First 20 bytes:", buffer.slice(0, 20).toString("hex"));
+  
+  // Validate it looks like a video file
+  if (buffer.length < 1000) {
+    throw new Error(`Downloaded file is too small (${buffer.length} bytes). Video URL may be invalid.`);
+  }
+  
+  return buffer;
 }
 
