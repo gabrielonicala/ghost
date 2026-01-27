@@ -213,7 +213,7 @@ export async function extractTextFromVideo(
 
   // Extract text from annotations (per official docs structure)
   // Each textAnnotation represents a unique piece of text that appears in the video
-  // Segments tell us WHEN that text appears - we use the earliest occurrence
+  // We need to group text that appears at the same time together
   const texts: Array<{
     text: string;
     confidence: number;
@@ -238,7 +238,6 @@ export async function extractTextFromVideo(
     // Skip if we've already seen this exact text
     // (same text might appear multiple times in video at different times)
     if (seenTexts.has(normalizedKey)) {
-      console.log("[VideoIntelligence] Skipping duplicate text:", text.slice(0, 50));
       continue;
     }
     seenTexts.add(normalizedKey);
@@ -291,9 +290,44 @@ export async function extractTextFromVideo(
     return 0;
   });
 
-  // Build full text - join with spaces for natural reading
-  // Each text annotation is a distinct piece of text from the video
-  const fullText = texts.map(t => t.text).join(" ").trim();
+  // Group text that appears at roughly the same time (within 0.5 seconds)
+  // This prevents mixing text that appears simultaneously on screen
+  const timeGroups: Array<{ time: number; texts: string[] }> = [];
+  const TIME_WINDOW = 0.5; // 500ms window for grouping simultaneous text
+
+  for (const textItem of texts) {
+    if (textItem.startTime === undefined) {
+      // Text without timing - add to last group or create new one
+      if (timeGroups.length > 0) {
+        timeGroups[timeGroups.length - 1].texts.push(textItem.text);
+      } else {
+        timeGroups.push({ time: 0, texts: [textItem.text] });
+      }
+      continue;
+    }
+
+    // Find a group within the time window, or create a new one
+    let foundGroup = false;
+    for (const group of timeGroups) {
+      if (Math.abs(group.time - textItem.startTime) <= TIME_WINDOW) {
+        group.texts.push(textItem.text);
+        foundGroup = true;
+        break;
+      }
+    }
+
+    if (!foundGroup) {
+      timeGroups.push({
+        time: textItem.startTime,
+        texts: [textItem.text],
+      });
+    }
+  }
+
+  // Join text within each time group (text that appears together)
+  // Then join groups in chronological order
+  const groupedTexts = timeGroups.map(group => group.texts.join(" "));
+  const fullText = groupedTexts.join(" ").trim();
 
   console.log("[VideoIntelligence] Extracted", texts.length, "text segments");
   console.log("[VideoIntelligence] Full text:", fullText.slice(0, 200));
