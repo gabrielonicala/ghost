@@ -11,10 +11,6 @@ import {
   calculatePerceptualHash,
   extractDominantColors,
 } from "@/lib/processing/media";
-import {
-  extractTextFromVideo,
-  isVideoIntelligenceAvailable,
-} from "@/lib/processing/video-intelligence";
 
 /**
  * Process content item: OCR, transcription, brand detection, ACCS scoring
@@ -123,124 +119,150 @@ export const processContentItem = inngest.createFunction(
       } else if (contentItem.contentType === "video" || contentItem.contentType === "reel") {
         const texts: string[] = [];
         
-        // Try Google Cloud Video Intelligence API first (better for text overlays)
-        if (isVideoIntelligenceAvailable()) {
+        console.log("=".repeat(80));
+        console.log("[OCR] 🎥 Processing video OCR using Video Intelligence API ONLY");
+        console.log("[OCR] Media URL:", contentItem.mediaUrl);
+        console.log("=".repeat(80));
+        
+        // Use the SAME video download logic as transcription
+        const { detectPlatform } = await import("@/lib/platforms");
+        const { downloadVideoWithApify, isApifyConfigured, downloadVideoFile } = await import("@/lib/platforms/apify");
+        
+        const platformInfo = detectPlatform(contentItem.mediaUrl);
+        let videoBuffer: Buffer | undefined;
+        
+        // Download video using same logic as transcription
+        if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform) && isApifyConfigured()) {
+          console.log("[OCR] Using Apify to download video (same as transcription)");
+          const apifyResult = await downloadVideoWithApify(
+            contentItem.mediaUrl,
+            platformInfo.platform as "tiktok" | "instagram" | "facebook"
+          );
+          
+          if (apifyResult?.videoUrl) {
+            console.log("[OCR] Got Apify video URL:", apifyResult.videoUrl);
+            videoBuffer = await downloadVideoFile(apifyResult.videoUrl);
+            console.log("[OCR] Downloaded video:", videoBuffer.length, "bytes");
+          }
+        } else if (contentItem.mediaUrl.includes("api.apify.com")) {
+          // Direct Apify URL
+          videoBuffer = await downloadVideoFile(contentItem.mediaUrl);
+          console.log("[OCR] Downloaded Apify video:", videoBuffer.length, "bytes");
+        } else {
+          // Try direct download
           try {
-            console.log("[OCR] Using Video Intelligence API for video text extraction");
-            
-            // For TikTok/Instagram/Facebook, we need to get the video from Apify first
-            // The contentItem.mediaUrl is the original platform URL, not the video file
-            const { detectPlatform } = await import("@/lib/platforms");
-            const { downloadVideoWithApify, isApifyConfigured } = await import("@/lib/platforms/apify");
-            
-            const platformInfo = detectPlatform(contentItem.mediaUrl);
-            let videoBuffer: Buffer | undefined;
-            
-            if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform) && isApifyConfigured()) {
-              console.log("[OCR] Fetching video from Apify for", platformInfo.platform);
-              const apifyResult = await downloadVideoWithApify(
-                contentItem.mediaUrl,
-                platformInfo.platform as "tiktok" | "instagram" | "facebook"
-              );
-              
-              if (apifyResult?.videoUrl) {
-                console.log("[OCR] Got Apify video URL:", apifyResult.videoUrl);
-                // Download the video
-                const response = await fetch(apifyResult.videoUrl, {
-                  headers: {
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                  },
-                });
-                if (response.ok) {
-                  const arrayBuffer = await response.arrayBuffer();
-                  videoBuffer = Buffer.from(arrayBuffer);
-                  console.log("[OCR] Downloaded video for analysis:", videoBuffer.length, "bytes");
-                }
-              }
-            } else if (contentItem.mediaUrl.includes("api.apify.com")) {
-              // Direct Apify URL
-              const response = await fetch(contentItem.mediaUrl);
-              if (response.ok) {
-                const arrayBuffer = await response.arrayBuffer();
-                videoBuffer = Buffer.from(arrayBuffer);
-                console.log("[OCR] Downloaded Apify video:", videoBuffer.length, "bytes");
-              }
+            const response = await fetch(contentItem.mediaUrl, {
+              headers: {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+              },
+            });
+            if (response.ok) {
+              const arrayBuffer = await response.arrayBuffer();
+              videoBuffer = Buffer.from(arrayBuffer);
+              console.log("[OCR] Downloaded video directly:", videoBuffer.length, "bytes");
             }
+          } catch (error) {
+            console.error("[OCR] Failed to download video:", error);
+          }
+        }
+        
+        if (!videoBuffer) {
+          console.error("[OCR] ❌ Could not download video buffer");
+          return [];
+        }
+        
+        // Use Video Intelligence API ONLY
+        const { extractTextFromVideo, isVideoIntelligenceAvailable } = await import("@/lib/processing/video-intelligence");
+        
+        if (!isVideoIntelligenceAvailable()) {
+          console.error("[OCR] ❌ Video Intelligence API not available");
+          console.error("[OCR] Check GOOGLE_APPLICATION_CREDENTIALS or GOOGLE_SERVICE_ACCOUNT_KEY");
+          return [];
+        }
+        
+        console.log("[OCR] ✅ Video Intelligence API is available");
+        console.log("[OCR] Calling extractTextFromVideo with buffer size:", videoBuffer.length);
+        
+        try {
+          const result = await extractTextFromVideo(undefined, videoBuffer);
+          
+          console.log("[OCR] Video Intelligence result:", {
+            textCount: result.texts.length,
+            fullTextLength: result.fullText.length,
+            fullTextPreview: result.fullText.slice(0, 500),
+          });
+          
+          if (result.fullText && result.fullText.trim().length > 0) {
+            console.log("[OCR] ✅ Video Intelligence found text!");
+            texts.push(result.fullText);
             
-            if (!videoBuffer) {
-              throw new Error("Could not download video for text extraction");
-            }
-            
-            // Video Intelligence API with base64 content works with API key
-            const result = await extractTextFromVideo(undefined, videoBuffer);
-            
-            if (result.fullText) {
-              texts.push(result.fullText);
-              
-              // Save to database
-              if (prisma) {
-                await prisma.contentOcrFrame.create({
-                  data: {
-                    contentItemId: contentItem.id,
-                    frameIndex: 0,
-                    text: result.fullText,
-                    confidence: 0.9,
-                  },
-                });
-              } else if (supabase) {
-                const frameId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
-                await supabase.from("ContentOcrFrame").insert({
-                  id: frameId,
+            // Save to database
+            if (prisma) {
+              await prisma.contentOcrFrame.create({
+                data: {
                   contentItemId: contentItem.id,
                   frameIndex: 0,
                   text: result.fullText,
                   confidence: 0.9,
-                  createdAt: new Date().toISOString(),
-                });
-              }
+                },
+              });
+            } else if (supabase) {
+              const frameId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
+              await supabase.from("ContentOcrFrame").insert({
+                id: frameId,
+                contentItemId: contentItem.id,
+                frameIndex: 0,
+                text: result.fullText,
+                confidence: 0.9,
+                createdAt: new Date().toISOString(),
+              });
             }
             
             return texts;
-          } catch (viError: any) {
-            console.error("[OCR] Video Intelligence API failed, falling back to thumbnail OCR:", viError.message);
-            // Fall through to thumbnail-based OCR
+          } else {
+            console.warn("[OCR] ⚠️ Video Intelligence returned empty text");
+            return [];
           }
+        } catch (viError: any) {
+          console.error("[OCR] ❌ Video Intelligence API failed:");
+          console.error("[OCR] Error message:", viError.message);
+          console.error("[OCR] Error stack:", viError.stack);
+          throw viError; // Re-throw so Inngest can retry
         }
         
-        // Fallback: Extract frames and OCR them (thumbnail only)
-        console.log("[OCR] Using thumbnail-based OCR for video");
-        const frames = await extractFrames(contentItem.mediaUrl, 1);
-        for (const frame of frames) {
-          try {
-            const ocrResult = await performOCR(frame.imageUrl);
-            if (ocrResult.text) {
-              texts.push(ocrResult.text);
-              if (prisma) {
-                await prisma.contentOcrFrame.create({
-                  data: {
-                    contentItemId: contentItem.id,
-                    frameIndex: frame.index,
-                    text: ocrResult.text,
-                    confidence: ocrResult.confidence,
-                  },
-                });
-              } else if (supabase) {
-                const frameId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
-                await supabase.from("ContentOcrFrame").insert({
-                  id: frameId,
-                  contentItemId: contentItem.id,
-                  frameIndex: frame.index,
-                  text: ocrResult.text,
-                  confidence: ocrResult.confidence,
-                  createdAt: new Date().toISOString(),
-                });
+        // CLOUD VISION API CODE COMMENTED OUT - FOCUS ON VIDEO INTELLIGENCE ONLY
+        /*
+        // Fallback: Extract frames and use Cloud Vision API
+        console.log("[OCR] 🔄 FALLBACK: Using frame extraction + Cloud Vision API");
+        
+        if (!videoBuffer) {
+          console.warn("[OCR] ⚠️ No video buffer available, using thumbnail OCR");
+          const thumbnailFrames = await extractFrames(contentItem.mediaUrl, 1);
+          for (const frame of thumbnailFrames) {
+            try {
+              const ocrResult = await performOCR(frame.imageUrl);
+              if (ocrResult.text && ocrResult.text.trim().length > 0) {
+                texts.push(ocrResult.text);
+                // ... save logic ...
               }
+            } catch (frameError) {
+              console.error(`[OCR] Error processing thumbnail frame:`, frameError);
             }
-          } catch (frameError) {
-            console.error(`OCR error for frame ${frame.index}:`, frameError);
           }
+          return texts;
         }
-        return texts;
+        
+        // Extract frames from video buffer and use Cloud Vision API
+        const { extractFramesFromVideoBuffer } = await import("@/lib/processing/media");
+        
+        try {
+          const frames = await extractFramesFromVideoBuffer(contentItem.mediaUrl, 5);
+          // ... process frames ...
+        } catch (error: any) {
+          console.error("[OCR] Frame extraction failed:", error.message);
+          return texts;
+        }
+        */
       }
       return [];
     });

@@ -148,7 +148,166 @@ export async function extractAudio(videoUrl: string): Promise<Buffer> {
 }
 
 /**
- * Extract frames from video for OCR
+ * Get video buffer using the SAME logic as transcription
+ * This ensures OCR uses the exact same video that transcription processes
+ */
+async function getVideoBufferForOCR(
+  videoUrl: string
+): Promise<Buffer | null> {
+  console.log("[getVideoBufferForOCR] Getting video buffer from:", videoUrl);
+  
+  // Use the SAME logic as transcription to get the video buffer
+  const platformInfo = detectPlatform(videoUrl);
+  
+  // For TikTok/Instagram/Facebook, use Apify (same as transcription)
+  if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform)) {
+    if (isApifyConfigured()) {
+      console.log(`[getVideoBufferForOCR] Using Apify for ${platformInfo.platform}`);
+      const apifyResult = await downloadVideoWithApify(
+        videoUrl,
+        platformInfo.platform as "tiktok" | "instagram" | "facebook"
+      );
+      
+      if (apifyResult?.videoUrl) {
+        console.log("[getVideoBufferForOCR] Got Apify video URL, downloading...");
+        const buffer = await downloadVideoFile(apifyResult.videoUrl);
+        console.log("[getVideoBufferForOCR] Downloaded video:", buffer.length, "bytes");
+        return buffer;
+      }
+    }
+  } else if (isDirectMediaUrl(videoUrl)) {
+    // Direct video URL - download directly
+    console.log("[getVideoBufferForOCR] Direct URL, downloading...");
+    return await downloadFile(videoUrl);
+  } else {
+    // Try downloading as-is
+    try {
+      return await downloadFile(videoUrl);
+    } catch (error) {
+      console.error("[getVideoBufferForOCR] Failed to download video:", error);
+      return null;
+    }
+  }
+  
+  return null;
+}
+
+/**
+ * Extract frames from video buffer for OCR using Cloud Vision API
+ * Uses the same video download logic as transcription
+ * 
+ * @param videoUrl - Original platform URL (same as transcription uses)
+ * @param frameCount - Number of frames to extract (default: 5)
+ * @returns Array of frame images as data URLs
+ */
+export async function extractFramesFromVideoBuffer(
+  videoUrl: string,
+  frameCount: number = 5
+): Promise<Array<{ index: number; imageUrl: string; timestamp: number }>> {
+  console.log("[extractFramesFromVideoBuffer] Starting frame extraction from:", videoUrl);
+  
+  const videoBuffer = await getVideoBufferForOCR(videoUrl);
+  
+  if (!videoBuffer) {
+    console.warn("[extractFramesFromVideoBuffer] Could not get video buffer");
+    return [];
+  }
+  
+  console.log("[extractFramesFromVideoBuffer] Video buffer obtained, size:", videoBuffer.length);
+  
+  // Extract frames using fluent-ffmpeg
+  // Note: This requires FFmpeg to be installed on the system
+  // For serverless, consider using @ffmpeg/ffmpeg (WebAssembly) or a cloud service
+  try {
+    const ffmpeg = (await import("fluent-ffmpeg")).default;
+    const fs = await import("fs");
+    const path = await import("path");
+    const os = await import("os");
+    
+    // Create temporary files for input and output
+    const inputPath = path.join(os.tmpdir(), `video-input-${Date.now()}.mp4`);
+    const outputDir = path.join(os.tmpdir(), `frames-${Date.now()}`);
+    fs.mkdirSync(outputDir, { recursive: true });
+    
+    // Write video buffer to temp file
+    fs.writeFileSync(inputPath, videoBuffer);
+    
+    // Extract frames at evenly spaced intervals
+    return new Promise((resolve, reject) => {
+      const frames: Array<{ index: number; imageUrl: string; timestamp: number }> = [];
+      
+      // Get video duration first
+      ffmpeg.ffprobe(inputPath, (err: any, metadata: any) => {
+        if (err) {
+          console.error("[extractFramesFromVideoBuffer] Failed to probe video:", err);
+          // Cleanup
+          try { fs.unlinkSync(inputPath); } catch {}
+          try { fs.rmSync(outputDir, { recursive: true }); } catch {}
+          reject(err);
+          return;
+        }
+        
+        const duration = metadata.format.duration || 10; // Default to 10 seconds if unknown
+        const interval = duration / (frameCount + 1); // Space frames evenly
+        
+        console.log(`[extractFramesFromVideoBuffer] Video duration: ${duration}s, extracting ${frameCount} frames`);
+        
+        // Extract frames
+        ffmpeg(inputPath)
+          .outputOptions([
+            `-vf fps=1/${interval}`, // Extract 1 frame per interval
+            `-frames:v ${frameCount}`, // Limit to frameCount frames
+            `-q:v 2`, // High quality
+          ])
+          .output(path.join(outputDir, "frame-%03d.jpg"))
+          .on("end", () => {
+            // Read extracted frames and convert to data URLs
+            const files = fs.readdirSync(outputDir).sort();
+            
+            files.forEach((file: string, index: number) => {
+              const framePath = path.join(outputDir, file);
+              const frameBuffer = fs.readFileSync(framePath);
+              const base64 = frameBuffer.toString("base64");
+              const dataUrl = `data:image/jpeg;base64,${base64}`;
+              const timestamp = interval * (index + 1);
+              
+              frames.push({
+                index,
+                imageUrl: dataUrl,
+                timestamp,
+              });
+              
+              // Cleanup frame file
+              try { fs.unlinkSync(framePath); } catch {}
+            });
+            
+            // Cleanup
+            try { fs.unlinkSync(inputPath); } catch {}
+            try { fs.rmSync(outputDir, { recursive: true }); } catch {}
+            
+            console.log(`[extractFramesFromVideoBuffer] Extracted ${frames.length} frames`);
+            resolve(frames);
+          })
+          .on("error", (err: any) => {
+            console.error("[extractFramesFromVideoBuffer] FFmpeg error:", err);
+            // Cleanup
+            try { fs.unlinkSync(inputPath); } catch {}
+            try { fs.rmSync(outputDir, { recursive: true }); } catch {}
+            reject(err);
+          })
+          .run();
+      });
+    });
+  } catch (error: any) {
+    console.error("[extractFramesFromVideoBuffer] Frame extraction failed:", error.message);
+    // If FFmpeg is not available, return empty array
+    // The OCR will fall back to thumbnail-based extraction
+    return [];
+  }
+}
+
+/**
+ * Extract frames from video for OCR (legacy method - uses thumbnails)
  * 
  * Uses platform-specific methods:
  * - YouTube: High-quality thumbnails via API

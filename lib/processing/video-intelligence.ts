@@ -71,6 +71,7 @@ function createClient(): VideoIntelligenceServiceClient {
 
 /**
  * Extract text from video using Google Cloud Video Intelligence API
+ * Based on official documentation: https://docs.cloud.google.com/video-intelligence/docs/text-detection
  * 
  * @param videoUrl - URL to the video file (must be accessible via Google Cloud Storage or public URL)
  * @param videoBuffer - Optional: video content as Buffer (for uploaded videos)
@@ -92,34 +93,36 @@ export async function extractTextFromVideo(
 
   const client = createClient();
 
-  // Build the request
+  // Build the request according to official docs
   const request: any = {
     features: ["TEXT_DETECTION"],
     videoContext: {
       textDetectionConfig: {
-        languageHints: ["en"], // Primary language
+        languageHints: ["en"],
       },
     },
   };
 
-  // Use either URL or base64 content
+  // Use either URL or base64 content (per official docs)
   if (videoBuffer) {
-    // For buffer content, we need to use inputContent
+    // For local files, base64 encode the content
     request.inputContent = videoBuffer.toString("base64");
     console.log("[VideoIntelligence] Using base64 content, size:", videoBuffer.length);
   } else if (videoUrl) {
-    // For URLs, must be a Google Cloud Storage URI (gs://) or publicly accessible
-    // If it's not a GCS URI, we might need to upload it first or use inputContent
     if (videoUrl.startsWith("gs://")) {
+      // Cloud Storage URI
       request.inputUri = videoUrl;
       console.log("[VideoIntelligence] Using GCS URI:", videoUrl);
     } else {
-      // For public URLs, we need to download and use inputContent
-      // Or upload to GCS first (better for large files)
+      // Public URL - download and use inputContent (per docs)
       console.log("[VideoIntelligence] Public URL detected, downloading...");
-      const response = await fetch(videoUrl);
+      const response = await fetch(videoUrl, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        },
+      });
       if (!response.ok) {
-        throw new Error(`Failed to download video from URL: ${response.statusText}`);
+        throw new Error(`Failed to download video from URL: ${response.status} ${response.statusText}`);
       }
       const buffer = Buffer.from(await response.arrayBuffer());
       request.inputContent = buffer.toString("base64");
@@ -129,7 +132,7 @@ export async function extractTextFromVideo(
     throw new Error("Either videoUrl or videoBuffer must be provided");
   }
 
-  // Start the annotation job (this is async)
+  // Start the annotation job (per official Node.js example)
   console.log("[VideoIntelligence] Starting annotation operation...");
   const [operation] = await client.annotateVideo(request);
 
@@ -138,24 +141,77 @@ export async function extractTextFromVideo(
   }
 
   console.log("[VideoIntelligence] Operation started:", operation.name);
+  console.log("[VideoIntelligence] Waiting for operation to complete...");
 
-  // Wait for operation to complete
-  // The operation object has a promise() method that resolves when done
-  let result: any;
+  // Wait for operation to complete using promise() method (per official docs)
+  let results: any;
   try {
-    // Try using the promise method if available
-    if (typeof (operation as any).promise === "function") {
-      result = await (operation as any).promise();
-    } else {
-      // Fallback to polling
-      result = await pollOperation(operation.name, client);
+    // According to official docs, operation.promise() returns the results
+    console.log("[VideoIntelligence] Calling operation.promise()...");
+    results = await operation.promise();
+    console.log("[VideoIntelligence] Operation completed");
+    console.log("[VideoIntelligence] Results type:", typeof results);
+    console.log("[VideoIntelligence] Results is array:", Array.isArray(results));
+    if (results) {
+      console.log("[VideoIntelligence] Results keys:", Object.keys(results));
+      if (Array.isArray(results)) {
+        console.log("[VideoIntelligence] Results array length:", results.length);
+        if (results.length > 0) {
+          console.log("[VideoIntelligence] Results[0] keys:", Object.keys(results[0] || {}));
+        }
+      }
     }
   } catch (error: any) {
-    // If promise fails, try polling
-    result = await pollOperation(operation.name, client);
+    console.error("[VideoIntelligence] Operation promise failed:", error.message);
+    console.error("[VideoIntelligence] Error stack:", error.stack);
+    // Fallback to polling if promise() doesn't work
+    console.log("[VideoIntelligence] Falling back to polling...");
+    results = await pollOperation(operation.name, client);
+    console.log("[VideoIntelligence] Polling completed, results type:", typeof results);
   }
 
-  // Extract text from results
+  // Extract text annotations (per official Node.js example structure)
+  // results[0].annotationResults[0].textAnnotations
+  let textAnnotations: any[] = [];
+  
+  console.log("[VideoIntelligence] Parsing results...");
+  console.log("[VideoIntelligence] Full results structure (first 5000 chars):", JSON.stringify(results, null, 2).slice(0, 5000));
+  
+  if (results && Array.isArray(results) && results.length > 0) {
+    console.log("[VideoIntelligence] Path 1: results is array with length", results.length);
+    const annotationResults = results[0]?.annotationResults;
+    console.log("[VideoIntelligence] annotationResults:", annotationResults ? "exists" : "missing");
+    if (annotationResults && Array.isArray(annotationResults) && annotationResults.length > 0) {
+      console.log("[VideoIntelligence] annotationResults[0] keys:", Object.keys(annotationResults[0] || {}));
+      textAnnotations = annotationResults[0]?.textAnnotations || [];
+      console.log("[VideoIntelligence] Found", textAnnotations.length, "textAnnotations in path 1");
+    }
+  } else if (results?.annotationResults) {
+    console.log("[VideoIntelligence] Path 2: results.annotationResults exists");
+    const annotationResults = Array.isArray(results.annotationResults) 
+      ? results.annotationResults 
+      : [results.annotationResults];
+    if (annotationResults.length > 0) {
+      textAnnotations = annotationResults[0]?.textAnnotations || [];
+      console.log("[VideoIntelligence] Found", textAnnotations.length, "textAnnotations in path 2");
+    }
+  } else if (results?.response?.annotationResults) {
+    console.log("[VideoIntelligence] Path 3: results.response.annotationResults exists");
+    const annotationResults = Array.isArray(results.response.annotationResults)
+      ? results.response.annotationResults
+      : [results.response.annotationResults];
+    if (annotationResults.length > 0) {
+      textAnnotations = annotationResults[0]?.textAnnotations || [];
+      console.log("[VideoIntelligence] Found", textAnnotations.length, "textAnnotations in path 3");
+    }
+  } else {
+    console.warn("[VideoIntelligence] Could not find textAnnotations in any expected path");
+    console.warn("[VideoIntelligence] Results structure:", JSON.stringify(results, null, 2).slice(0, 2000));
+  }
+
+  console.log("[VideoIntelligence] Final textAnnotations count:", textAnnotations.length);
+
+  // Extract text from annotations (per official docs structure)
   const texts: Array<{
     text: string;
     confidence: number;
@@ -163,27 +219,40 @@ export async function extractTextFromVideo(
     endTime?: number;
   }> = [];
 
-  const annotationResults = result.annotationResults || [];
-  for (const annotationResult of annotationResults) {
-    const textAnnotations = annotationResult.textAnnotations || [];
-    for (const annotation of textAnnotations) {
-      const segment = annotation.segments?.[0];
-      if (annotation.text) {
-        texts.push({
-          text: annotation.text,
-          confidence: segment?.confidence || 0.9,
-          startTime: segment?.segment?.startTimeOffset
-            ? parseTimeOffset(segment.segment.startTimeOffset)
-            : undefined,
-          endTime: segment?.segment?.endTimeOffset
-            ? parseTimeOffset(segment.segment.endTimeOffset)
-            : undefined,
-        });
-      }
+  for (const textAnnotation of textAnnotations) {
+    const text = textAnnotation.text;
+    if (!text) continue;
+
+    // Get segments (per official docs)
+    const segments = textAnnotation.segments || [];
+    for (const segment of segments) {
+      const time = segment.segment;
+      const startTime = time?.startTimeOffset 
+        ? parseTimeOffsetFromProtobuf(time.startTimeOffset)
+        : undefined;
+      const endTime = time?.endTimeOffset
+        ? parseTimeOffsetFromProtobuf(time.endTimeOffset)
+        : undefined;
+      const confidence = segment.confidence || 0.9;
+
+      texts.push({
+        text: text,
+        confidence: confidence,
+        startTime: startTime,
+        endTime: endTime,
+      });
+    }
+
+    // If no segments, still add the text
+    if (segments.length === 0) {
+      texts.push({
+        text: text,
+        confidence: 0.9,
+      });
     }
   }
 
-  // Build full text (unique texts, sorted by time if available)
+  // Build full text (unique texts)
   const uniqueTexts = [...new Set(texts.map((t) => t.text))];
   const fullText = uniqueTexts.join("\n");
 
@@ -288,18 +357,134 @@ async function getOperationStatus(
 }
 
 /**
- * Parse time offset string (e.g., "1.5s" or "90s") to seconds
+ * Parse protobuf duration to seconds
+ * Per official docs, timeOffset has seconds and nanos properties
  */
-function parseTimeOffset(offset: string): number {
-  // Handle both "1.5s" format and protobuf duration format
-  if (offset.endsWith("s")) {
-    const match = offset.match(/^(\d+\.?\d*)s$/);
-    return match ? parseFloat(match[1]) : 0;
-  }
+function parseTimeOffsetFromProtobuf(timeOffset: any): number {
+  if (!timeOffset) return 0;
   
-  // Handle protobuf duration (e.g., "1.5s" or just seconds as number)
-  const seconds = parseFloat(offset);
-  return isNaN(seconds) ? 0 : seconds;
+  // Handle protobuf Duration format: { seconds: number, nanos: number }
+  const seconds = timeOffset.seconds || 0;
+  const nanos = timeOffset.nanos || 0;
+  
+  return seconds + nanos / 1e9;
+}
+
+/**
+ * Detect logos in video using Google Cloud Video Intelligence API
+ * Based on official documentation
+ */
+export async function detectLogosInVideo(
+  videoUrl?: string,
+  videoBuffer?: Buffer
+): Promise<Array<{
+  entityId: string;
+  description: string;
+  segments: Array<{
+    startTime: number;
+    endTime: number;
+    confidence: number;
+  }>;
+}>> {
+  console.log("[VideoIntelligence] Starting logo detection...");
+
+  const client = createClient();
+
+  const request: any = {
+    features: ["LOGO_RECOGNITION"],
+  };
+
+  if (videoBuffer) {
+    request.inputContent = videoBuffer.toString("base64");
+    console.log("[VideoIntelligence] Using base64 content for logo detection");
+  } else if (videoUrl) {
+    if (videoUrl.startsWith("gs://")) {
+      request.inputUri = videoUrl;
+    } else {
+      const response = await fetch(videoUrl, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to download video: ${response.status} ${response.statusText}`);
+      }
+      const buffer = Buffer.from(await response.arrayBuffer());
+      request.inputContent = buffer.toString("base64");
+    }
+  } else {
+    throw new Error("Either videoUrl or videoBuffer must be provided");
+  }
+
+  const [operation] = await client.annotateVideo(request);
+
+  if (!operation.name) {
+    throw new Error("Failed to start logo detection operation");
+  }
+
+  console.log("[VideoIntelligence] Logo detection operation started:", operation.name);
+
+  let results: any;
+  try {
+    results = await operation.promise();
+  } catch (error: any) {
+    console.error("[VideoIntelligence] Logo detection operation failed:", error.message);
+    results = await pollOperation(operation.name, client);
+  }
+
+  const logos: Array<{
+    entityId: string;
+    description: string;
+    segments: Array<{
+      startTime: number;
+      endTime: number;
+      confidence: number;
+    }>;
+  }> = [];
+
+  let logoAnnotations: any[] = [];
+  
+  if (results && Array.isArray(results) && results.length > 0) {
+    const annotationResults = results[0]?.annotationResults;
+    if (annotationResults && Array.isArray(annotationResults) && annotationResults.length > 0) {
+      logoAnnotations = annotationResults[0]?.logoRecognitionAnnotations || [];
+    }
+  } else if (results?.annotationResults) {
+    const annotationResults = Array.isArray(results.annotationResults) 
+      ? results.annotationResults 
+      : [results.annotationResults];
+    if (annotationResults.length > 0) {
+      logoAnnotations = annotationResults[0]?.logoRecognitionAnnotations || [];
+    }
+  }
+
+  for (const logoAnnotation of logoAnnotations) {
+    const entity = logoAnnotation.entity;
+    if (!entity) continue;
+
+    const segments = logoAnnotation.tracks || [];
+    const logoSegments = segments.map((track: any) => {
+      const segment = track.segment;
+      return {
+        startTime: segment?.startTimeOffset 
+          ? parseTimeOffsetFromProtobuf(segment.startTimeOffset)
+          : 0,
+        endTime: segment?.endTimeOffset
+          ? parseTimeOffsetFromProtobuf(segment.endTimeOffset)
+          : 0,
+        confidence: track.confidence || 0.9,
+      };
+    });
+
+    logos.push({
+      entityId: entity.entityId || "",
+      description: entity.description || "",
+      segments: logoSegments,
+    });
+  }
+
+  console.log("[VideoIntelligence] Detected", logos.length, "logos");
+  return logos;
 }
 
 /**
