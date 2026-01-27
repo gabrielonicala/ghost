@@ -48,3 +48,7 @@ README.md
 # generated files
 /app/generated/prisma
 /src/generated
+
+# secrets (credentials, keys, etc.)
+/secrets/*
+!/secrets/README.md

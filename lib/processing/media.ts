@@ -303,7 +303,7 @@ export async function performOCR(imageUrl: string): Promise<{
             requests: [
               {
                 image: { content: base64Image },
-                features: [{ type: "TEXT_DETECTION", maxResults: 10 }],
+                features: [{ type: "TEXT_DETECTION" }], // maxResults not needed for TEXT_DETECTION
               },
             ],
           }),
@@ -311,36 +311,99 @@ export async function performOCR(imageUrl: string): Promise<{
       );
 
       if (!response.ok) {
-        throw new Error(`Google Vision API error: ${response.statusText}`);
+        const errorText = await response.text();
+        let errorMessage = `Google Vision API error: ${response.status} ${response.statusText}`;
+        try {
+          const errorData = JSON.parse(errorText);
+          if (errorData.error?.message) {
+            errorMessage = `Google Vision API error: ${errorData.error.message}`;
+          }
+        } catch {
+          // If we can't parse the error, use the text as-is
+          if (errorText) {
+            errorMessage = `Google Vision API error: ${errorText}`;
+          }
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
+      
+      // Check for API-level errors in the response
+      if (data.responses?.[0]?.error) {
+        throw new Error(`Google Vision API error: ${data.responses[0].error.message || "Unknown error"}`);
+      }
+
       const textAnnotation = data.responses?.[0]?.fullTextAnnotation;
 
-      if (textAnnotation) {
+      if (textAnnotation?.text) {
         const text = textAnnotation.text || "";
-        const boundingBoxes = textAnnotation.pages?.[0]?.blocks
-          ?.flatMap((block: any) =>
-            block.paragraphs?.flatMap((para: any) =>
-              para.words?.map((word: any) => {
-                const vertices = word.boundingBox.vertices;
-                return {
-                  x: vertices[0]?.x || 0,
-                  y: vertices[0]?.y || 0,
-                  width: (vertices[2]?.x || 0) - (vertices[0]?.x || 0),
-                  height: (vertices[2]?.y || 0) - (vertices[0]?.y || 0),
-                  text: word.symbols?.map((s: any) => s.text).join("") || "",
-                };
-              })
-            )
-          )
-          .filter(Boolean) || [];
+        
+        // Extract bounding boxes from the annotation structure
+        const boundingBoxes: Array<{
+          x: number;
+          y: number;
+          width: number;
+          height: number;
+          text: string;
+        }> = [];
+
+        // Parse bounding boxes from pages -> blocks -> paragraphs -> words
+        if (textAnnotation.pages) {
+          for (const page of textAnnotation.pages) {
+            if (page.blocks) {
+              for (const block of page.blocks) {
+                if (block.paragraphs) {
+                  for (const para of block.paragraphs) {
+                    if (para.words) {
+                      for (const word of para.words) {
+                        if (word.boundingBox?.vertices && word.symbols) {
+                          const vertices = word.boundingBox.vertices;
+                          const wordText = word.symbols
+                            .map((s: any) => s.text || "")
+                            .join("");
+                          
+                          if (wordText && vertices.length >= 4) {
+                            boundingBoxes.push({
+                              x: vertices[0]?.x || 0,
+                              y: vertices[0]?.y || 0,
+                              width: Math.max(0, (vertices[2]?.x || 0) - (vertices[0]?.x || 0)),
+                              height: Math.max(0, (vertices[2]?.y || 0) - (vertices[0]?.y || 0)),
+                              text: wordText,
+                            });
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
 
         return {
           text: text.trim(),
           confidence: 0.95, // Google Vision is generally very accurate
           boundingBoxes,
         };
+      }
+      
+      // If no fullTextAnnotation but there are textAnnotations, try to extract from those
+      const textAnnotations = data.responses?.[0]?.textAnnotations;
+      if (textAnnotations && textAnnotations.length > 0) {
+        const texts = textAnnotations
+          .map((ann: any) => ann.description || "")
+          .filter(Boolean)
+          .join(" ");
+        
+        if (texts) {
+          return {
+            text: texts.trim(),
+            confidence: 0.90,
+            boundingBoxes: [],
+          };
+        }
       }
     } catch (error: any) {
       console.warn("Google Cloud Vision OCR failed, falling back to Tesseract:", error.message);

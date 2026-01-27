@@ -13,6 +13,8 @@ export async function GET() {
     // APIs
     hasOpenAiKey: !!process.env.OPENAI_API_KEY,
     hasGoogleCloudKey: !!process.env.GOOGLE_CLOUD_API_KEY,
+    hasGoogleApplicationCredentials: !!process.env.GOOGLE_APPLICATION_CREDENTIALS,
+    hasGoogleServiceAccountKey: !!process.env.GOOGLE_SERVICE_ACCOUNT_KEY,
     hasApifyToken: !!process.env.APIFY_API_TOKEN,
     apifyTokenLength: process.env.APIFY_API_TOKEN?.length || 0,
     // Supabase
