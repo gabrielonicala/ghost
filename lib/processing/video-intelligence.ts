@@ -212,6 +212,8 @@ export async function extractTextFromVideo(
   console.log("[VideoIntelligence] Final textAnnotations count:", textAnnotations.length);
 
   // Extract text from annotations (per official docs structure)
+  // Each textAnnotation represents a unique piece of text that appears in the video
+  // Segments tell us WHEN that text appears - we use the earliest occurrence
   const texts: Array<{
     text: string;
     confidence: number;
@@ -219,42 +221,79 @@ export async function extractTextFromVideo(
     endTime?: number;
   }> = [];
 
+  // Track seen texts to avoid exact duplicates (case-insensitive)
+  const seenTexts = new Set<string>();
+
   for (const textAnnotation of textAnnotations) {
-    const text = textAnnotation.text;
+    let text = textAnnotation.text;
     if (!text) continue;
 
-    // Get segments (per official docs)
+    // Clean up the text - remove extra whitespace
+    text = text.trim().replace(/\s+/g, " ");
+    if (text.length === 0) continue;
+
+    // Create a normalized key for deduplication (lowercase, no extra spaces)
+    const normalizedKey = text.toLowerCase().trim();
+    
+    // Skip if we've already seen this exact text
+    // (same text might appear multiple times in video at different times)
+    if (seenTexts.has(normalizedKey)) {
+      console.log("[VideoIntelligence] Skipping duplicate text:", text.slice(0, 50));
+      continue;
+    }
+    seenTexts.add(normalizedKey);
+
+    // Get segments to find timing information
     const segments = textAnnotation.segments || [];
-    for (const segment of segments) {
-      const time = segment.segment;
-      const startTime = time?.startTimeOffset 
+    let startTime: number | undefined;
+    let endTime: number | undefined;
+    let confidence = 0.9;
+
+    // Use the first (earliest) segment's timing
+    if (segments.length > 0) {
+      // Find the earliest segment
+      let earliestSegment = segments[0];
+      let earliestTime = parseTimeOffsetFromProtobuf(segments[0]?.segment?.startTimeOffset || {});
+      
+      for (const segment of segments) {
+        const segTime = parseTimeOffsetFromProtobuf(segment?.segment?.startTimeOffset || {});
+        if (segTime < earliestTime) {
+          earliestTime = segTime;
+          earliestSegment = segment;
+        }
+      }
+
+      const time = earliestSegment.segment;
+      startTime = time?.startTimeOffset 
         ? parseTimeOffsetFromProtobuf(time.startTimeOffset)
         : undefined;
-      const endTime = time?.endTimeOffset
+      endTime = time?.endTimeOffset
         ? parseTimeOffsetFromProtobuf(time.endTimeOffset)
         : undefined;
-      const confidence = segment.confidence || 0.9;
-
-      texts.push({
-        text: text,
-        confidence: confidence,
-        startTime: startTime,
-        endTime: endTime,
-      });
+      confidence = earliestSegment.confidence || 0.9;
     }
 
-    // If no segments, still add the text
-    if (segments.length === 0) {
-      texts.push({
-        text: text,
-        confidence: 0.9,
-      });
-    }
+    texts.push({
+      text: text,
+      confidence: confidence,
+      startTime: startTime,
+      endTime: endTime,
+    });
   }
 
-  // Build full text (unique texts)
-  const uniqueTexts = [...new Set(texts.map((t) => t.text))];
-  const fullText = uniqueTexts.join("\n");
+  // Sort by start time (chronological order) if available
+  texts.sort((a, b) => {
+    if (a.startTime !== undefined && b.startTime !== undefined) {
+      return a.startTime - b.startTime;
+    }
+    if (a.startTime !== undefined) return -1;
+    if (b.startTime !== undefined) return 1;
+    return 0;
+  });
+
+  // Build full text - join with spaces for natural reading
+  // Each text annotation is a distinct piece of text from the video
+  const fullText = texts.map(t => t.text).join(" ").trim();
 
   console.log("[VideoIntelligence] Extracted", texts.length, "text segments");
   console.log("[VideoIntelligence] Full text:", fullText.slice(0, 200));
