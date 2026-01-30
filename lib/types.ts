@@ -61,6 +61,12 @@ export interface ContentItemWithScores {
     username: string;
     displayName?: string;
   };
+  metrics?: {
+    views?: number | null;
+    likes?: number | null;
+    comments?: number | null;
+    shares?: number | null;
+  };
   accsScore?: ACCSScore;
   ocrFrames?: Array<{
     id: string;

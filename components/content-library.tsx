@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ACCSScoreCard } from "@/components/accs-score-card";
 import { formatDate, formatNumber } from "@/lib/utils";
 import type { ContentItemWithScores, ACCSScore } from "@/lib/types";
-import { Instagram, Youtube, Facebook, X, Music2 } from "lucide-react";
+import { Instagram, Youtube, Facebook, X, Music2, Heart, MessageCircle, Eye, ExternalLink } from "lucide-react";
 
 function getPlatformLabel(platform: ContentItemWithScores["platform"]) {
   switch (platform) {
@@ -64,22 +64,33 @@ export function ContentLibrary() {
       const data = await response.json();
       
       // Transform API response to match ContentItemWithScores type
-      const transformed = (data.contentItems || []).map((item: any) => ({
-        id: item.id,
-        platform: item.platform,
-        contentType: item.contentType,
-        mediaUrl: item.mediaUrl,
-        thumbnailUrl: item.thumbnailUrl,
-        caption: item.caption,
-        publishedAt: new Date(item.publishedAt),
-        creator: {
-          id: item.creator.id,
-          username: item.creator.username,
-          displayName: item.creator.displayName,
-        },
-        // Include OCR and transcript data
-        ocrFrames: item.ocrFrames || [],
-        transcripts: item.transcripts || [],
+      const transformed = (data.contentItems || []).map((item: any) => {
+        // Get the latest metrics snapshot
+        const latestMetrics = item.metricsSnapshots?.[0] || {};
+        
+        return {
+          id: item.id,
+          platform: item.platform,
+          contentType: item.contentType,
+          mediaUrl: item.mediaUrl,
+          thumbnailUrl: item.thumbnailUrl,
+          caption: item.caption,
+          publishedAt: new Date(item.publishedAt),
+          creator: {
+            id: item.creator.id,
+            username: item.creator.username,
+            displayName: item.creator.displayName,
+          },
+          // Metrics (likes, comments, views)
+          metrics: {
+            views: latestMetrics.views || null,
+            likes: latestMetrics.likes || null,
+            comments: latestMetrics.comments || null,
+            shares: latestMetrics.shares || null,
+          },
+          // Include OCR and transcript data (deduplicated)
+          ocrFrames: item.ocrFrames || [],
+          transcripts: item.transcripts || [],
         accsScore: item.conversionScores?.[0] ? {
           score: item.conversionScores[0].score,
           authenticity: {
@@ -112,7 +123,8 @@ export function ContentLibrary() {
           confidenceInterval: item.conversionScores[0].confidenceInterval || { lower: 0, upper: 100 },
           reasonAttribution: item.conversionScores[0].reasonAttribution || { strengths: [], weaknesses: [], keyFactors: [] },
         } : undefined,
-      }));
+        };
+      });
       
       setContentItems(transformed);
     } catch (error) {
@@ -193,18 +205,58 @@ export function ContentLibrary() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  {item.thumbnailUrl ? (
-                    <img
-                      src={item.thumbnailUrl}
-                      alt={`${getPlatformLabel(item.platform)} thumbnail`}
-                      className="w-full h-48 object-cover rounded mb-2"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-48 bg-muted rounded mb-2 flex items-center justify-center text-muted-foreground">
-                      No thumbnail
+                  {/* Clickable thumbnail - opens original video */}
+                  <a 
+                    href={item.mediaUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="block relative group"
+                  >
+                    {item.thumbnailUrl ? (
+                      <div className="relative">
+                        <img
+                          src={item.thumbnailUrl}
+                          alt={`${getPlatformLabel(item.platform)} thumbnail`}
+                          className="w-full h-48 object-cover rounded mb-2 group-hover:opacity-80 transition-opacity"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <ExternalLink className="h-8 w-8 text-white drop-shadow-lg" />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="w-full h-48 bg-muted rounded mb-2 flex items-center justify-center text-muted-foreground group-hover:bg-muted/80 transition-colors">
+                        <span>No thumbnail</span>
+                        <ExternalLink className="h-4 w-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                    )}
+                  </a>
+                  
+                  {/* Metrics row - likes, comments, views */}
+                  {(item.metrics?.likes || item.metrics?.comments || item.metrics?.views) && (
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                      {item.metrics.views && (
+                        <span className="flex items-center gap-1">
+                          <Eye className="h-3.5 w-3.5" />
+                          {formatNumber(item.metrics.views)}
+                        </span>
+                      )}
+                      {item.metrics.likes && (
+                        <span className="flex items-center gap-1">
+                          <Heart className="h-3.5 w-3.5" />
+                          {formatNumber(item.metrics.likes)}
+                        </span>
+                      )}
+                      {item.metrics.comments && (
+                        <span className="flex items-center gap-1">
+                          <MessageCircle className="h-3.5 w-3.5" />
+                          {formatNumber(item.metrics.comments)}
+                        </span>
+                      )}
                     </div>
                   )}
+                  
                   {item.caption && (
                     <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
                       {item.caption}
@@ -259,23 +311,34 @@ export function ContentLibrary() {
                     </div>
                   )}
                   
-                  {/* Transcript */}
+                  {/* Transcript - deduplicated */}
                   {selectedContent.transcripts && selectedContent.transcripts.length > 0 && (
                     <div>
                       <h4 className="text-sm font-medium mb-2 text-foreground">
                         Transcript (from video/audio)
                       </h4>
                       <div className="bg-muted p-3 rounded text-sm text-foreground max-h-48 overflow-y-auto">
-                        {selectedContent.transcripts.map((transcript: any, idx: number) => (
-                          <div key={idx}>
-                            <p className="whitespace-pre-wrap">{transcript.text}</p>
-                            {transcript.language && (
-                              <p className="text-xs text-muted-foreground mt-1">
-                                Language: {transcript.language}
-                              </p>
-                            )}
-                          </div>
-                        ))}
+                        {(() => {
+                          // Deduplicate transcripts by text content
+                          const seen = new Set<string>();
+                          const uniqueTranscripts = selectedContent.transcripts.filter((t: any) => {
+                            const normalized = t.text?.trim().toLowerCase();
+                            if (!normalized || seen.has(normalized)) return false;
+                            seen.add(normalized);
+                            return true;
+                          });
+                          
+                          return uniqueTranscripts.map((transcript: any, idx: number) => (
+                            <div key={idx}>
+                              <p className="whitespace-pre-wrap">{transcript.text}</p>
+                              {transcript.language && (
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  Language: {transcript.language}
+                                </p>
+                              )}
+                            </div>
+                          ));
+                        })()}
                       </div>
                     </div>
                   )}
