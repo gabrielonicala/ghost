@@ -65,8 +65,11 @@ export function ContentLibrary() {
       
       // Transform API response to match ContentItemWithScores type
       const transformed = (data.contentItems || []).map((item: any) => {
-        // Get the latest metrics snapshot
-        const latestMetrics = item.metricsSnapshots?.[0] || {};
+        // Get the latest metrics snapshot (sort by snapshotAt descending)
+        const sortedMetrics = [...(item.metricsSnapshots || [])].sort(
+          (a: any, b: any) => new Date(b.snapshotAt).getTime() - new Date(a.snapshotAt).getTime()
+        );
+        const latestMetrics = sortedMetrics[0] || {};
         
         return {
           id: item.id,
@@ -88,9 +91,11 @@ export function ContentLibrary() {
             comments: latestMetrics.comments || null,
             shares: latestMetrics.shares || null,
           },
-          // Include OCR and transcript data (deduplicated)
+          // Include OCR and transcript data (sorted by newest, deduplicated in display)
           ocrFrames: item.ocrFrames || [],
-          transcripts: item.transcripts || [],
+          transcripts: [...(item.transcripts || [])].sort(
+            (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          ).slice(0, 1), // Only keep the latest transcript
         accsScore: item.conversionScores?.[0] ? {
           score: item.conversionScores[0].score,
           authenticity: {
