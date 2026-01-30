@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
       
       let query = supabase
         .from("ContentItem")
-        .select("*, creator:Creator(*), conversionScores:ConversionConfidenceScore(*), metricsSnapshots:ContentMetricsSnapshot(*, order:snapshotAt.desc), ocrFrames:ContentOcrFrame(*), transcripts:ContentTranscript(*, order:createdAt.desc)")
+        .select("*, creator:Creator(*), conversionScores:ConversionConfidenceScore(*), metricsSnapshots:ContentMetricsSnapshot(*), ocrFrames:ContentOcrFrame(*), transcripts:ContentTranscript(*)")
         .range((page - 1) * limit, page * limit - 1)
         .limit(limit);
       
