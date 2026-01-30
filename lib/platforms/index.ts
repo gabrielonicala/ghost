@@ -35,10 +35,13 @@ export {
   fetchYouTubeDirectVideoUrl,
   fetchYouTubeComments,
   processYouTubeWithApify,
+  // Multi-platform transcript (TikTok, Instagram, Facebook, X)
+  fetchVideoTranscript,
   type ApifyVideoResult,
   type YouTubeTranscriptResult,
   type YouTubeDownloadResult,
   type YouTubeComment,
   type YouTubeCommentsResult,
+  type VideoTranscriptResult,
 } from "./apify";
 

@@ -12,6 +12,7 @@ import {
   downloadVideoFile,
   fetchYouTubeTranscript,
   fetchYouTubeDirectVideoUrl,
+  fetchVideoTranscript,
 } from "@/lib/platforms";
 
 const openai = new OpenAI({
@@ -723,15 +724,15 @@ export async function transcribeAudio(
         }
       }
       
-      // Platforms that require Apify for video download
-      if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform)) {
+      // Platforms that require Apify for video download (TikTok, Instagram, Facebook, X/Twitter)
+      if (platformInfo && ["tiktok", "instagram", "facebook", "twitter"].includes(platformInfo.platform)) {
+        const platformName = platformInfo.platform.charAt(0).toUpperCase() + platformInfo.platform.slice(1);
         console.log(`[Transcribe] Detected ${platformInfo.platform} URL, checking Apify config...`);
         
         // Check if Apify is configured
         if (!isApifyConfigured()) {
-          // Apify not configured - show helpful error
           throw new Error(
-            `${platformInfo.platform.charAt(0).toUpperCase() + platformInfo.platform.slice(1)} videos require Apify for download.\n\n` +
+            `${platformName} videos require Apify for transcription.\n\n` +
             "To enable:\n" +
             "1. Sign up at apify.com\n" +
             "2. Get your API token from Settings → Integrations\n" +
@@ -741,7 +742,35 @@ export async function transcribeAudio(
           );
         }
         
-        console.log(`[Transcribe] Using Apify to download ${platformInfo.platform} video...`);
+        // Method 1: Try the fast multi-platform transcript actor (JfsnkyrbdA9JkpkRJ)
+        console.log(`[Transcribe ${platformName}] Trying fast transcript scraper (actor: JfsnkyrbdA9JkpkRJ)...`);
+        try {
+          const transcriptResult = await fetchVideoTranscript(audioBufferOrUrl);
+          
+          console.log(`[Transcribe ${platformName}] Transcript result:`, {
+            hasResult: !!transcriptResult,
+            transcriptLength: transcriptResult?.fullTranscriptText?.length || 0,
+            title: transcriptResult?.title?.slice(0, 50),
+          });
+          
+          if (transcriptResult?.fullTranscriptText && transcriptResult.fullTranscriptText.trim().length > 0) {
+            console.log(`[Transcribe ${platformName}] SUCCESS - Got transcript:`, 
+              transcriptResult.fullTranscriptText.slice(0, 200) + "...");
+            return {
+              text: transcriptResult.fullTranscriptText,
+              language: "en", // Actor doesn't provide language info
+              confidence: 0.90,
+            };
+          } else {
+            console.log(`[Transcribe ${platformName}] Transcript scraper returned empty, trying video download + Whisper...`);
+          }
+        } catch (transcriptError: any) {
+          console.error(`[Transcribe ${platformName}] Fast transcript scraper failed:`, transcriptError.message);
+          console.log(`[Transcribe ${platformName}] Falling back to video download + Whisper...`);
+        }
+        
+        // Method 2: Fallback to download video + Whisper (slower but more reliable)
+        console.log(`[Transcribe ${platformName}] Using Apify to download video for Whisper...`);
         
         try {
           const apifyResult = await downloadVideoWithApify(
@@ -755,19 +784,23 @@ export async function transcribeAudio(
             );
           }
           
-          console.log(`[Transcribe] Got video URL from Apify, downloading...`);
+          console.log(`[Transcribe ${platformName}] Got video URL from Apify, downloading...`);
           
           // Download the actual video file
           const videoBuffer = await downloadVideoFile(apifyResult.videoUrl);
           
-          console.log(`[Transcribe] Video downloaded (${videoBuffer.length} bytes), transcribing...`);
+          console.log(`[Transcribe ${platformName}] Video downloaded (${videoBuffer.length} bytes), transcribing with Whisper...`);
           
           // Now transcribe the downloaded video
           return transcribeAudio(videoBuffer, language);
         } catch (apifyError: any) {
-          console.error("[Transcribe] Apify download failed:", apifyError.message);
+          console.error(`[Transcribe ${platformName}] Video download failed:`, apifyError.message);
           throw new Error(
-            `Failed to download ${platformInfo.platform} video via Apify: ${apifyError.message}\n\n` +
+            `Failed to transcribe ${platformInfo.platform} video.\n\n` +
+            "Both methods failed:\n" +
+            "1. Fast transcript scraper (JfsnkyrbdA9JkpkRJ) - failed\n" +
+            "2. Video download + Whisper - failed\n\n" +
+            `Error: ${apifyError.message}\n\n` +
             "The video might be private, deleted, or the URL format is not supported."
           );
         }
