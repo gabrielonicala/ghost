@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
       
       let query = supabase
         .from("ContentItem")
-        .select("*, creator:Creator(*), conversionScores:ConversionConfidenceScore(*), metricsSnapshots:ContentMetricsSnapshot(*), ocrFrames:ContentOcrFrame(*), transcripts:ContentTranscript(*)")
+        .select("*, creator:Creator(*), conversionScores:ConversionConfidenceScore(*), metricsSnapshots:ContentMetricsSnapshot(*, order:snapshotAt.desc), ocrFrames:ContentOcrFrame(*), transcripts:ContentTranscript(*, order:createdAt.desc)")
         .range((page - 1) * limit, page * limit - 1)
         .limit(limit);
       
@@ -62,9 +62,15 @@ export async function GET(request: NextRequest) {
         include: {
           creator: true,
           conversionScores: true,
-          metricsSnapshots: true,
+          metricsSnapshots: {
+            orderBy: { snapshotAt: "desc" }, // Get latest metrics first
+            take: 1, // Only need the latest
+          },
           ocrFrames: true, // Include OCR frames
-          transcripts: true, // Include transcripts
+          transcripts: {
+            orderBy: { createdAt: "desc" }, // Get latest transcript first
+            take: 1, // Only need the latest (avoid duplicates)
+          },
           authenticitySignals: true,
           trustMetrics: true,
         },
