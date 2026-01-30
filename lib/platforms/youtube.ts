@@ -105,10 +105,20 @@ export class YouTubeAdapter implements PlatformAdapter {
   }
 
   /**
-   * Fetch video metadata by video ID
+   * Fetch video metadata by video ID (or URL)
    */
-  async fetchContent(videoId: string): Promise<PlatformContent | null> {
+  async fetchContent(videoIdOrUrl: string): Promise<PlatformContent | null> {
     try {
+      // Accept either a raw videoId or a full YouTube/Shorts URL
+      let videoId = videoIdOrUrl.trim();
+      if (/^https?:\/\//i.test(videoId)) {
+        const extracted = extractYouTubeVideoId(videoId);
+        if (!extracted) {
+          throw new Error("Could not extract YouTube video ID from URL");
+        }
+        videoId = extracted;
+      }
+
       // Fetch video details
       const videoUrl = new URL(`${YOUTUBE_API_BASE}/videos`);
       videoUrl.searchParams.set("part", "snippet,contentDetails,statistics");

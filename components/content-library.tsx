@@ -6,6 +6,42 @@ import { Badge } from "@/components/ui/badge";
 import { ACCSScoreCard } from "@/components/accs-score-card";
 import { formatDate, formatNumber } from "@/lib/utils";
 import type { ContentItemWithScores, ACCSScore } from "@/lib/types";
+import { Instagram, Youtube, Facebook, X, Music2 } from "lucide-react";
+
+function getPlatformLabel(platform: ContentItemWithScores["platform"]) {
+  switch (platform) {
+    case "tiktok":
+      return "TikTok";
+    case "instagram":
+      return "Instagram";
+    case "youtube":
+      return "YouTube";
+    case "facebook":
+      return "Facebook";
+    case "twitter":
+      return "X";
+    default:
+      return platform;
+  }
+}
+
+function PlatformIcon({ platform }: { platform: ContentItemWithScores["platform"] }) {
+  const cls = "h-3.5 w-3.5";
+  switch (platform) {
+    case "instagram":
+      return <Instagram className={cls} />;
+    case "youtube":
+      return <Youtube className={cls} />;
+    case "facebook":
+      return <Facebook className={cls} />;
+    case "twitter":
+      return <X className={cls} />;
+    case "tiktok":
+      return <Music2 className={cls} />;
+    default:
+      return null;
+  }
+}
 
 export function ContentLibrary() {
   const [contentItems, setContentItems] = useState<ContentItemWithScores[]>([]);
@@ -129,7 +165,10 @@ export function ContentLibrary() {
               >
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <Badge variant="secondary">{item.platform}</Badge>
+                    <Badge variant="secondary" className="gap-1">
+                      <PlatformIcon platform={item.platform} />
+                      {getPlatformLabel(item.platform)}
+                    </Badge>
                     {item.accsScore && (
                       <div
                         className={`text-2xl font-bold ${
@@ -144,16 +183,22 @@ export function ContentLibrary() {
                       </div>
                     )}
                   </div>
-                  <CardTitle className="text-lg">
-                    @{item.creator.username}
-                  </CardTitle>
+                  <div className="space-y-1">
+                    <CardTitle className="text-lg leading-tight">
+                      {item.creator.displayName || `@${item.creator.username}`}
+                    </CardTitle>
+                    <div className="text-sm text-muted-foreground">
+                      @{item.creator.username}
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   {item.thumbnailUrl ? (
                     <img
                       src={item.thumbnailUrl}
-                      alt="Content thumbnail"
+                      alt={`${getPlatformLabel(item.platform)} thumbnail`}
                       className="w-full h-48 object-cover rounded mb-2"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="w-full h-48 bg-muted rounded mb-2 flex items-center justify-center text-muted-foreground">

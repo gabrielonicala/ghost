@@ -30,6 +30,15 @@ export {
   downloadInstagramVideo,
   downloadFacebookVideo,
   downloadYouTubeVideo as downloadYouTubeVideoWithApify,
+  // YouTube Apify scrapers
+  fetchYouTubeTranscript,
+  fetchYouTubeDirectVideoUrl,
+  fetchYouTubeComments,
+  processYouTubeWithApify,
   type ApifyVideoResult,
+  type YouTubeTranscriptResult,
+  type YouTubeDownloadResult,
+  type YouTubeComment,
+  type YouTubeCommentsResult,
 } from "./apify";
 

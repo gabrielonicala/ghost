@@ -126,13 +126,35 @@ export const processContentItem = inngest.createFunction(
         
         // Use the SAME video download logic as transcription
         const { detectPlatform } = await import("@/lib/platforms");
-        const { downloadVideoWithApify, isApifyConfigured, downloadVideoFile } = await import("@/lib/platforms/apify");
+        const { 
+          downloadVideoWithApify, 
+          isApifyConfigured, 
+          downloadVideoFile,
+          fetchYouTubeDirectVideoUrl,
+        } = await import("@/lib/platforms/apify");
         
         const platformInfo = detectPlatform(contentItem.mediaUrl);
         let videoBuffer: Buffer | undefined;
         
-        // Download video using same logic as transcription
-        if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform) && isApifyConfigured()) {
+        // YouTube: Use Apify video downloader for direct URL
+        if (platformInfo?.platform === "youtube" && isApifyConfigured()) {
+          console.log("[OCR] Using Apify YouTube downloader for direct video URL...");
+          try {
+            const downloadResult = await fetchYouTubeDirectVideoUrl(contentItem.mediaUrl);
+            
+            if (downloadResult?.directVideoUrl) {
+              console.log("[OCR] Got YouTube direct URL:", downloadResult.directVideoUrl.slice(0, 100) + "...");
+              videoBuffer = await downloadVideoFile(downloadResult.directVideoUrl);
+              console.log("[OCR] Downloaded YouTube video:", videoBuffer.length, "bytes");
+            } else {
+              console.warn("[OCR] YouTube downloader returned no direct URL");
+            }
+          } catch (ytError: any) {
+            console.error("[OCR] YouTube video download failed:", ytError.message);
+          }
+        }
+        // TikTok/Instagram/Facebook: Use existing Apify downloaders
+        else if (platformInfo && ["tiktok", "instagram", "facebook"].includes(platformInfo.platform) && isApifyConfigured()) {
           console.log("[OCR] Using Apify to download video (same as transcription)");
           const apifyResult = await downloadVideoWithApify(
             contentItem.mediaUrl,
