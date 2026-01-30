@@ -485,6 +485,12 @@ export async function downloadVideoFile(videoUrl: string): Promise<Buffer> {
  * Fetch YouTube transcript + metadata using Apify
  * Actor: Uwpce1RSXlrzF6WBA
  * 
+ * Input format:
+ * {
+ *   "include_transcript_text": false,
+ *   "youtube_url": "https://www.youtube.com/watch?v=VIDEO_ID"
+ * }
+ * 
  * Returns: transcript (with timestamps), channel info, views, likes, subscribers
  */
 export async function fetchYouTubeTranscript(
@@ -492,9 +498,10 @@ export async function fetchYouTubeTranscript(
 ): Promise<YouTubeTranscriptResult | null> {
   console.log("[Apify YouTube Transcript] Starting scrape for:", videoUrl);
   
+  // Correct input format for this actor
   const results = await runActor(YOUTUBE_ACTORS.transcript, {
-    startUrls: [{ url: videoUrl }],
-    maxResults: 1,
+    youtube_url: videoUrl,
+    include_transcript_text: true, // We want the transcript!
   });
 
   console.log("[Apify YouTube Transcript] Raw results:", JSON.stringify(results, null, 2).slice(0, 2000));
@@ -519,7 +526,8 @@ export async function fetchYouTubeTranscript(
     .join(" ")
     .trim();
 
-  console.log("[Apify YouTube Transcript] Extracted transcript:", fullTranscriptText.slice(0, 500));
+  console.log("[Apify YouTube Transcript] Extracted transcript length:", fullTranscriptText.length);
+  console.log("[Apify YouTube Transcript] Transcript preview:", fullTranscriptText.slice(0, 500));
 
   return {
     videoId: video.video_id || video.videoId,
@@ -551,6 +559,14 @@ export async function fetchYouTubeTranscript(
  * Get direct YouTube video download URL using Apify
  * Actor: cmC0PdCbAkXY5NRAw
  * 
+ * Input format:
+ * {
+ *   "urls": [{ "url": "https://www.youtube.com/watch?v=VIDEO_ID" }]
+ * }
+ * 
+ * NOTE: The returned video URLs are IP-restricted (signed for Apify's IP).
+ * Downloading from a different IP (like Vercel) will result in 403 Forbidden.
+ * 
  * Returns: Direct video URL that can be used for OCR/Video Intelligence API
  */
 export async function fetchYouTubeDirectVideoUrl(
@@ -558,9 +574,9 @@ export async function fetchYouTubeDirectVideoUrl(
 ): Promise<YouTubeDownloadResult | null> {
   console.log("[Apify YouTube Downloader] Starting scrape for:", videoUrl);
   
+  // Correct input format for this actor
   const results = await runActor(YOUTUBE_ACTORS.downloader, {
-    startUrls: [{ url: videoUrl }],
-    maxResults: 1,
+    urls: [{ url: videoUrl }],
   });
 
   console.log("[Apify YouTube Downloader] Raw results:", JSON.stringify(results, null, 2).slice(0, 3000));
@@ -659,6 +675,14 @@ export async function fetchYouTubeDirectVideoUrl(
  * Fetch YouTube comments using Apify
  * Actor: mExYO4A2k9976zMfA
  * 
+ * Input format:
+ * {
+ *   "customMapFunction": "(object) => { return {...object} }",
+ *   "maxItems": 1000,
+ *   "sort": "top",
+ *   "startUrls": ["https://www.youtube.com/watch?v=VIDEO_ID"]
+ * }
+ * 
  * Returns: Array of comments with author info, text, likes, replies
  */
 export async function fetchYouTubeComments(
@@ -667,9 +691,12 @@ export async function fetchYouTubeComments(
 ): Promise<YouTubeCommentsResult | null> {
   console.log("[Apify YouTube Comments] Starting scrape for:", videoUrl);
   
+  // Correct input format for this actor - startUrls is array of strings
   const results = await runActor(YOUTUBE_ACTORS.comments, {
-    startUrls: [{ url: videoUrl }],
-    maxComments: maxComments,
+    startUrls: [videoUrl], // Array of URL strings, not objects
+    maxItems: maxComments,
+    sort: "top",
+    customMapFunction: "(object) => { return {...object} }",
   }, 180000); // 3 minute timeout for comments
 
   console.log("[Apify YouTube Comments] Raw results count:", results?.length || 0);
