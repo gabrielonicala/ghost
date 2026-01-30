@@ -25,15 +25,20 @@ export interface ApifyVideoResult {
   thumbnailUrl?: string;
   caption?: string;
   author?: {
+    id?: string;
     username: string;
     displayName?: string;
     profileUrl?: string;
+    profileImageUrl?: string;
+    followerCount?: number;
+    verified?: boolean;
   };
   metrics?: {
     views?: number;
     likes?: number;
     comments?: number;
     shares?: number;
+    saves?: number;
   };
   duration?: number;
   publishedAt?: Date;
@@ -267,15 +272,20 @@ export async function downloadTikTokVideo(
     thumbnailUrl: video.videoMeta?.coverUrl || video.videoMeta?.originalCoverUrl,
     caption: video.text,
     author: {
+      id: video.authorMeta?.id,
       username: video.authorMeta?.name,
       displayName: video.authorMeta?.nickName,
       profileUrl: video.authorMeta?.profileUrl,
+      profileImageUrl: video.authorMeta?.avatar,
+      followerCount: video.authorMeta?.fans,
+      verified: video.authorMeta?.verified || false,
     },
     metrics: {
       views: video.playCount,
       likes: video.diggCount,
       comments: video.commentCount,
       shares: video.shareCount,
+      saves: video.collectCount,
     },
     duration: video.videoMeta?.duration,
     publishedAt: video.createTime ? new Date(video.createTime * 1000) : undefined,

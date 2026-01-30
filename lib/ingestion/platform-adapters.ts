@@ -116,20 +116,20 @@ export class TikTokAdapter implements PlatformAdapter {
       caption: result.caption,
       publishedAt: result.publishedAt || new Date(),
       creator: {
-        // Apify result doesn't currently provide a stable numeric creator id,
-        // so we use username as platformId for now.
-        platformId: result.author?.username || "unknown",
+        // Use author ID if available, otherwise fall back to username
+        platformId: result.author?.id || result.author?.username || "unknown",
         username: result.author?.username || "unknown",
         displayName: result.author?.displayName,
-        profileImageUrl: undefined,
-        followerCount: undefined,
-        verified: false,
+        profileImageUrl: result.author?.profileImageUrl,
+        followerCount: result.author?.followerCount,
+        verified: result.author?.verified || false,
       },
       metrics: {
         views: result.metrics?.views,
         likes: result.metrics?.likes,
         comments: result.metrics?.comments,
         shares: result.metrics?.shares,
+        saves: result.metrics?.saves,
       },
     };
   }
