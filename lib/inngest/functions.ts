@@ -126,12 +126,7 @@ export const processContentItem = inngest.createFunction(
         
         // Use the SAME video download logic as transcription
         const { detectPlatform } = await import("@/lib/platforms");
-        const { 
-          downloadVideoWithApify, 
-          isApifyConfigured, 
-          downloadVideoFile,
-          fetchYouTubeDirectVideoUrl,
-        } = await import("@/lib/platforms/apify");
+        const { downloadVideoWithApify, isApifyConfigured, downloadVideoFile, fetchYouTubeDirectVideoUrl } = await import("@/lib/platforms/apify");
         
         const platformInfo = detectPlatform(contentItem.mediaUrl);
         let videoBuffer: Buffer | undefined;
@@ -141,7 +136,6 @@ export const processContentItem = inngest.createFunction(
           console.log("[OCR] Using Apify YouTube downloader for direct video URL...");
           try {
             const downloadResult = await fetchYouTubeDirectVideoUrl(contentItem.mediaUrl);
-            
             if (downloadResult?.directVideoUrl) {
               console.log("[OCR] Got YouTube direct URL:", downloadResult.directVideoUrl.slice(0, 100) + "...");
               videoBuffer = await downloadVideoFile(downloadResult.directVideoUrl);
