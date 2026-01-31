@@ -218,24 +218,33 @@ export function ContentLibrary() {
                     onClick={(e) => e.stopPropagation()}
                     className="block relative group"
                   >
-                    {item.thumbnailUrl ? (
-                      <div className="relative">
-                        <img
-                          src={item.thumbnailUrl}
-                          alt={`${getPlatformLabel(item.platform)} thumbnail`}
-                          className="w-full h-48 object-cover rounded mb-2 group-hover:opacity-80 transition-opacity"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          <ExternalLink className="h-8 w-8 text-white drop-shadow-lg" />
-                        </div>
+                    <div className="relative w-full h-48 bg-muted rounded mb-2 overflow-hidden flex items-center justify-center">
+                      {item.thumbnailUrl ? (
+                        <>
+                          <img
+                            src={item.thumbnailUrl}
+                            alt={`${getPlatformLabel(item.platform)} thumbnail`}
+                            className="max-w-full max-h-full object-contain group-hover:opacity-80 transition-opacity"
+                            loading="lazy"
+                            onError={(e) => {
+                              // Hide broken image and show fallback
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const fallback = target.nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                          <div className="hidden items-center justify-center text-muted-foreground text-sm">
+                            <span>Image unavailable</span>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-muted-foreground text-sm">No thumbnail</span>
+                      )}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                        <ExternalLink className="h-8 w-8 text-white drop-shadow-lg" />
                       </div>
-                    ) : (
-                      <div className="w-full h-48 bg-muted rounded mb-2 flex items-center justify-center text-muted-foreground group-hover:bg-muted/80 transition-colors">
-                        <span>No thumbnail</span>
-                        <ExternalLink className="h-4 w-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
-                    )}
+                    </div>
                   </a>
                   
                   {/* Metrics row - likes, comments, views */}
