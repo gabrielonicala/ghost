@@ -373,43 +373,79 @@ export async function downloadTikTokVideo(
 
 /**
  * Download Instagram video/reel using Apify
+ * Actor: Fj1zYgto86GELL443
+ * 
+ * Input format:
+ * {
+ *   "links": ["https://www.instagram.com/reels/..."],
+ *   "proxyConfiguration": { "useApifyProxy": false }
+ * }
+ * 
+ * Output format:
+ * [{ url, result: { title, thumbnail, owner, medias: [{ url, type }], ... } }]
  */
 export async function downloadInstagramVideo(
   url: string
 ): Promise<ApifyVideoResult | null> {
-  const results = await runActor("apify~instagram-scraper", {
-    directUrls: [url],
-    resultsType: "posts",
-    resultsLimit: 1,
-  });
+  console.log("[Apify Instagram] Starting download for:", url);
+  
+  const results = await runActor("Fj1zYgto86GELL443", {
+    links: [url],
+    proxyConfiguration: {
+      useApifyProxy: false,
+    },
+  }, 120000); // 2 minute timeout
+
+  console.log("[Apify Instagram] Raw results:", JSON.stringify(results, null, 2).slice(0, 3000));
 
   if (!results || results.length === 0) {
+    console.log("[Apify Instagram] No results returned");
     return null;
   }
 
-  const post = results[0];
+  const item = results[0];
+  const result = item.result;
+  
+  if (!result || result.error) {
+    console.error("[Apify Instagram] Error in result:", result?.error);
+    return null;
+  }
 
-  // Instagram can have multiple media items
-  const videoUrl = post.videoUrl || post.displayUrl;
+  // Find video media (type === "video")
+  const videoMedia = result.medias?.find((m: any) => m.type === "video");
+  const videoUrl = videoMedia?.url;
 
   if (!videoUrl) {
+    console.error("[Apify Instagram] No video URL found in medias");
     return null;
   }
 
+  console.log("[Apify Instagram] Found video URL:", videoUrl.slice(0, 100) + "...");
+
+  // Extract owner info
+  const owner = result.owner || {};
+  
   return {
     videoUrl,
-    thumbnailUrl: post.displayUrl,
-    caption: post.caption,
+    thumbnailUrl: result.thumbnail,
+    caption: result.title, // title contains the caption/description
     author: {
-      username: post.ownerUsername,
-      displayName: post.ownerFullName,
+      id: owner.id,
+      username: owner.username,
+      displayName: owner.full_name,
+      profileUrl: `https://www.instagram.com/${owner.username}/`,
+      profileImageUrl: owner.profile_pic_url,
+      followerCount: owner.edge_followed_by?.count,
+      verified: owner.is_verified || false,
     },
     metrics: {
-      views: post.videoViewCount,
-      likes: post.likesCount,
-      comments: post.commentsCount,
+      views: result.view_count,
+      likes: result.like_count,
+      comments: undefined, // Not in this API response
+      shares: undefined,
     },
-    publishedAt: post.timestamp ? new Date(post.timestamp) : undefined,
+    duration: result.duration,
+    publishedAt: undefined, // Not in this API response
   };
 }
 

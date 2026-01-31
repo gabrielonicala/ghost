@@ -1,6 +1,6 @@
 import type { Platform } from "@/lib/types";
 import { YouTubeAdapter } from "@/lib/platforms/youtube";
-import { downloadTikTokVideo, isApifyConfigured } from "@/lib/platforms/apify";
+import { downloadTikTokVideo, downloadInstagramVideo, isApifyConfigured } from "@/lib/platforms/apify";
 
 export interface PlatformContent {
   platform: Platform;
@@ -44,16 +44,57 @@ export interface PlatformAdapter {
  */
 export class InstagramAdapter implements PlatformAdapter {
   async fetchContent(contentId: string): Promise<PlatformContent | null> {
-    // TODO: Implement Instagram API integration
-    throw new Error("Instagram adapter not implemented");
+    // Accept either a full Instagram URL or a shortcode
+    const isUrl = /^https?:\/\//i.test(contentId);
+    if (!isUrl) {
+      throw new Error(
+        "Instagram ingestion expects a full Instagram URL (e.g., https://www.instagram.com/reels/...)."
+      );
+    }
+
+    if (!isApifyConfigured()) {
+      throw new Error("APIFY_API_TOKEN is not configured (required for Instagram).");
+    }
+
+    const result = await downloadInstagramVideo(contentId);
+    if (!result?.videoUrl) return null;
+
+    // Extract shortcode from URL for platformContentId
+    const shortcodeMatch = contentId.match(/(?:reels?|p)\/([A-Za-z0-9_-]+)/);
+    const platformContentId = shortcodeMatch?.[1] || contentId;
+
+    return {
+      platform: "instagram",
+      platformContentId,
+      contentType: "reel",
+      // Keep original URL as mediaUrl so we can re-fetch via Apify if needed
+      mediaUrl: contentId,
+      thumbnailUrl: result.thumbnailUrl,
+      caption: result.caption,
+      publishedAt: result.publishedAt || new Date(),
+      creator: {
+        platformId: result.author?.id || result.author?.username || "unknown",
+        username: result.author?.username || "unknown",
+        displayName: result.author?.displayName,
+        profileImageUrl: result.author?.profileImageUrl,
+        followerCount: result.author?.followerCount,
+        verified: result.author?.verified || false,
+      },
+      metrics: {
+        views: result.metrics?.views,
+        likes: result.metrics?.likes,
+        comments: result.metrics?.comments,
+        shares: result.metrics?.shares,
+      },
+    };
   }
 
   async fetchCreatorContent(
     creatorId: string,
     limit: number = 50
   ): Promise<PlatformContent[]> {
-    // TODO: Implement Instagram API integration
-    throw new Error("Instagram adapter not implemented");
+    // TODO: Implement Instagram creator content fetching
+    throw new Error("Instagram creator content fetching not implemented");
   }
 
   normalizeContent(raw: any): PlatformContent {
