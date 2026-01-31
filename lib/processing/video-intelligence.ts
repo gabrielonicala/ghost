@@ -211,14 +211,15 @@ export async function extractTextFromVideo(
 
   console.log("[VideoIntelligence] Final textAnnotations count:", textAnnotations.length);
 
-  // Extract text from annotations (per official docs structure)
-  // Each textAnnotation represents a unique piece of text that appears in the video
-  // We need to group text that appears at the same time together
+  // Extract text from annotations with bounding box information
+  // Each textAnnotation has segments with frames containing rotatedBoundingBox
   const texts: Array<{
     text: string;
     confidence: number;
     startTime?: number;
     endTime?: number;
+    avgY: number; // Average Y position (0=top, 1=bottom)
+    avgX: number; // Average X position (0=left, 1=right)
   }> = [];
 
   // Track seen texts to avoid exact duplicates (case-insensitive)
@@ -236,19 +237,19 @@ export async function extractTextFromVideo(
     const normalizedKey = text.toLowerCase().trim();
     
     // Skip if we've already seen this exact text
-    // (same text might appear multiple times in video at different times)
     if (seenTexts.has(normalizedKey)) {
       continue;
     }
     seenTexts.add(normalizedKey);
 
-    // Get segments to find timing information
+    // Get segments to find timing and position information
     const segments = textAnnotation.segments || [];
     let startTime: number | undefined;
     let endTime: number | undefined;
     let confidence = 0.9;
+    let avgY = 0.5; // Default to middle
+    let avgX = 0.5;
 
-    // Use the first (earliest) segment's timing
     if (segments.length > 0) {
       // Find the earliest segment
       let earliestSegment = segments[0];
@@ -270,6 +271,26 @@ export async function extractTextFromVideo(
         ? parseTimeOffsetFromProtobuf(time.endTimeOffset)
         : undefined;
       confidence = earliestSegment.confidence || 0.9;
+
+      // Extract bounding box position from frames
+      // frames[].rotatedBoundingBox.vertices[] contains x,y coordinates (0-1 normalized)
+      const frames = earliestSegment.frames || [];
+      if (frames.length > 0) {
+        const firstFrame = frames[0];
+        const boundingBox = firstFrame?.rotatedBoundingBox;
+        const vertices = boundingBox?.vertices || boundingBox?.normalizedVertices || [];
+        
+        if (vertices.length >= 4) {
+          // Calculate center point of the bounding box
+          let sumX = 0, sumY = 0;
+          for (const vertex of vertices) {
+            sumX += vertex.x || 0;
+            sumY += vertex.y || 0;
+          }
+          avgX = sumX / vertices.length;
+          avgY = sumY / vertices.length;
+        }
+      }
     }
 
     texts.push({
@@ -277,40 +298,30 @@ export async function extractTextFromVideo(
       confidence: confidence,
       startTime: startTime,
       endTime: endTime,
+      avgY: avgY,
+      avgX: avgX,
     });
   }
 
-  // Sort by start time (chronological order) if available
-  texts.sort((a, b) => {
-    if (a.startTime !== undefined && b.startTime !== undefined) {
-      return a.startTime - b.startTime;
-    }
-    if (a.startTime !== undefined) return -1;
-    if (b.startTime !== undefined) return 1;
-    return 0;
-  });
-
-  // Group text that appears at roughly the same time (within 0.5 seconds)
-  // This prevents mixing text that appears simultaneously on screen
-  const timeGroups: Array<{ time: number; texts: string[] }> = [];
+  // Group text by time window first (text appearing together)
   const TIME_WINDOW = 0.5; // 500ms window for grouping simultaneous text
+  const timeGroups: Array<{ 
+    time: number; 
+    items: Array<{ text: string; avgY: number; avgX: number }> 
+  }> = [];
 
   for (const textItem of texts) {
-    if (textItem.startTime === undefined) {
-      // Text without timing - add to last group or create new one
-      if (timeGroups.length > 0) {
-        timeGroups[timeGroups.length - 1].texts.push(textItem.text);
-      } else {
-        timeGroups.push({ time: 0, texts: [textItem.text] });
-      }
-      continue;
-    }
-
+    const itemTime = textItem.startTime ?? 0;
+    
     // Find a group within the time window, or create a new one
     let foundGroup = false;
     for (const group of timeGroups) {
-      if (Math.abs(group.time - textItem.startTime) <= TIME_WINDOW) {
-        group.texts.push(textItem.text);
+      if (Math.abs(group.time - itemTime) <= TIME_WINDOW) {
+        group.items.push({ 
+          text: textItem.text, 
+          avgY: textItem.avgY, 
+          avgX: textItem.avgX 
+        });
         foundGroup = true;
         break;
       }
@@ -318,16 +329,42 @@ export async function extractTextFromVideo(
 
     if (!foundGroup) {
       timeGroups.push({
-        time: textItem.startTime,
-        texts: [textItem.text],
+        time: itemTime,
+        items: [{ text: textItem.text, avgY: textItem.avgY, avgX: textItem.avgX }],
       });
     }
   }
 
-  // Join text within each time group (text that appears together)
+  // Sort time groups chronologically
+  timeGroups.sort((a, b) => a.time - b.time);
+
+  // Within each time group, sort items by position: top-to-bottom, then left-to-right
+  // Y tolerance: items within 10% vertical distance are considered same "row"
+  const Y_TOLERANCE = 0.1;
+  
+  for (const group of timeGroups) {
+    group.items.sort((a, b) => {
+      // If items are roughly on the same horizontal line, sort by X (left to right)
+      if (Math.abs(a.avgY - b.avgY) < Y_TOLERANCE) {
+        return a.avgX - b.avgX;
+      }
+      // Otherwise sort by Y (top to bottom)
+      return a.avgY - b.avgY;
+    });
+  }
+
+  // Join text within each time group (now in reading order)
   // Then join groups in chronological order
-  const groupedTexts = timeGroups.map(group => group.texts.join(" "));
+  const groupedTexts = timeGroups.map(group => 
+    group.items.map(item => item.text).join(" ")
+  );
   const fullText = groupedTexts.join(" ").trim();
+  
+  console.log("[VideoIntelligence] Text positions:", texts.map(t => ({ 
+    text: t.text.slice(0, 20), 
+    y: t.avgY.toFixed(2), 
+    x: t.avgX.toFixed(2) 
+  })));
 
   console.log("[VideoIntelligence] Extracted", texts.length, "text segments");
   console.log("[VideoIntelligence] Full text:", fullText.slice(0, 200));
