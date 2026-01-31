@@ -7,8 +7,9 @@
  * - Facebook (apify/facebook-posts-scraper)
  * - YouTube (multiple scrapers for complete processing):
  *   - Transcript + Metadata: Uwpce1RSXlrzF6WBA
- *   - Video Downloader: cmC0PdCbAkXY5NRAw
+ *   - Video Downloader: y1IMcEPawMQPafm02 (stores on Apify key-value store)
  *   - Comments: mExYO4A2k9976zMfA
+ * - Multi-platform Transcript: JfsnkyrbdA9JkpkRJ (TikTok, Instagram, Facebook, X)
  */
 
 const APIFY_API_BASE = "https://api.apify.com/v2";
@@ -16,7 +17,7 @@ const APIFY_API_BASE = "https://api.apify.com/v2";
 // YouTube Apify Actor IDs
 const YOUTUBE_ACTORS = {
   transcript: "Uwpce1RSXlrzF6WBA",  // Transcript + views/likes/subscribers
-  downloader: "cmC0PdCbAkXY5NRAw", // Direct video URL
+  downloader: "y1IMcEPawMQPafm02", // Video downloader (stores on Apify key-value store)
   comments: "mExYO4A2k9976zMfA",   // Comments extraction
 };
 
@@ -640,29 +641,40 @@ export async function fetchVideoTranscript(
 
 /**
  * Get direct YouTube video download URL using Apify
- * Actor: cmC0PdCbAkXY5NRAw
+ * Actor: y1IMcEPawMQPafm02
+ * 
+ * This actor downloads the video and stores it on Apify's key-value store,
+ * returning a direct URL that works from any IP (unlike the old actor).
  * 
  * Input format:
  * {
- *   "urls": [{ "url": "https://www.youtube.com/watch?v=VIDEO_ID" }]
+ *   "startUrls": ["https://www.youtube.com/watch?v=VIDEO_ID"],
+ *   "quality": "720",
+ *   "proxy": { "useApifyProxy": true }
  * }
  * 
- * NOTE: The returned video URLs are IP-restricted (signed for Apify's IP).
- * Downloading from a different IP (like Vercel) will result in 403 Forbidden.
+ * Output format:
+ * [{ "sourceUrl": "...", "downloadUrl": "https://api.apify.com/v2/key-value-stores/..." }]
  * 
- * Returns: Direct video URL that can be used for OCR/Video Intelligence API
+ * Returns: Direct video URL hosted on Apify (accessible from any IP)
  */
 export async function fetchYouTubeDirectVideoUrl(
   videoUrl: string
 ): Promise<YouTubeDownloadResult | null> {
-  console.log("[Apify YouTube Downloader] Starting scrape for:", videoUrl);
+  console.log("[Apify YouTube Downloader] Starting download for:", videoUrl);
   
-  // Correct input format for this actor
+  // New actor input format
   const results = await runActor(YOUTUBE_ACTORS.downloader, {
-    urls: [{ url: videoUrl }],
-  });
+    startUrls: [videoUrl],
+    quality: "720",
+    includeFailedVideos: false,
+    useFfmpeg: false,
+    proxy: {
+      useApifyProxy: true,
+    },
+  }, 180000); // 3 minute timeout for video download
 
-  console.log("[Apify YouTube Downloader] Raw results:", JSON.stringify(results, null, 2).slice(0, 3000));
+  console.log("[Apify YouTube Downloader] Raw results:", JSON.stringify(results, null, 2).slice(0, 2000));
 
   if (!results || results.length === 0) {
     console.log("[Apify YouTube Downloader] No results returned");
@@ -671,86 +683,29 @@ export async function fetchYouTubeDirectVideoUrl(
 
   const result = results[0];
   
-  // Check status
-  if (result.status !== "ok") {
-    console.error("[Apify YouTube Downloader] Scrape failed:", result.status);
+  // New output format: { sourceUrl, downloadUrl }
+  if (!result.downloadUrl) {
+    console.error("[Apify YouTube Downloader] No downloadUrl in result");
     return null;
   }
 
-  const videoInfo = result.videoInfo;
-  if (!videoInfo) {
-    console.error("[Apify YouTube Downloader] No videoInfo in result");
-    return null;
-  }
+  console.log("[Apify YouTube Downloader] Got download URL:", result.downloadUrl);
 
-  // Extract formats - prefer MP4, highest quality
-  const allFormats = [
-    ...(videoInfo.formats || []),
-    ...(videoInfo.adaptiveFormats || []),
-  ];
-
-  // Filter for video formats (not audio-only)
-  const videoFormats = allFormats.filter(
-    (f: any) => f.mimeType?.includes("video/") && f.url
-  );
-
-  // Sort by quality (prefer 720p MP4)
-  const sortedFormats = videoFormats.sort((a: any, b: any) => {
-    // Prefer MP4 over WebM
-    const aIsMp4 = a.mimeType?.includes("video/mp4") ? 1 : 0;
-    const bIsMp4 = b.mimeType?.includes("video/mp4") ? 1 : 0;
-    if (aIsMp4 !== bIsMp4) return bIsMp4 - aIsMp4;
-    
-    // Prefer 720p (not too high, not too low)
-    const aHeight = a.height || 0;
-    const bHeight = b.height || 0;
-    const aDiff = Math.abs(aHeight - 720);
-    const bDiff = Math.abs(bHeight - 720);
-    return aDiff - bDiff;
-  });
-
-  // Get the best format URL
-  const bestFormat = sortedFormats[0];
-  const directVideoUrl = bestFormat?.url || videoFormats[0]?.url;
-
-  if (!directVideoUrl) {
-    console.error("[Apify YouTube Downloader] No video URL found in formats");
-    console.log("[Apify YouTube Downloader] Available formats:", 
-      allFormats.map((f: any) => ({ itag: f.itag, mimeType: f.mimeType, quality: f.quality }))
-    );
-    return null;
-  }
-
-  console.log("[Apify YouTube Downloader] Found direct URL:", directVideoUrl.slice(0, 100) + "...");
-  console.log("[Apify YouTube Downloader] Best format:", {
-    itag: bestFormat?.itag,
-    quality: bestFormat?.qualityLabel || bestFormat?.quality,
-    mimeType: bestFormat?.mimeType,
-  });
-
-  // Get best thumbnail
-  const thumbnails = videoInfo.thumbnail || [];
-  const bestThumbnail = thumbnails.find((t: any) => t.width >= 480) || thumbnails[0];
+  // Extract video ID from source URL
+  const videoIdMatch = result.sourceUrl?.match(/(?:v=|\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  const videoId = videoIdMatch?.[1] || "";
 
   return {
-    videoId: videoInfo.id,
-    title: videoInfo.title,
-    channelTitle: videoInfo.channelTitle,
-    channelId: videoInfo.channelId,
-    description: videoInfo.description || "",
-    thumbnailUrl: bestThumbnail?.url || "",
-    viewCount: parseInt(videoInfo.viewCount || "0", 10),
-    durationSeconds: parseInt(videoInfo.lengthSeconds || "0", 10),
-    directVideoUrl,
-    formats: videoFormats.map((f: any) => ({
-      itag: f.itag,
-      url: f.url,
-      mimeType: f.mimeType,
-      quality: f.quality,
-      qualityLabel: f.qualityLabel,
-      width: f.width,
-      height: f.height,
-    })),
+    videoId,
+    title: "", // This actor doesn't return metadata
+    channelTitle: "",
+    channelId: "",
+    description: "",
+    thumbnailUrl: "",
+    viewCount: 0,
+    durationSeconds: 0,
+    directVideoUrl: result.downloadUrl,
+    formats: [],
   };
 }
 
