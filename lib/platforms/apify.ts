@@ -196,42 +196,61 @@ async function runActor(
 
   const runData: { data: ApifyRunResult } = await runResponse.json();
   const runId = runData.data.id;
+  console.log(`[Apify] Actor started, run ID: ${runId}`);
 
   // Poll for completion
   const startTime = Date.now();
+  let pollCount = 0;
   while (Date.now() - startTime < timeoutMs) {
+    pollCount++;
     const statusResponse = await fetch(
       `${APIFY_API_BASE}/actor-runs/${runId}?token=${apiToken}`
     );
 
     if (!statusResponse.ok) {
+      const errorText = await statusResponse.text();
+      console.error(`[Apify] Status check failed: ${statusResponse.status} - ${errorText}`);
       throw new Error("Failed to check actor run status");
     }
 
     const statusData: { data: ApifyRunResult } = await statusResponse.json();
+    const status = statusData.data.status;
+    
+    // Log status every 5 polls or on status change
+    if (pollCount % 5 === 1 || status !== "RUNNING") {
+      console.log(`[Apify] Poll #${pollCount}: status=${status}, elapsed=${Math.round((Date.now() - startTime) / 1000)}s`);
+    }
 
-    if (statusData.data.status === "SUCCEEDED") {
+    if (status === "SUCCEEDED") {
+      console.log(`[Apify] Actor completed successfully after ${Math.round((Date.now() - startTime) / 1000)}s`);
       // Fetch results from dataset
       const datasetId = statusData.data.defaultDatasetId;
+      console.log(`[Apify] Fetching results from dataset: ${datasetId}`);
       const dataResponse = await fetch(
         `${APIFY_API_BASE}/datasets/${datasetId}/items?token=${apiToken}`
       );
 
       if (!dataResponse.ok) {
+        const errorText = await dataResponse.text();
+        console.error(`[Apify] Failed to fetch results: ${dataResponse.status} - ${errorText}`);
         throw new Error("Failed to fetch actor results");
       }
 
-      return await dataResponse.json();
+      const results = await dataResponse.json();
+      console.log(`[Apify] Got ${results.length} results`);
+      return results;
     }
 
-    if (statusData.data.status === "FAILED" || statusData.data.status === "ABORTED") {
-      throw new Error(`Apify actor run ${statusData.data.status}`);
+    if (status === "FAILED" || status === "ABORTED") {
+      console.error(`[Apify] Actor run ${status}`);
+      throw new Error(`Apify actor run ${status}`);
     }
 
     // Wait before polling again
     await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
+  console.error(`[Apify] Timeout after ${pollCount} polls, ${Math.round((Date.now() - startTime) / 1000)}s`);
   throw new Error("Apify actor run timed out");
 }
 
