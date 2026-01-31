@@ -373,27 +373,25 @@ export async function downloadTikTokVideo(
 
 /**
  * Download Instagram video/reel using Apify
- * Actor: Fj1zYgto86GELL443
+ * Actor: 8yz4aO3qlqckRu3nu
  * 
  * Input format:
  * {
- *   "links": ["https://www.instagram.com/reels/..."],
- *   "proxyConfiguration": { "useApifyProxy": false }
+ *   "url": "https://www.instagram.com/reels/...",
+ *   "use_cache": false
  * }
  * 
- * Output format:
- * [{ url, result: { title, thumbnail, owner, medias: [{ url, type }], ... } }]
+ * Output includes: user_posted, description, num_comments, date_posted, likes,
+ * photos (thumbnail), videos (direct mp4 URL), video_play_count, followers, etc.
  */
 export async function downloadInstagramVideo(
   url: string
 ): Promise<ApifyVideoResult | null> {
   console.log("[Apify Instagram] Starting download for:", url);
   
-  const results = await runActor("Fj1zYgto86GELL443", {
-    links: [url],
-    proxyConfiguration: {
-      useApifyProxy: false,
-    },
+  const results = await runActor("8yz4aO3qlqckRu3nu", {
+    url: url,
+    use_cache: false,
   }, 120000); // 2 minute timeout
 
   console.log("[Apify Instagram] Raw results:", JSON.stringify(results, null, 2).slice(0, 3000));
@@ -403,49 +401,42 @@ export async function downloadInstagramVideo(
     return null;
   }
 
-  const item = results[0];
-  const result = item.result;
+  const post = results[0];
   
-  if (!result || result.error) {
-    console.error("[Apify Instagram] Error in result:", result?.error);
-    return null;
-  }
-
-  // Find video media (type === "video")
-  const videoMedia = result.medias?.find((m: any) => m.type === "video");
-  const videoUrl = videoMedia?.url;
-
+  // Get video URL from videos array
+  const videoUrl = post.videos?.[0];
+  
   if (!videoUrl) {
-    console.error("[Apify Instagram] No video URL found in medias");
+    console.error("[Apify Instagram] No video URL found");
     return null;
   }
 
   console.log("[Apify Instagram] Found video URL:", videoUrl.slice(0, 100) + "...");
 
-  // Extract owner info
-  const owner = result.owner || {};
+  // Get thumbnail from photos array
+  const thumbnailUrl = post.photos?.[0] || post.thumbnail;
   
   return {
     videoUrl,
-    thumbnailUrl: result.thumbnail,
-    caption: result.title, // title contains the caption/description
+    thumbnailUrl,
+    caption: post.description,
     author: {
-      id: owner.id,
-      username: owner.username,
-      displayName: owner.full_name,
-      profileUrl: `https://www.instagram.com/${owner.username}/`,
-      profileImageUrl: owner.profile_pic_url,
-      followerCount: owner.edge_followed_by?.count,
-      verified: owner.is_verified || false,
+      id: post.user_posted_id,
+      username: post.user_posted,
+      displayName: post.owner_full_name,
+      profileUrl: post.profile_url || `https://www.instagram.com/${post.user_posted}/`,
+      profileImageUrl: post.profile_image_link,
+      followerCount: post.followers,
+      verified: post.is_verified || false,
     },
     metrics: {
-      views: result.view_count,
-      likes: result.like_count,
-      comments: undefined, // Not in this API response
+      views: post.video_play_count,
+      likes: post.likes,
+      comments: post.num_comments,
       shares: undefined,
     },
-    duration: result.duration,
-    publishedAt: undefined, // Not in this API response
+    duration: post.video_duration,
+    publishedAt: post.date_posted ? new Date(post.date_posted) : undefined,
   };
 }
 
