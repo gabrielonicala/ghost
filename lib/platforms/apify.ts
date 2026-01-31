@@ -672,7 +672,7 @@ export async function fetchYouTubeDirectVideoUrl(
     proxy: {
       useApifyProxy: true,
     },
-  }, 180000); // 3 minute timeout for video download
+  }, 300000); // 5 minute timeout for video download (actor downloads and stores video)
 
   console.log("[Apify YouTube Downloader] Raw results:", JSON.stringify(results, null, 2).slice(0, 2000));
 
