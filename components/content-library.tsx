@@ -43,6 +43,14 @@ function PlatformIcon({ platform }: { platform: ContentItemWithScores["platform"
   }
 }
 
+// Proxy images through wsrv.nl to bypass hotlink protection and ensure proper loading
+function getProxiedImageUrl(url: string): string {
+  if (!url) return url;
+  // wsrv.nl is a free image proxy that handles hotlink protection
+  // fit=contain ensures aspect ratio is preserved
+  return `https://wsrv.nl/?url=${encodeURIComponent(url)}&fit=contain&n=-1`;
+}
+
 export function ContentLibrary() {
   const [contentItems, setContentItems] = useState<ContentItemWithScores[]>([]);
   const [loading, setLoading] = useState(true);
@@ -222,9 +230,9 @@ export function ContentLibrary() {
                       {item.thumbnailUrl ? (
                         <>
                           <img
-                            src={item.thumbnailUrl}
+                            src={getProxiedImageUrl(item.thumbnailUrl)}
                             alt={`${getPlatformLabel(item.platform)} thumbnail`}
-                            className="max-w-full max-h-full object-contain group-hover:opacity-80 transition-opacity"
+                            className="h-full w-auto max-w-full object-contain group-hover:opacity-80 transition-opacity"
                             loading="lazy"
                             onError={(e) => {
                               // Hide broken image and show fallback
