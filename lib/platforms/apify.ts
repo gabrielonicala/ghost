@@ -134,6 +134,7 @@ interface ApifyRunResult {
   id: string;
   status: string;
   defaultDatasetId: string;
+  defaultKeyValueStoreId?: string;
 }
 
 /**
@@ -223,22 +224,62 @@ async function runActor(
 
     if (status === "SUCCEEDED") {
       console.log(`[Apify] Actor completed successfully after ${Math.round((Date.now() - startTime) / 1000)}s`);
-      // Fetch results from dataset
+      
+      // Try fetching results from dataset first
       const datasetId = statusData.data.defaultDatasetId;
       console.log(`[Apify] Fetching results from dataset: ${datasetId}`);
       const dataResponse = await fetch(
         `${APIFY_API_BASE}/datasets/${datasetId}/items?token=${apiToken}`
       );
 
-      if (!dataResponse.ok) {
-        const errorText = await dataResponse.text();
-        console.error(`[Apify] Failed to fetch results: ${dataResponse.status} - ${errorText}`);
-        throw new Error("Failed to fetch actor results");
+      if (dataResponse.ok) {
+        const results = await dataResponse.json();
+        console.log(`[Apify] Got ${results.length} results from dataset`);
+        
+        if (results.length > 0) {
+          return results;
+        }
       }
-
-      const results = await dataResponse.json();
-      console.log(`[Apify] Got ${results.length} results`);
-      return results;
+      
+      // If dataset is empty, try key-value store (some actors store results there)
+      const kvStoreId = statusData.data.defaultKeyValueStoreId;
+      if (kvStoreId) {
+        console.log(`[Apify] Dataset empty, checking key-value store: ${kvStoreId}`);
+        
+        // List keys in the key-value store
+        const kvListResponse = await fetch(
+          `${APIFY_API_BASE}/key-value-stores/${kvStoreId}/keys?token=${apiToken}`
+        );
+        
+        if (kvListResponse.ok) {
+          const kvList = await kvListResponse.json();
+          console.log(`[Apify] Key-value store has ${kvList.data?.items?.length || 0} items`);
+          
+          // Look for OUTPUT or result keys
+          const outputKey = kvList.data?.items?.find((item: any) => 
+            item.key === "OUTPUT" || item.key.endsWith(".json") || item.key === "results"
+          );
+          
+          if (outputKey) {
+            console.log(`[Apify] Found output key: ${outputKey.key}`);
+            const kvDataResponse = await fetch(
+              `${APIFY_API_BASE}/key-value-stores/${kvStoreId}/records/${outputKey.key}?token=${apiToken}`
+            );
+            
+            if (kvDataResponse.ok) {
+              const kvData = await kvDataResponse.json();
+              console.log(`[Apify] Got data from key-value store`);
+              return Array.isArray(kvData) ? kvData : [kvData];
+            }
+          }
+          
+          // Log all keys for debugging
+          console.log(`[Apify] All KV store keys:`, kvList.data?.items?.map((i: any) => i.key));
+        }
+      }
+      
+      console.warn(`[Apify] Actor succeeded but no results found in dataset or key-value store`);
+      return [];
     }
 
     if (status === "FAILED" || status === "ABORTED") {
@@ -682,7 +723,7 @@ export async function fetchYouTubeDirectVideoUrl(
 ): Promise<YouTubeDownloadResult | null> {
   console.log("[Apify YouTube Downloader] Starting download for:", videoUrl);
   
-  // New actor input format
+  // New actor input format - must match exactly what works in Apify console
   const results = await runActor(YOUTUBE_ACTORS.downloader, {
     startUrls: [videoUrl],
     quality: "720",
@@ -690,6 +731,7 @@ export async function fetchYouTubeDirectVideoUrl(
     useFfmpeg: false,
     proxy: {
       useApifyProxy: true,
+      apifyProxyGroups: ["RESIDENTIAL"], // Required for YouTube to work properly
     },
   }, 300000); // 5 minute timeout for video download (actor downloads and stores video)
 
