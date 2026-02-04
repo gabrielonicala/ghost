@@ -1,22 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/auth-context";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
-  title: "Creator Intelligence Platform",
+  title: "Ghost | Creator Intelligence Platform",
   description:
-    "Not all UGC converts. We tell you which content actually will — before you spend money.",
+    "Track and analyze sponsored creator content. Know which UGC converts before you spend.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -25,9 +23,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} font-sans antialiased min-h-screen bg-background`}
       >
         <AuthProvider>{children}</AuthProvider>
       </body>
