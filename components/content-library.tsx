@@ -103,6 +103,7 @@ export function ContentLibrary() {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [minScore, setMinScore] = useState<number | undefined>(undefined);
   const [recalculating, setRecalculating] = useState(false);
+  const [recalcMessage, setRecalcMessage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchContent();
@@ -422,6 +423,7 @@ export function ContentLibrary() {
                 disabled={recalculating}
                 onClick={async () => {
                   if (!selectedContent?.id) return;
+                  setRecalcMessage(null);
                   try {
                     setRecalculating(true);
                     const response = await fetch(`/api/content/${selectedContent.id}/score`, {
@@ -431,13 +433,16 @@ export function ContentLibrary() {
                         organizationId: "clx0000000000000000000000", // TODO: Get from user context
                       }),
                     });
+                    const data = await response.json().catch(() => ({}));
                     if (response.ok) {
                       await fetchContent(true);
+                      setRecalcMessage("Score recalculated. Display updated.");
+                      setTimeout(() => setRecalcMessage(null), 4000);
                     } else {
-                      alert("Failed to recalculate score");
+                      setRecalcMessage(data?.error || "Failed to recalculate score");
                     }
                   } catch (error) {
-                    alert("Error recalculating score");
+                    setRecalcMessage("Error recalculating score");
                   } finally {
                     setRecalculating(false);
                   }
@@ -447,6 +452,11 @@ export function ContentLibrary() {
                 {recalculating ? "Recalculating…" : "Recalculate ACCS"}
               </Button>
             </div>
+            {recalcMessage && (
+              <p className={`text-sm ${recalcMessage.startsWith("Score recalculated") ? "text-green-600 dark:text-green-400" : "text-destructive"}`}>
+                {recalcMessage}
+              </p>
+            )}
             <ACCSScoreCard score={selectedContent.accsScore} />
             
             {/* Extracted Text Section */}
