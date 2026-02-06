@@ -538,6 +538,26 @@ export function ContentLibrary() {
                 </CardContent>
               </Card>
             )}
+
+            {/* Exact analysis output (raw ACCS result) */}
+            {selectedContent?.accsScore && (
+              <Card>
+                <CardHeader className="pb-3">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                    <CardTitle className="text-base">Analysis output</CardTitle>
+                  </div>
+                  <CardDescription className="text-xs">
+                    Exact output from the ACCS analysis (JSON)
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <pre className="bg-muted/50 p-3 rounded-lg text-xs text-foreground overflow-x-auto overflow-y-auto max-h-96 border border-border whitespace-pre-wrap break-words font-mono">
+                    {JSON.stringify(selectedContent.accsScore, null, 2)}
+                  </pre>
+                </CardContent>
+              </Card>
+            )}
           </>
         ) : selectedContent ? (
           <Card>
