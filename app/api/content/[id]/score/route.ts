@@ -184,11 +184,23 @@ export async function POST(
       similarContent: similarWithSimilarity,
     });
 
-    // Save scores to database
+    // Save scores to database (upsert so recalculate updates existing row; DB allows only one score per content)
     if (prisma) {
-      await prisma.conversionConfidenceScore.create({
-        data: {
+      await prisma.conversionConfidenceScore.upsert({
+        where: { contentItemId: contentItem.id },
+        create: {
           contentItemId: contentItem.id,
+          score: score.score,
+          authenticityScore: score.authenticity.score,
+          audienceTrustScore: score.audienceTrust.score,
+          promotionSaturationScore: score.promotionSaturation.score,
+          fatigueRiskScore: score.fatigueRisk.score,
+          predictedPerformanceTier: score.predictedPerformanceTier,
+          recommendedUse: score.recommendedUse,
+          confidenceInterval: score.confidenceInterval,
+          reasonAttribution: score.reasonAttribution,
+        },
+        update: {
           score: score.score,
           authenticityScore: score.authenticity.score,
           audienceTrustScore: score.audienceTrust.score,
@@ -223,10 +235,14 @@ export async function POST(
         });
       }
     } else if (supabase) {
-      const scoreId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
-      await supabase.from("ConversionConfidenceScore").insert({
-        id: scoreId,
-        contentItemId: contentItem.id,
+      const now = new Date().toISOString();
+      const { data: existingScore } = await supabase
+        .from("ConversionConfidenceScore")
+        .select("id")
+        .eq("contentItemId", contentItem.id)
+        .maybeSingle();
+
+      const scorePayload = {
         score: score.score,
         authenticityScore: score.authenticity.score,
         audienceTrustScore: score.audienceTrust.score,
@@ -236,12 +252,40 @@ export async function POST(
         recommendedUse: score.recommendedUse,
         confidenceInterval: score.confidenceInterval,
         reasonAttribution: score.reasonAttribution,
-        computedAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
+        computedAt: now,
+        updatedAt: now,
+      };
+
+      if (existingScore?.id) {
+        const { error: scoreError } = await supabase
+          .from("ConversionConfidenceScore")
+          .update(scorePayload)
+          .eq("id", existingScore.id);
+        if (scoreError) {
+          console.error("ConversionConfidenceScore update error:", scoreError);
+          return NextResponse.json(
+            { error: scoreError.message || "Failed to update score" },
+            { status: 500 }
+          );
+        }
+      } else {
+        const scoreId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
+        const { error: scoreError } = await supabase.from("ConversionConfidenceScore").insert({
+          id: scoreId,
+          contentItemId: contentItem.id,
+          ...scorePayload,
+        });
+        if (scoreError) {
+          console.error("ConversionConfidenceScore insert error:", scoreError);
+          return NextResponse.json(
+            { error: scoreError.message || "Failed to save score" },
+            { status: 500 }
+          );
+        }
+      }
 
       const authId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
-      await supabase.from("AuthenticitySignal").insert({
+      const { error: authError } = await supabase.from("AuthenticitySignal").insert({
         id: authId,
         contentItemId: contentItem.id,
         creatorId: contentItem.creatorId,
@@ -249,19 +293,21 @@ export async function POST(
         scriptLikelihood: score.authenticity.scriptLikelihood,
         reusedHookDetected: score.authenticity.reusedHookDetected,
         reasonBreakdown: { reasons: score.authenticity.reasons },
-        computedAt: new Date().toISOString(),
+        computedAt: now,
       });
+      if (authError) console.warn("AuthenticitySignal insert (non-fatal):", authError.message);
 
       if (latestMetrics) {
         const trustId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
-        await supabase.from("AudienceTrustMetric").insert({
+        const { error: trustError } = await supabase.from("AudienceTrustMetric").insert({
           id: trustId,
           contentItemId: contentItem.id,
           trustIndex: score.audienceTrust.score,
           engagementQualityGrade: score.audienceTrust.engagementQualityGrade,
           purchaseIntentConfidence: score.audienceTrust.purchaseIntentConfidence,
-          computedAt: new Date().toISOString(),
+          computedAt: now,
         });
+        if (trustError) console.warn("AudienceTrustMetric insert (non-fatal):", trustError.message);
       }
     }
 
