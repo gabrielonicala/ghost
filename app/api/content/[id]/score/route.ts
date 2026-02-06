@@ -257,10 +257,11 @@ export async function POST(
       };
 
       if (existingScore?.id) {
-        const { error: scoreError } = await supabase
+        const { data: updatedRows, error: scoreError } = await supabase
           .from("ConversionConfidenceScore")
           .update(scorePayload)
-          .eq("id", existingScore.id);
+          .eq("id", existingScore.id)
+          .select("id, updatedAt");
         if (scoreError) {
           console.error("ConversionConfidenceScore update error:", scoreError);
           return NextResponse.json(
@@ -268,6 +269,15 @@ export async function POST(
             { status: 500 }
           );
         }
+        if (!updatedRows?.length) {
+          console.error("ConversionConfidenceScore update affected no rows (id=%s)", existingScore.id);
+          return NextResponse.json(
+            { error: "Score update did not affect any rows (check RLS or table)" },
+            { status: 500 }
+          );
+        }
+        const returned = updatedRows[0] as { id?: string; updatedAt?: string };
+        console.log("[ACCS] Score updated id=%s returned updatedAt=%s", existingScore.id, returned?.updatedAt ?? "(none)");
       } else {
         const scoreId = `c${Date.now().toString(36)}${Math.random().toString(36).substring(2, 15)}`;
         const { error: scoreError } = await supabase.from("ConversionConfidenceScore").insert({
