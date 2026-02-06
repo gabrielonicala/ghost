@@ -3,6 +3,19 @@ import { prisma } from "@/lib/prisma";
 import { supabase } from "@/lib/supabase";
 import { calculateACCS } from "@/lib/scoring/accs";
 
+/** Simple word-overlap similarity between two texts (0–1). Used when we don't have embeddings. */
+function captionSimilarity(a: string | null | undefined, b: string | null | undefined): number {
+  if (!a || !b || !a.trim() || !b.trim()) return 0.5;
+  const wordsA = new Set(a.toLowerCase().split(/\s+/).filter((w) => w.length > 1));
+  const wordsB = new Set(b.toLowerCase().split(/\s+/).filter((w) => w.length > 1));
+  if (wordsA.size === 0 || wordsB.size === 0) return 0.5;
+  let overlap = 0;
+  wordsA.forEach((w) => {
+    if (wordsB.has(w)) overlap++;
+  });
+  return overlap / Math.max(wordsA.size, wordsB.size);
+}
+
 /**
  * Calculate and save ACCS score for a content item
  * This is a direct endpoint that runs immediately (no background job needed)
@@ -23,11 +36,12 @@ export async function POST(
       );
     }
 
-    // Fetch content item
+    // Fetch content item, latest transcript, metrics, and related content
     let contentItem: any;
     let latestMetrics: any = null;
+    let latestTranscriptText: string | undefined;
     let creatorPromotions: any[] = [];
-    let similarContent: any[] = [];
+    let similarContent: Array<{ id: string; caption?: string | null; structure?: Record<string, unknown> }> = [];
 
     if (prisma) {
       contentItem = await prisma.contentItem.findUnique({
@@ -46,6 +60,13 @@ export async function POST(
         where: { contentItemId: id },
         orderBy: { snapshotAt: "desc" },
       });
+
+      const latestTranscript = await prisma.contentTranscript.findFirst({
+        where: { contentItemId: id },
+        orderBy: { createdAt: "desc" },
+        select: { text: true },
+      });
+      latestTranscriptText = latestTranscript?.text;
 
       creatorPromotions = await prisma.contentItem.findMany({
         where: {
@@ -67,6 +88,7 @@ export async function POST(
           id: { not: id },
         },
         take: 10,
+        select: { id: true, caption: true },
       });
     } else if (supabase) {
       const { data: item, error: itemError } = await supabase
@@ -102,16 +124,25 @@ export async function POST(
         .limit(20);
       creatorPromotions = promotions || [];
 
+      const { data: transcriptRow } = await supabase
+        .from("ContentTranscript")
+        .select("text")
+        .eq("contentItemId", id)
+        .order("createdAt", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      latestTranscriptText = transcriptRow?.text;
+
       const { data: similar } = await supabase
         .from("ContentItem")
-        .select("id")
+        .select("id, caption")
         .eq("creatorId", contentItem.creatorId)
         .neq("id", id)
         .limit(10);
-      similarContent = (similar || []).map((item: { id: string }) => ({
+      similarContent = (similar || []).map((item: { id: string; caption?: string | null }) => ({
         id: item.id,
+        caption: item.caption,
         structure: {},
-        similarity: 0.5,
       }));
     } else {
       return NextResponse.json(
@@ -120,11 +151,18 @@ export async function POST(
       );
     }
 
-    // Calculate ACCS score
+    const currentCaption = contentItem.caption ?? undefined;
+    const similarWithSimilarity = similarContent.map((item: { id: string; caption?: string | null }) => ({
+      id: item.id,
+      structure: {} as { hookType?: string; visualComposition?: string; audioTrend?: string },
+      similarity: captionSimilarity(currentCaption, item.caption),
+    }));
+
+    // Calculate ACCS score (uses transcript when available for authenticity)
     const score = await calculateACCS({
       contentItemId: contentItem.id,
-      transcript: undefined, // Would come from ContentTranscript
-      caption: contentItem.caption || undefined,
+      transcript: latestTranscriptText,
+      caption: currentCaption,
       engagementMetrics: latestMetrics
         ? {
             views: latestMetrics.views || undefined,
@@ -143,11 +181,7 @@ export async function POST(
           date: typeof p.publishedAt === "string" ? new Date(p.publishedAt) : p.publishedAt,
         })),
       },
-      similarContent: similarContent.map((item: { id: string }) => ({
-        id: item.id,
-        structure: {},
-        similarity: 0.5,
-      })),
+      similarContent: similarWithSimilarity,
     });
 
     // Save scores to database
