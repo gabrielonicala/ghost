@@ -108,14 +108,19 @@ export function ContentLibrary() {
     fetchContent();
   }, [minScore]);
 
-  const fetchContent = async () => {
+  const fetchContent = async (bypassCache = false) => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
       if (minScore !== undefined) {
         params.append("minScore", minScore.toString());
       }
-      const response = await fetch(`/api/content?${params.toString()}`);
+      if (bypassCache) {
+        params.append("_", Date.now().toString());
+      }
+      const response = await fetch(`/api/content?${params.toString()}`, {
+        ...(bypassCache && { cache: "no-store" }),
+      });
       const data = await response.json();
       
       // Transform API response to match ContentItemWithScores type
@@ -165,20 +170,25 @@ export function ContentLibrary() {
           const latestScore = list.sort(
             (a: any, b: any) => new Date((b.computedAt || b.updatedAt || 0)).getTime() - new Date((a.computedAt || a.updatedAt || 0)).getTime()
           )[0];
+          // Use latest authenticity/trust rows too (same order as score: by computedAt desc)
+          const authList = Array.isArray(item.authenticitySignals) ? item.authenticitySignals : item.authenticitySignals ? [item.authenticitySignals] : [];
+          const trustList = Array.isArray(item.trustMetrics) ? item.trustMetrics : item.trustMetrics ? [item.trustMetrics] : [];
+          const latestAuth = authList.sort((a: any, b: any) => new Date((b.computedAt || 0)).getTime() - new Date((a.computedAt || 0)).getTime())[0];
+          const latestTrust = trustList.sort((a: any, b: any) => new Date((b.computedAt || 0)).getTime() - new Date((a.computedAt || 0)).getTime())[0];
           return latestScore ? {
           score: latestScore.score,
           authenticity: {
             score: latestScore.authenticityScore,
-            level: item.authenticitySignals?.[0]?.score >= 70 ? "high" : item.authenticitySignals?.[0]?.score >= 50 ? "medium" : "low",
-            scriptLikelihood: item.authenticitySignals?.[0]?.scriptLikelihood || 0,
-            reusedHookDetected: item.authenticitySignals?.[0]?.reusedHookDetected || false,
+            level: (latestAuth?.score ?? latestScore.authenticityScore) >= 70 ? "high" : (latestAuth?.score ?? latestScore.authenticityScore) >= 50 ? "medium" : "low",
+            scriptLikelihood: latestAuth?.scriptLikelihood ?? 0,
+            reusedHookDetected: latestAuth?.reusedHookDetected ?? false,
             reasons: [],
           },
           audienceTrust: {
             score: latestScore.audienceTrustScore,
-            level: item.trustMetrics?.[0]?.trustIndex >= 80 ? "very_high" : item.trustMetrics?.[0]?.trustIndex >= 65 ? "high" : item.trustMetrics?.[0]?.trustIndex >= 40 ? "medium" : "low",
-            engagementQualityGrade: item.trustMetrics?.[0]?.engagementQualityGrade || "C",
-            purchaseIntentConfidence: item.trustMetrics?.[0]?.purchaseIntentConfidence || 0,
+            level: (latestTrust?.trustIndex ?? latestScore.audienceTrustScore) >= 80 ? "very_high" : (latestTrust?.trustIndex ?? latestScore.audienceTrustScore) >= 65 ? "high" : (latestTrust?.trustIndex ?? latestScore.audienceTrustScore) >= 40 ? "medium" : "low",
+            engagementQualityGrade: latestTrust?.engagementQualityGrade ?? "C",
+            purchaseIntentConfidence: latestTrust?.purchaseIntentConfidence ?? 0,
           },
           promotionSaturation: {
             score: latestScore.promotionSaturationScore,
@@ -422,7 +432,7 @@ export function ContentLibrary() {
                       }),
                     });
                     if (response.ok) {
-                      await fetchContent();
+                      await fetchContent(true);
                     } else {
                       alert("Failed to recalculate score");
                     }
