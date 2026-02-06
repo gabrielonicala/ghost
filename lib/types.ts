@@ -46,6 +46,9 @@ export interface ACCSScore {
     weaknesses: string[];
     keyFactors: string[];
   };
+  /** When this score was computed (from DB). Use to confirm recalc ran. */
+  computedAt?: string;
+  updatedAt?: string;
 }
 
 export interface ContentItemWithScores {

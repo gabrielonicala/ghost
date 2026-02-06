@@ -207,6 +207,8 @@ export function ContentLibrary() {
           recommendedUse: latestScore.recommendedUse || [],
           confidenceInterval: latestScore.confidenceInterval || { lower: 0, upper: 100 },
           reasonAttribution: latestScore.reasonAttribution || { strengths: [], weaknesses: [], keyFactors: [] },
+          computedAt: latestScore.computedAt,
+          updatedAt: latestScore.updatedAt,
         } : undefined;
         })(),
         };
@@ -457,6 +459,14 @@ export function ContentLibrary() {
                 {recalcMessage}
               </p>
             )}
+            {(selectedContent.accsScore?.computedAt || selectedContent.accsScore?.updatedAt) && (
+              <p className="text-xs text-muted-foreground font-medium">
+                Last calculated: {new Date(selectedContent.accsScore.updatedAt || selectedContent.accsScore.computedAt!).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "medium" })}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              Same inputs → same score. The timestamp above confirms when the score was last run.
+            </p>
             <ACCSScoreCard score={selectedContent.accsScore} />
             
             {/* Extracted Text Section */}
