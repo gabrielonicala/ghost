@@ -21,7 +21,8 @@ import {
   Sparkles,
   TrendingUp,
   Music2,
-  X
+  X,
+  RefreshCw
 } from "lucide-react";
 
 function getPlatformLabel(platform: ContentItemWithScores["platform"]) {
@@ -101,6 +102,7 @@ export function ContentLibrary() {
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [minScore, setMinScore] = useState<number | undefined>(undefined);
+  const [recalculating, setRecalculating] = useState(false);
 
   useEffect(() => {
     fetchContent();
@@ -149,38 +151,53 @@ export function ContentLibrary() {
           transcripts: [...(item.transcripts || [])].sort(
             (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           ).slice(0, 1), // Only keep the latest transcript
-        accsScore: item.conversionScores?.[0] ? {
-          score: item.conversionScores[0].score,
+          // Normalize scores to array (API may return single object or array), then sort by latest
+          conversionScores: (() => {
+            const raw = item.conversionScores;
+            const list = Array.isArray(raw) ? raw : raw ? [raw] : [];
+            return list.sort(
+              (a: any, b: any) => new Date((b.computedAt || b.updatedAt || 0)).getTime() - new Date((a.computedAt || a.updatedAt || 0)).getTime()
+            );
+          })(),
+        accsScore: (() => {
+          const raw = item.conversionScores;
+          const list = Array.isArray(raw) ? raw : raw ? [raw] : [];
+          const latestScore = list.sort(
+            (a: any, b: any) => new Date((b.computedAt || b.updatedAt || 0)).getTime() - new Date((a.computedAt || a.updatedAt || 0)).getTime()
+          )[0];
+          return latestScore ? {
+          score: latestScore.score,
           authenticity: {
-            score: item.conversionScores[0].authenticityScore,
+            score: latestScore.authenticityScore,
             level: item.authenticitySignals?.[0]?.score >= 70 ? "high" : item.authenticitySignals?.[0]?.score >= 50 ? "medium" : "low",
             scriptLikelihood: item.authenticitySignals?.[0]?.scriptLikelihood || 0,
             reusedHookDetected: item.authenticitySignals?.[0]?.reusedHookDetected || false,
             reasons: [],
           },
           audienceTrust: {
-            score: item.conversionScores[0].audienceTrustScore,
+            score: latestScore.audienceTrustScore,
             level: item.trustMetrics?.[0]?.trustIndex >= 80 ? "very_high" : item.trustMetrics?.[0]?.trustIndex >= 65 ? "high" : item.trustMetrics?.[0]?.trustIndex >= 40 ? "medium" : "low",
             engagementQualityGrade: item.trustMetrics?.[0]?.engagementQualityGrade || "C",
             purchaseIntentConfidence: item.trustMetrics?.[0]?.purchaseIntentConfidence || 0,
           },
           promotionSaturation: {
-            score: item.conversionScores[0].promotionSaturationScore,
+            score: latestScore.promotionSaturationScore,
             level: "low",
             density: 0,
             riskLevel: "low",
           },
           fatigueRisk: {
-            score: item.conversionScores[0].fatigueRiskScore,
+            score: latestScore.fatigueRiskScore,
             level: "low",
             originalityPercentile: 0,
             warnings: [],
           },
-          predictedPerformanceTier: item.conversionScores[0].predictedPerformanceTier || "medium",
-          recommendedUse: item.conversionScores[0].recommendedUse || [],
-          confidenceInterval: item.conversionScores[0].confidenceInterval || { lower: 0, upper: 100 },
-          reasonAttribution: item.conversionScores[0].reasonAttribution || { strengths: [], weaknesses: [], keyFactors: [] },
-        } : undefined,
+          predictedPerformanceTier: latestScore.predictedPerformanceTier || "medium",
+          recommendedUse: latestScore.recommendedUse || [],
+          confidenceInterval: latestScore.confidenceInterval || { lower: 0, upper: 100 },
+          reasonAttribution: latestScore.reasonAttribution || { strengths: [], weaknesses: [], keyFactors: [] },
+        } : undefined;
+        })(),
         };
       });
       
@@ -388,6 +405,38 @@ export function ContentLibrary() {
       <div className="space-y-4">
         {selectedContent && selectedContent.accsScore ? (
           <>
+            <div className="flex items-center justify-end gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={recalculating}
+                onClick={async () => {
+                  if (!selectedContent?.id) return;
+                  try {
+                    setRecalculating(true);
+                    const response = await fetch(`/api/content/${selectedContent.id}/score`, {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        organizationId: "clx0000000000000000000000", // TODO: Get from user context
+                      }),
+                    });
+                    if (response.ok) {
+                      await fetchContent();
+                    } else {
+                      alert("Failed to recalculate score");
+                    }
+                  } catch (error) {
+                    alert("Error recalculating score");
+                  } finally {
+                    setRecalculating(false);
+                  }
+                }}
+              >
+                <RefreshCw className={`w-4 h-4 ${recalculating ? "animate-spin" : ""}`} />
+                {recalculating ? "Recalculating…" : "Recalculate ACCS"}
+              </Button>
+            </div>
             <ACCSScoreCard score={selectedContent.accsScore} />
             
             {/* Extracted Text Section */}
